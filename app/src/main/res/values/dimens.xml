@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (C) 2018  Ian Buttimer
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+
+    <dimen name="small_margin">4dp</dimen>
+    <dimen name="text_margin">8dp</dimen>
+    <dimen name="button_margin">8dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="appbar_padding_top">8dp</dimen>
+    <dimen name="list_item_margin">2dp</dimen>
+
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="fab_bottom_margin">16dp</dimen>
+    <dimen name="fab_size_normal">56dp</dimen>
+    <dimen name="fab_size_mini">40dp</dimen>
+    <dimen name="fab_mini_margin_to_centre_in_normal">8dp</dimen>
+    <dimen name="search_clear_centre_margin">16dp</dimen>
+
+    <dimen name="login_icon_size">150dp</dimen>
+
+    <dimen name="app_bar_height">200dp</dimen>
+    <dimen name="item_width">300dp</dimen>
+
+    <!-- button_margin + fab_mini_margin_to_centre_in_normal -->
+
+    <dimen name="post_detail_image_height">100dp</dimen>
+    <dimen name="post_detail_image_horz_margin">50dp</dimen>
+
+    <dimen name="collapsing_toolbar_expanded_title_margin">50dp</dimen>
+
+    <dimen name="postlist_horizontal_margin">16dp</dimen>
+    <dimen name="listing_layout_vertical_margin">16dp</dimen>
+
+    <!--
+        Refer to App Widget Documentation for margin information
+        http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
+    -->
+    <dimen name="widget_margin">8dp</dimen>
+    <dimen name="widget_border">2dp</dimen>
+    <dimen name="widget_corner">6dp</dimen>
+    <dimen name="widget_name_text">18sp</dimen>
+    <!-- from https://developer.android.com/guide/practices/ui_guidelines/widget_design.html
+            n cells = 70 × n − 30
+        -->
+    <dimen name="widget_1_cell">40dp</dimen>
+    <dimen name="widget_2_cell">110dp</dimen>
+    <dimen name="widget_3_cell">180dp</dimen>
+    <dimen name="widget_4_cell">250dp</dimen>
+
+    <dimen name="widget_img_thumbnail_width">48dp</dimen>
+    <dimen name="widget_img_thumbnail_height">48dp</dimen>
+
+    <dimen name="listview_stroke">1dp</dimen>
+    <dimen name="listview_padding">1dp</dimen>
+    <dimen name="listview_corner">2dp</dimen>
+
+</resources>

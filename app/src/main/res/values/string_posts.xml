@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2018  Ian Buttimer
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+
+    <string name="title_post_list">Posts</string>
+
+    <string name="posts_tab_new">New</string>
+    <string name="posts_tab_pinned">Pinned</string>
+
+    <string name="link_title">Link title</string>
+    <string name="link_selftext">Link self text</string>
+    <string name="link_likes">Link likes</string>
+    <string name="link_score">Link score</string>
+    <string name="link_comments">Link comments</string>
+    <string name="link_age">Link age</string>
+    <string name="link_author">Link author</string>
+    <string name="link_subreddit">Link subreddit</string>
+
+    <string name="content_desc_thumbnail">Thumbnail</string>
+    <string name="content_desc_score">Score</string>
+
+    <string name="item_like">like</string>
+    <string name="item_likes">likes</string>
+
+    <string name="item_comment">comment</string>
+    <string name="item_comments">comments</string>
+
+    <string name="no_posts_in_list">No posts in listing</string>
+    <string name="refresh_posts_list">Posts listing empty, tap Refresh</string>
+
+    <!-- Note: to be parsed by MessageFormat, play particular attention to quotes -->
+    <string name="link_author_format">by &lt;b&gt;{0}&lt;/b&gt;</string>
+
+</resources>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2018  Ian Buttimer
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_content_post_or_thread"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ianbuttimer.tidder.ui.PostDetailActivity">
+    <!--app:layout_behavior="@string/content_post_view_behavior"-->
+
+    <TextView
+        android:id="@+id/tv_title_post_or_thread"
+        style="?android:attr/textAppearanceLarge"
+        android:fontFamily="sans-serif-condensed"
+        tools:text="@string/link_title"
+        android:layout_marginTop="@dimen/listing_layout_vertical_margin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginEnd="@dimen/text_margin"
+        android:layout_marginStart="@dimen/text_margin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/img_thumbnail_postA"
+        android:src="@drawable/ic_link"
+        android:contentDescription="@string/content_desc_thumbnail"
+        app:layout_constraintEnd_toEndOf="@+id/tv_title_post_or_thread"
+        app:layout_constraintStart_toStartOf="@+id/tv_title_post_or_thread"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title_post_or_thread"
+        android:scaleType="centerCrop"
+        android:layout_marginEnd="@dimen/post_detail_image_horz_margin"
+        android:layout_marginStart="@dimen/post_detail_image_horz_margin"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/post_detail_image_height" />
+
+    <WebView
+        android:id="@+id/wv_selftext_postA"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/text_margin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_thumbnail_postA"
+        android:layout_marginEnd="@dimen/text_margin"
+        android:layout_marginStart="@dimen/text_margin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" />
+
+    <com.ianbuttimer.tidder.ui.widgets.BasicStatsView
+        android:id="@+id/bsv_post_or_thread"
+        app:layoutId="@layout/basic_stats_content_post_thread"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/text_margin"
+        app:layout_constraintStart_toStartOf="@+id/tv_title_post_or_thread"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/wv_selftext_postA"
+        />
+
+    <include layout="@layout/listing_layout"
+        android:id="@+id/inc_listing_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/listing_layout_vertical_margin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bsv_post_or_thread"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

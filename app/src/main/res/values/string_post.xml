@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2018  Ian Buttimer
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+
+    <string name="title_post_detail">Post Detail</string>
+    <string name="title_activity_comment_thread">Comment Thread</string>
+
+    <string name="comment_text">Comment text</string>
+    <string name="comment_more_text">More comments ({0} replies)</string>
+    <string name="comment_age">Link age</string>
+    <string name="comment_author">Link author</string>
+
+    <string name="content_desc_expand_replies">Expand replies</string>
+    <string name="content_desc_collapse_replies">Collapse replies</string>
+    <string name="content_desc_load_replies">Load more replies</string>
+
+    <string name="no_comments_in_list">No comments in listing</string>
+
+    <string name="viewing_comment_thread">You are viewing a single comment\'s thread</string>
+
+    <!-- Note: to be parsed by MessageFormat, play particular attention to quotes -->
+    <string name="pining_toast">"Pinned {0}"</string>
+    <string name="unpining_toast">"Unpinned {0}"</string>
+
+</resources>

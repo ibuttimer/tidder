@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2018  Ian Buttimer
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+
+    <string name="app_name">Tidder (Free)</string>
+
+    <string name="paid_app_feature">This feature is only available in the full version.</string>
+
+    <!-- TODO replace values with AdMob app & ad unit IDs -->
+    <string name="admob_id" translatable="false">ca-app-pub-3940256099942544~3347511713</string> <!-- AdMob test id -->
+    <string name="admob_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string> <!-- AdMob banner test unit id -->
+
+    <string name="admob_test_device_id_todo" translatable="false">replace value with AdMob test devide ID</string>
+    <!-- TODO replace values with AdMob test device ID for testing purposes -->
+    <string name="admob_test_device_id" translatable="false">@string/admob_test_device_id_todo</string>
+    <!--<string name="admob_test_device_id" translatable="false">009D1556DC160E7B1D41E44EBE556A09</string>-->
+
+</resources>

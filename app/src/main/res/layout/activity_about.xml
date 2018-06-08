@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2018  Ian Buttimer
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_horizontal_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_horizontal_margin"
+    tools:context="com.ianbuttimer.tidder.ui.AboutActivity">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_app_aboutA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/colorTextDefault" />
+
+        <TextView
+            android:id="@+id/tv_version_aboutA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_app_aboutA"
+            android:text="@string/app_version"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/colorTextDefault" />
+
+        <TextView
+            android:id="@+id/tv_copyright_aboutA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_version_aboutA"
+            android:paddingBottom="@dimen/fab_margin"
+            android:text="@string/copyright"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/colorTextDefault" />
+
+        <TextView
+            android:id="@+id/tv_price_aboutA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_copyright_aboutA"
+            android:text="@string/about_price"
+            android:paddingBottom="@dimen/fab_margin"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/colorTextDefault" />
+
+        <TextView
+            android:id="@+id/tv_licence_aboutA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_price_aboutA"
+            android:text="@string/about_license"
+            android:paddingBottom="@dimen/fab_margin"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/colorTextDefault" />
+
+        <TextView
+            android:id="@+id/tv_licencelink_aboutA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_licence_aboutA"
+            android:text="@string/about_license_link"
+            android:paddingBottom="@dimen/fab_margin"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColorLink="@color/colorPrimaryDark"
+            android:textColor="@color/colorTextDefault" />
+
+        <TextView
+            android:id="@+id/tv_acknowledgements_aboutA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_licencelink_aboutA"
+            android:text="@string/acknowledgements"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/colorTextDefault" />
+
+        <TextView
+            android:id="@+id/tv_icons8_aboutA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_acknowledgements_aboutA"
+            android:text="@string/ack_icons8"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColorLink="@color/colorPrimaryDark"
+            android:textColor="@color/colorTextDefault" />
+
+        <TextView
+            android:id="@+id/tv_icons_material_aboutA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_icons8_aboutA"
+            android:text="@string/ack_icons_material"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColorLink="@color/colorPrimaryDark"
+            android:textColor="@color/colorTextDefault" />
+
+        <TextView
+            android:id="@+id/tv_noto_font_aboutA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_icons_material_aboutA"
+            android:text="@string/ack_noto_font"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColorLink="@color/colorPrimaryDark"
+            android:textColor="@color/colorTextDefault" />
+
+    </RelativeLayout>
+
+</ScrollView>

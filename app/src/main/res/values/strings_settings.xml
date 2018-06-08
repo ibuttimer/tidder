@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2018  Ian Buttimer
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <string name="title_activity_settings">Settings</string>
+
+
+    <string name="pref_device_key" translatable="false">device_id</string>
+    <string name="pref_device_dflt_value" translatable="false">device_id_not_set</string>
+
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_sfw">Safe for Work</string>
+    <string name="pref_description_sfw_on">Only Safe for Work content will be displayed</string>
+    <string name="pref_description_sfw_off">All content, including Not Safe for Work, will be displayed</string>
+    <string name="pref_sfw_key" translatable="false">safe_for_work</string>
+
+    <string name="pref_title_refresh_on_discard">Refresh on Discard</string>
+    <string name="pref_description_refresh_on_discard_on">Automatically retrieve a new post from a subreddit when the current post is discarded</string>
+    <string name="pref_description_refresh_on_discard_off">Do not automatically retrieve a new post from a subreddit when the current post is discarded</string>
+    <string name="pref_refresh_on_discard_key" translatable="false">refresh_on_discard</string>
+
+    <string name="pref_title_post_source">Post Source</string>
+    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+    <string-array name="pref_post_source_titles">
+        <item>Hot</item>
+        <item>New</item>
+        <item>Rising</item>
+        <item>Random</item>
+        <item>Top</item>
+        <item>Controversial</item>
+    </string-array>
+    <string-array name="pref_post_source_values" translatable="false">
+        <item>hot</item>
+        <item>new</item>
+        <item>rising</item>
+        <item>random</item>
+        <item>top</item>
+        <item>controversial</item>
+    </string-array>
+    <string name="pref_post_source_key" translatable="false">post_source</string>
+    <string name="pref_post_source_dflt_value" translatable="false">hot</string>
+
+    <string name="pref_title_autoexpand">Comment Thread Auto Expand</string>
+    <string name="pref_description_autoexpand_on">Automatically expand comment threads</string>
+    <string name="pref_description_autoexpand_off">Do not automatically expand comment threads</string>
+    <string name="pref_autoexpand_key" translatable="false">autoexpand</string>
+
+    <string name="pref_title_autoexpand_level">Thread Auto Expand Level</string>
+    <string-array name="pref_autoexpand_level_titles">
+        <item>1st reply</item>
+        <item>2nd reply</item>
+        <item>3rd reply</item>
+        <item>4th reply</item>
+        <item>5th reply</item>
+        <item>6th reply</item>
+        <item>All</item>
+    </string-array>
+    <string-array name="pref_autoexpand_level_values" translatable="false">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>2147483647</item>
+    </string-array>
+    <string name="pref_autoexpand_level_key" translatable="false">autoexpand_level</string>
+    <string name="pref_autoexpand_level_dflt_value" translatable="false">1</string>
+
+    <string name="pref_event_delivery_key" translatable="false">event_delivery</string>
+    <string name="pref_event_delivery_deliver_value" translatable="false">delivery</string>
+    <string name="pref_event_delivery_ignore_value" translatable="false">ignore</string>
+    <string name="pref_event_delivery_neither_value" translatable="false">neither</string>
+    <string name="pref_event_delivery_both_value" translatable="false">both</string>
+    <string name="pref_event_delivery_dflt_value" translatable="false">both</string>
+
+    <string name="pref_event_handled_key" translatable="false">event_handled</string>
+    <string name="pref_event_handled_handle_value" translatable="false">handled</string>
+    <string name="pref_event_handled_ignore_value" translatable="false">ignore</string>
+    <string name="pref_event_handled_neither_value" translatable="false">neither</string>
+    <string name="pref_event_handled_both_value" translatable="false">both</string>
+    <string name="pref_event_handled_dflt_value" translatable="false">both</string>
+
+</resources>

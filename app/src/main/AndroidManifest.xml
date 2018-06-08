@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.ianbuttimer.tidder">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:name=".TidderApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <!-- TODO replace values with Reddit Client ID and redirect URL -->
+        <!-- <meta-data -->
+        <!-- android:name="CLIENT_ID" -->
+        <!-- android:value="@string/client_id_metadata_todo" /> -->
+        <!-- <meta-data -->
+        <!-- android:name="REDIRECT_URI" -->
+        <!-- android:value="@string/redirect_uri_metadata_todo" /> -->
+        <meta-data
+            android:name="CLIENT_ID"
+            android:value="reddit_client_id" />
+        <meta-data
+            android:name="REDIRECT_URI"
+            android:value="http://tidder.ianbuttimer.com/redirect" />
+
+        <activity android:name=".ui.LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- TODO replace host. scheme and path with Reddit redirect URL values, -->
+                <!-- e.g. if the redirect URL is http://www.example.com/my_redirect, then -->
+                <!-- <data android:host="www.example.com" -->
+                <!-- android:scheme="http" -->
+                <!-- android:path="/my_redirect" /> -->
+                <!-- <data android:host="@string/redirect_uri_intentfilter_host" -->
+                <!-- android:scheme="@string/redirect_uri_intentfilter_scheme" -->
+                <!-- android:path="@string/redirect_uri_intentfilter_path" /> -->
+                <data
+                    android:host="tidder.ianbuttimer.com"
+                    android:path="/redirect"
+                    android:scheme="http" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".reddit.ClientService"
+            android:exported="false" />
+        <service
+            android:name=".data.DatabaseIntentService"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.FollowActivity"
+            android:label="@string/title_activity_follow"
+            android:parentActivityName=".ui.PostListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.PostListActivity" />
+        </activity>
+        <activity
+            android:name=".ui.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".ui.PostListActivity">
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.PostListActivity" />
+        </activity>
+        <activity
+            android:name=".ui.PostListActivity"
+            android:label="@string/title_post_list"
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.PostDetailActivity"
+            android:label="@string/title_post_detail"
+            android:parentActivityName=".ui.PostListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ianbuttimer.tidder.ui.PostListActivity" />
+        </activity>
+        <activity android:name=".ui.AboutActivity" />
+        <activity
+            android:name=".ui.CommentThreadActivity"
+            android:label="@string/title_activity_comment_thread"
+            android:parentActivityName=".ui.PostDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ianbuttimer.tidder.ui.PostDetailActivity" />
+        </activity>
+
+        <receiver android:name=".widget.PostsWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/posts_widget_info" />
+        </receiver>
+
+        <service
+            android:name=".data.PostsWidgetViewsService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"/>
+
+        <activity android:name=".ui.HelpActivity"
+            android:label="@string/title_activity_help">
+        </activity>
+    </application>
+
+</manifest>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2018  Ian Buttimer
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+
+    <!-- Note: to be parsed by MessageFormat, play particular attention to quotes -->
+    <string name="app_version">Version {0}</string>
+
+    <string name="copyright" translatable="false">Copyright &#169; 2018 Ian Buttimer</string>
+    <string name="about_price">This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.</string>
+    <string name="about_license">This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</string>
+    <string name="about_license_link">You should have received a copy of the GNU General Public License along with this program. If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</string>
+
+    <string name="acknowledgements">Acknowledgements</string>
+    <string name="ack_icons8">&#x2022; Some icons courtesy of icons8 (<a href="http://icons8.com/">icons8</a>) licensed under the (<a href="http://creativecommons.org/licenses/by-nd/3.0/">Creative Commons Attribution-NoDerivs 3.0 Unported License</a>).</string>
+    <string name="ack_icons_material">&#x2022; Some icons courtesy of Material Design (<a href="https://material.io/icons/">material.io</a>) licensed under the (<a href="https://github.com/google/material-design-icons/blob/master/LICENSE">Apache License, Version 2.0</a>).</string>
+    <string name="ack_noto_font">&#x2022; Noto Sans font courtesy of Google (<a href="https://fonts.google.com/specimen/Noto+Sans">fonts.google.com</a>) licensed under the (<a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>).</string>
+
+
+</resources>

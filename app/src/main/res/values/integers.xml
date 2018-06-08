@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2018  Ian Buttimer
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+
+    <integer name="search_text_sise">10</integer>
+
+    <integer name="back_to_exit_delay">2000</integer>
+
+    <integer name="msec_per_min">60000</integer>
+    <integer name="msec_per_5_min">300000</integer>
+    <integer name="msec_per_10_min">600000</integer>
+    <integer name="msec_per_15_min">900000</integer>
+    <integer name="msec_per_20_min">1200000</integer>
+    <integer name="msec_per_30_min">1800000</integer>
+    <integer name="msec_per_hour">3600000</integer>
+
+    <!-- values from https://developer.android.com/reference/android/view/Gravity -->
+    <integer name="gravity_top">48</integer>            <!-- 48 (0x00000030) -->
+    <integer name="gravity_start">8388611</integer>     <!-- 8388611 (0x00800003) -->
+    <integer name="gravity_bottom">80</integer>         <!-- 80 (0x00000050) -->
+    <integer name="gravity_end">8388613</integer>       <!-- 8388613 (0x00800005) -->
+    <integer name="gravity_top_start">8388659</integer> <!-- 8388659 (0x00800033) -->
+    <integer name="gravity_bottom_end">8388693</integer><!-- 8388693 (0x00800055) -->
+
+    <integer name="widget_colour_gradient">225</integer>
+
+</resources>

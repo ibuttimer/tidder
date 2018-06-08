@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2018  Ian Buttimer
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+
+    <string name="title_activity_follow">Following</string>
+
+    <string name="follow_tab_list">List</string>
+    <string name="follow_tab_search">Search</string>
+    <string name="follow_tab_all">All</string>
+
+    <string name="what_interests">What are you interested in?</string>
+    <string name="search_name">Search by name</string>
+
+    <string name="search_btn_content_desc">Perform a search</string>
+    <string name="search_clear_btn_content_desc">Clear the current search</string>
+
+    <string name="subreddit_name">Subreddit name</string>
+    <string name="subreddit_title">Subreddit title</string>
+    <string name="subreddit_description">Subreddit description</string>
+    <string name="subreddit_followers">Subreddit followers</string>
+    <string name="subreddit_age">Subreddit age</string>
+
+    <string name="no_subreddits_in_list">No subreddits in listing</string>
+
+    <string name="item_follower">follower</string>
+    <string name="item_followers">followers</string>
+
+    <!-- Note: to be parsed by MessageFormat, play particular attention to quotes -->
+    <string name="following_toast">"Now following {0}"</string>
+    <string name="unfollowing_toast">"No longer following {0}"</string>
+    <string name="unfollowing_all_toast">"No longer following anything"</string>
+
+    <string name="no_search_result">"No results found matching search criteria"</string>
+    <string name="no_subreddit_result">"No subreddits found"</string>
+    <string name="not_following_anything">"Not currently following any subreddits"</string>
+
+
+</resources>

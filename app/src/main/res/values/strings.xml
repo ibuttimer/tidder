@@ -1,0 +1,152 @@
+<resources>
+
+    <!-- login activity -->
+    <string name="login_to_reddit">Login to Reddit</string>
+    <string name="authorise_title">Authorise Access</string>
+    <string name="login_to_reddit_text">Login to Reddit using your Reddit ID</string>
+    <string name="login_imp_to_reddit_text">Login to Reddit temporarily using your Reddit ID</string>
+    <string name="login_app_to_reddit_text">Login to Reddit with no user details</string>
+
+    <!-- logout related -->
+    <string name="info_title">Information</string>
+    <string name="logged_out">Logged out successfully</string>
+
+
+    <!-- network related -->
+    <string name="unavailable">Unavailable</string>
+    <string name="no_response">No response received.\nPlease check the network state.</string>
+    <string name="invalid_response">Invalid response received.\nPlease try again later.</string>
+    <string name="network_na">Network unavailable.\nPlease check Wifi and/or mobile data settings.</string>
+    <string name="cant_contact_server">Unable to contact server.\nPlease check Wifi and/or mobile data settings.</string>
+    <string name="unauthorised_access">Server access is not authorised.</string>
+    <string name="forbidden_access">Server access is not allowed.</string>
+    <string name="retry">Retry</string>
+
+
+    <!-- reddit related -->
+    <string name="client_id_metadata" translatable="false">CLIENT_ID</string>
+    <string name="redirect_uri_metadata" translatable="false">REDIRECT_URI</string>
+    <string name="client_id_metadata_todo" translatable="false">replace value with Reddit Client ID</string>
+    <string name="redirect_uri_metadata_todo" translatable="false">http://www.example.com/my_redirect</string>
+    <string name="redirect_uri_intentfilter_host" translatable="false">www.example.com</string>
+    <string name="redirect_uri_intentfilter_scheme" translatable="false">http</string>
+    <string name="redirect_uri_intentfilter_path" translatable="false">/my_redirect</string>
+
+    <!-- Note: to be parsed by MessageFormat, play particular attention to quotes -->
+    <string name="config_error">The application does not appear to be configured correctly.\nPlease verify the {0} configuration.</string>
+    <string name="config_error_client_id">Reddit Client ID</string>
+    <string name="config_error_redirect_uri">Reddit redirect URL</string>
+    <string name="config_error_client_id_redirect_uri">Reddit Client ID and redirect URL</string>
+    <string name="config_error_redirect_uri_intentfilter">Reddit redirect URL intent filter</string>
+
+    <string name="client_id_metadata_error">The application does not appear to be configured correctly.\nPlease verify the Reddit Client ID.</string>
+    <string name="redirect_uri_metadata_error">replace value with Reddit redirect URL</string>
+
+    <!-- Note: to be parsed by MessageFormat, play particular attention to quotes -->
+    <string name="user_agent">"{0}/{1}"</string>
+
+    <plurals name="time_span_days_ago">
+        <item quantity="one">%d day ago</item>
+        <item quantity="other">%d days ago</item>
+    </plurals>
+    <plurals name="time_span_months_ago">
+        <item quantity="one">%d month ago</item>
+        <item quantity="other">%d months ago</item>
+    </plurals>
+    <plurals name="time_span_years_ago">
+        <item quantity="one">%d year ago</item>
+        <item quantity="other">%d years ago</item>
+    </plurals>
+    <plurals name="time_span_in_days">
+        <item quantity="one">in %d day</item>
+        <item quantity="other">in %d days</item>
+    </plurals>
+    <plurals name="time_span_in_months">
+        <item quantity="one">in %d month</item>
+        <item quantity="other">in %d months</item>
+    </plurals>
+    <plurals name="time_span_in_years">
+        <item quantity="one">in %d year</item>
+        <item quantity="other">in %d years</item>
+    </plurals>
+
+    <string-array name="reddit_scopes" translatable="false">
+        <item>account</item>
+        <item>creddits</item>
+        <item>edit</item>
+        <item>flair</item>
+        <item>history</item>
+        <item>identity</item>
+        <item>livemanage</item>
+        <item>modconfig</item>
+        <item>modcontributors</item>
+        <item>modflair</item>
+        <item>modlog</item>
+        <item>modmail</item>
+        <item>modothers</item>
+        <item>modposts</item>
+        <item>modself</item>
+        <item>modwiki</item>
+        <item>mysubreddits</item>
+        <item>privatemessages</item>
+        <item>read</item>
+        <item>report</item>
+        <item>save</item>
+        <item>submit</item>
+        <item>subscribe</item>
+        <item>vote</item>
+        <item>wikiedit</item>
+        <item>wikiread</item>
+    </string-array>
+    <string name="reddit_scope_config" translatable="false">read</string>
+
+    <string name="action_follow">Follow</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_about">About</string>
+    <string name="action_help">Help</string>
+    <string name="action_logout">Logout</string>
+
+
+    <string-array name="app_error_message">
+        <!-- Note; order matches the ordinal values for AppError.Codes enum -->
+        <!-- UNAUTHORISED -->
+        <item>Unable to proceed as the application has not been authorised to access Reddit</item>
+        <!-- ACCESS_DENIED -->
+        <item>Unable to proceed as you did not authorise application to access Reddit</item>
+        <!-- INVALID_AUTH_REQUEST -->
+        <item>Unable to proceed as an invalid authorisation request was made</item>
+        <!-- INVALID_AUTH_RESPONSE -->
+        <item>Unable to proceed as an invalid authorisation response was received</item>
+        <!-- UNKNOWN_AUTH_ERROR -->
+        <item>Unable to proceed as an authorisation error occurred</item>
+        <!-- TOKEN_RETRIEVE_ERROR -->
+        <item>Error retrieving authorisation token</item>
+        <!-- LOGOUT_ERROR -->
+        <item>Error during logout</item>
+        <!-- USER_INFO_ERROR -->
+        <item>Unable to retrieve user</item>
+        <!-- SUBREDDIT_QUERY_ERROR -->
+        <item>Unable to retrieve subreddit listing</item>
+        <!-- COMMS_ERROR -->
+        <item>Communications error</item>
+    </string-array>
+    <string name="comms_error">Communications error</string>
+
+    <!-- Note: to be parsed by MessageFormat, play particular attention to quotes -->
+    <string name="count_indication_1_item">{0} {1}</string>
+    <string name="count_indication_k_item">{0}k {1}</string>
+    <string name="count_indication_m_item">{0}m {1}</string>
+    <string name="count_indication_1">{0}</string>
+    <string name="count_indication_k">{0}k</string>
+    <string name="count_indication_m">{0}m</string>
+
+    <string name="no_entries_in_list">No entries in list</string>
+
+    <string name="log_in_to_see_posts">Please log in to see posts</string>
+
+    <string name="back_to_exit">Please press Back again to exit</string>
+
+    <string name="markdownview_scrollup_property" translatable="false">.scrollup</string>
+    <string name="markdownview_scrollup_setting" translatable="false">background-color: #{0}</string>
+
+</resources>
