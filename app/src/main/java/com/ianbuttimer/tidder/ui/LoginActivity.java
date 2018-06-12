@@ -21,28 +21,32 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 
+import com.google.common.net.MediaType;
 import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.TidderApplication;
+import com.ianbuttimer.tidder.event.RedditClientEvent;
 import com.ianbuttimer.tidder.net.NetworkUtils;
 import com.ianbuttimer.tidder.net.RedditUriBuilder;
 import com.ianbuttimer.tidder.reddit.RedditClient;
-import com.ianbuttimer.tidder.event.RedditClientEvent;
 import com.ianbuttimer.tidder.ui.widgets.PostOffice;
 import com.ianbuttimer.tidder.utils.Dialog;
 import com.ianbuttimer.tidder.utils.Utils;
 
 import org.greenrobot.eventbus.Subscribe;
+
+import java.text.MessageFormat;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -148,27 +152,33 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void webviewLogin(final Uri uri) {
-        mDialog = new AuthenticateDialog(this);
 
-        mDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
+        if (NetworkUtils.isInternetAvailable(this)) {
+            mDialog = new AuthenticateDialog(this);
 
-                mDialog.loadUrl(NetworkUtils.convertUriToURL(uri));
-            }
-        });
+            mDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialogInterface) {
 
-        mDialog.setTitle(R.string.authorise_title);
-        mDialog.show();
+                    mDialog.loadUrl(NetworkUtils.convertUriToURL(uri));
+                }
+            });
 
-        mDialog.setWebViewClient(new LoginWebViewClient());
-        mDialog.setWebChromeClient(new WebChromeClient() {
-            public void onProgressChanged(WebView view, int progress) {
-                // Activities and WebViews measure progress with different scales.
-                // The progress meter will automatically disappear when we reach 100%
-                LoginActivity.this.setProgress(progress * 1000);
-            }
-        });
+            mDialog.setTitle(R.string.authorise_title);
+            mDialog.show();
+
+            mDialog.setWebViewClient(new LoginWebViewClient());
+            mDialog.setWebChromeClient(new WebChromeClient() {
+                @Override
+                public void onProgressChanged(WebView view, int progress) {
+                    // Activities and WebViews measure progress with different scales.
+                    // The progress meter will automatically disappear when we reach 100%
+                    LoginActivity.this.setProgress(progress * 1000);
+                }
+            });
+        } else {
+            Dialog.showNoNetworkDialog(this);
+        }
     }
 
 //    @OnClick(R.id.btn_login_imp_loginA)
@@ -232,6 +242,35 @@ public class LoginActivity extends AppCompatActivity {
          */
         private boolean isRedirectHost(Uri uri) {
             return uri.getHost().equals(redirectHost);
+        }
+
+        @Override
+        public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+
+            String htmlData;
+
+            switch (errorCode) {
+                case WebViewClient.ERROR_HOST_LOOKUP:
+                    htmlData = getString(R.string.error_html_message);
+                    htmlData = MessageFormat.format(htmlData, getString(R.string.cant_contact_server));
+                    break;
+                default:
+                    htmlData = getString(R.string.error_html);
+                    htmlData = MessageFormat.format(htmlData, failingUrl, description);
+                    break;
+            }
+
+            mDialog.loadUrl((String)null);
+            mDialog.loadDataWithBaseURL("file:///android_res/drawable/", htmlData,
+                    MediaType.HTML_UTF_8.toString(),
+                    MediaType.HTML_UTF_8.charset().get().toString(),
+                    null);
+            mDialog.invalidate();
+        }
+
+        @Override
+        public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+            super.onReceivedError(view, request, error);
         }
 
         @Override

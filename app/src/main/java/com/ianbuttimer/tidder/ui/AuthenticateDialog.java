@@ -81,6 +81,25 @@ public class AuthenticateDialog extends Dialog {
     }
 
     /**
+     * Loads the given data into this WebView, using baseUrl as the base URL for the content.
+     * @param baseUrl       URL to use as the page's base URL. If null defaults to 'about:blank'.
+     * @param data          String of data in the given encoding mimeType
+     * @param mimeType      MIME type of the data, e.g. 'text/html'. This value may be null.
+     * @param encoding      encoding of the data This value may be null.
+     * @param historyUrl    URL to use as the history entry. If null defaults to 'about:blank'. If non-null, this must be a valid URL.
+     */
+    void loadDataWithBaseURL(String baseUrl, String data, String mimeType, String encoding, String historyUrl) {
+        webView.loadDataWithBaseURL(baseUrl, data, mimeType, encoding, historyUrl);
+    }
+
+    /**
+     * Invalidate the whole webview
+     */
+    void invalidate() {
+        webView.invalidate();
+    }
+
+    /**
      * Stops the current loading
      */
     void stopLoading() {
