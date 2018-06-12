@@ -39,4 +39,11 @@
 
     <integer name="widget_colour_gradient">225</integer>
 
+
+    <!-- values from https://developer.android.com/reference/android/view/View#attr_android:textAlignment -->
+    <integer name="align_text_start">2</integer>    <!-- Align to the start of the paragraph, for example: ALIGN_NORMAL. -->
+    <integer name="align_text_end">3</integer>      <!-- Align to the end of the paragraph, for example: ALIGN_OPPOSITE. -->
+
+    <integer name="text_alignment">@integer/align_text_start</integer>
+
 </resources>

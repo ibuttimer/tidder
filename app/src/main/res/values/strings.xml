@@ -146,7 +146,28 @@
 
     <string name="back_to_exit">Please press Back again to exit</string>
 
+    <string name="markdownview_text_align_left" translatable="false">left</string>
+    <string name="markdownview_text_align_right" translatable="false">right</string>
+    <string name="markdownview_dir" translatable="false">ltr</string>
     <string name="markdownview_scrollup_property" translatable="false">.scrollup</string>
     <string name="markdownview_scrollup_setting" translatable="false">background-color: #{0}</string>
+    <string name="markdownview_paragraph_property" translatable="false">p</string>
+    <string name="markdownview_text_align_setting" translatable="false">text-align: {0}</string>
+    <string name="markdownview_text_left_property" translatable="false">.text-left</string>
+    <string name="markdownview_text_right_property" translatable="false">.text-right</string>
+    <string name="markdownview_th_left_property" translatable="false">th[align=left]</string>
+    <string name="markdownview_th_right_property" translatable="false">th[align=right]</string>
+    <string name="markdownview_td_left_property" translatable="false">td[align=left]</string>
+    <string name="markdownview_td_right_property" translatable="false">td[align=right]</string>
+    <string name="markdownview_h1_property" translatable="false">h1</string>
+    <string name="markdownview_h2_property" translatable="false">h2</string>
+    <string name="markdownview_h3_property" translatable="false">h3</string>
+    <string name="markdownview_h4_property" translatable="false">h4</string>
+    <string name="markdownview_h5_property" translatable="false">h5</string>
+    <string name="markdownview_h6_property" translatable="false">h6</string>
+    <string name="markdownview_ul_property" translatable="false">ul</string>
+    <string name="markdownview_ol_property" translatable="false">ol</string>
+    <string name="markdownview_dir_setting" translatable="false">direction: {0}</string>
+
 
 </resources>

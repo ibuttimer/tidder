@@ -80,6 +80,7 @@ dependencies {
     implementation "org.parceler:parceler-api:$rootProject.ext.parcelerVersion"
     annotationProcessor "org.parceler:parceler:$rootProject.ext.parcelerVersion"
     implementation 'org.greenrobot:eventbus:3.1.1'
+    // TODO update rootProject.ext.supportLibVersion to 27.1.1 once recyclerviewhelper updates
     implementation "com.github.nisrulz:recyclerviewhelper:$rootProject.ext.supportLibVersion"
     implementation "net.opacapp:multiline-collapsingtoolbar:$rootProject.ext.supportLibVersion"
     implementation 'com.google.guava:guava:25.0-android'

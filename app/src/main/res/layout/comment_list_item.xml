@@ -29,6 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/text_margin"
         android:layout_marginStart="@dimen/text_margin"
+        android:textAlignment="@integer/text_alignment"
         android:textColorLink="@color/colorPrimaryDark"
         android:clickable="true"
         android:focusable="true"

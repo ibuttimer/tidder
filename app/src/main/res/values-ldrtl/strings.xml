@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="markdownview_text_align_left" translatable="false">right</string>
+    <string name="markdownview_text_align_right" translatable="false">left</string>
+    <string name="markdownview_dir" translatable="false">rtl</string>
+
+</resources>

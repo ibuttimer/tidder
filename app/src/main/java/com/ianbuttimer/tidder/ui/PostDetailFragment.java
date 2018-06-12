@@ -73,6 +73,8 @@ public class PostDetailFragment extends CommentThreadFragment implements PostOff
 
     public static final String TAG = PostDetailFragment.class.getSimpleName();
 
+    private static final int TOAST_TITLE_LEN = 10;  // max length of title int pin/unpin toast
+
     @BindView(R.id.wv_selftext_postA) WebView wvSelfText;
     @BindView(R.id.img_thumbnail_postA) ImageView imgThumbnail;
 
@@ -297,6 +299,12 @@ public class PostDetailFragment extends CommentThreadFragment implements PostOff
         if (TextUtils.isEmpty(name)) {
             return;
         }
+        String title = link.getTitle();
+        if (TextUtils.isEmpty(title)) {
+            title = "";
+        } else if (title.length() > TOAST_TITLE_LEN) {
+            title = title.substring(0, TOAST_TITLE_LEN) + "...";
+        }
         Context context = getContext();
         DatabaseIntentService.Builder builder;
         @StringRes int toastResult;
@@ -329,7 +337,7 @@ public class PostDetailFragment extends CommentThreadFragment implements PostOff
                     .selectionArgs(name)
                     .resultReceiver(new ToastReceiver(context, MessageFormat.format(
                             context.getResources().getString(toastResult),
-                            name)))
+                            title)))
                     .build());
         }
     }

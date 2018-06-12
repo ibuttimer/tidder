@@ -15,16 +15,23 @@
   ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<android.support.v4.view.ViewPager
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container_postList"
-    android:name="com.ianbuttimer.tidder.ui.PostListFragment"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginStart="@dimen/postlist_horizontal_margin"
-    android:layout_marginEnd="@dimen/postlist_horizontal_margin"
-    app:layoutManager="LinearLayoutManager"
-    tools:context="com.ianbuttimer.tidder.ui.PostListActivity"
-    tools:listitem="@layout/content_post" />
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tv_ul_bullet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/unordered_list_bullet" />
+
+    <TextView
+        android:id="@+id/tv_ul_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/unordered_list_item_margin"
+        tools:text="@string/unordered_list_bullet" />
+
+</LinearLayout>

@@ -114,9 +114,6 @@ public class BasicStatsView extends ConstraintLayout {
             String html = MessageFormat.format(
                     context.getString(R.string.link_author_format), source.getAuthor());
             tvAuthor.setText(Html.fromHtml(html)
-
-//                    MessageFormat.format(
-//                            context.getString(R.string.link_author_format), source.getAuthor())
             );
         }
     }

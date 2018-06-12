@@ -48,8 +48,8 @@
     <ListView
         android:id="@+id/appwidget_listview"
         android:layout_below="@id/ll_appwidget_title"
-        android:layout_marginLeft="@dimen/small_margin"
-        android:layout_marginRight="@dimen/small_margin"
+        android:layout_marginStart="@dimen/small_margin"
+        android:layout_marginEnd="@dimen/small_margin"
         android:layout_marginBottom="@dimen/small_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

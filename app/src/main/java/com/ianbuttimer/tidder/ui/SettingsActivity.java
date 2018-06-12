@@ -23,7 +23,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.ianbuttimer.tidder.R;
-import com.ianbuttimer.tidder.utils.Utils;
+import com.ianbuttimer.tidder.utils.ScreenUtils;
 
 import timber.log.Timber;
 
@@ -45,7 +45,7 @@ public class SettingsActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        Point dim = Utils.getScreenDp(this);
+        Point dim = ScreenUtils.getScreenDp(this);
         Timber.i("Device: x %ddp, y %ddp", dim.x, dim.y);
     }
 

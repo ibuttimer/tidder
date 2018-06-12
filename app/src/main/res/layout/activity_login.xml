@@ -41,6 +41,8 @@
         android:layout_marginEnd="@dimen/button_margin"
         android:layout_marginStart="@dimen/button_margin"
         android:layout_marginTop="@dimen/button_margin"
+        android:paddingEnd="@dimen/button_margin"
+        android:paddingStart="@dimen/button_margin"
         android:contentDescription="@string/login_to_reddit"
         android:drawableStart="@drawable/ic_enter"
         android:text="@string/login_to_reddit"

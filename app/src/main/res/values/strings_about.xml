@@ -26,9 +26,10 @@
     <string name="about_license_link">You should have received a copy of the GNU General Public License along with this program. If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</string>
 
     <string name="acknowledgements">Acknowledgements</string>
-    <string name="ack_icons8">&#x2022; Some icons courtesy of icons8 (<a href="http://icons8.com/">icons8</a>) licensed under the (<a href="http://creativecommons.org/licenses/by-nd/3.0/">Creative Commons Attribution-NoDerivs 3.0 Unported License</a>).</string>
-    <string name="ack_icons_material">&#x2022; Some icons courtesy of Material Design (<a href="https://material.io/icons/">material.io</a>) licensed under the (<a href="https://github.com/google/material-design-icons/blob/master/LICENSE">Apache License, Version 2.0</a>).</string>
-    <string name="ack_noto_font">&#x2022; Noto Sans font courtesy of Google (<a href="https://fonts.google.com/specimen/Noto+Sans">fonts.google.com</a>) licensed under the (<a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>).</string>
+    <string name="unordered_list_bullet">&#x2022; </string>
+    <string name="ack_icons8">Some icons courtesy of icons8 (<a href="http://icons8.com/">icons8</a>) licensed under the (<a href="http://creativecommons.org/licenses/by-nd/3.0/">Creative Commons Attribution-NoDerivs 3.0 Unported License</a>).</string>
+    <string name="ack_icons_material">Some icons courtesy of Material Design (<a href="https://material.io/icons/">material.io</a>) licensed under the (<a href="https://github.com/google/material-design-icons/blob/master/LICENSE">Apache License, Version 2.0</a>).</string>
+    <string name="ack_noto_font">Noto Sans font courtesy of Google (<a href="https://fonts.google.com/specimen/Noto+Sans">fonts.google.com</a>) licensed under the (<a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>).</string>
 
 
 </resources>

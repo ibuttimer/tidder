@@ -18,6 +18,7 @@
 
     <dimen name="small_margin">4dp</dimen>
     <dimen name="text_margin">8dp</dimen>
+    <dimen name="unordered_list_item_margin">6dp</dimen>
     <dimen name="button_margin">8dp</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>

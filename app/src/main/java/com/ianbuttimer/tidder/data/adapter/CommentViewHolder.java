@@ -108,6 +108,10 @@ public class CommentViewHolder extends AbstractViewHolder<Comment> {
         removeIndents();
     }
 
+    /**
+     * Add indents to indicate reply level
+     * @param info
+     */
     public void addIndents(Comment info) {
         int depth = info.getDepth();
         if (depth > 0) {

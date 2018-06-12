@@ -18,6 +18,7 @@ package com.ianbuttimer.tidder.ui;
 
 import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.event.RedditClientEvent;
+import com.ianbuttimer.tidder.event.StandardEvent;
 
 
 /**

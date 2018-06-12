@@ -29,7 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ianbuttimer.tidder.TidderApplication;
-import com.ianbuttimer.tidder.utils.Utils;
+import com.ianbuttimer.tidder.utils.ScreenUtils;
 
 /**
  * Ui-related utility functions
@@ -81,7 +81,7 @@ public class UiUtils {
             view.getLocationOnScreen(location);
 
             int top = location[1] - view.getHeight();
-            top = Utils.convertPixelsToDp(appCtx, top);
+            top = ScreenUtils.convertPixelsToDp(appCtx, top);
             if (top < 0) {
                 top = 0;
             }

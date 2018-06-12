@@ -19,4 +19,12 @@
     <declare-styleable name="BasicStatsView">
         <attr name="layoutId" format="reference" />
     </declare-styleable>
+    <declare-styleable name="UnorderedListItem">
+        <attr name="bulletId" format="reference" />
+        <attr name="itemId" format="reference" />
+        <attr name="textAppearance" format="reference" />
+        <attr name="textAlignment" format="reference" />
+        <attr name="textColorLink" format="reference" />
+        <attr name="textColor" format="reference" />
+    </declare-styleable>
 </resources>

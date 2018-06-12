@@ -20,20 +20,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.Dimension;
 import android.support.annotation.PluralsRes;
 import android.support.annotation.StringRes;
 import android.support.v4.app.NavUtils;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
-import android.util.DisplayMetrics;
 import android.view.MenuItem;
-import android.view.WindowManager;
 
 import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.TidderApplication;
@@ -292,206 +287,6 @@ public class Utils {
     }
 
     /**
-     * Get the screen metrics.
-     * @param activity  The current activity
-     * @return  screen metrics
-     */
-    public static DisplayMetrics getScreenMetrics(Activity activity) {
-        return getScreenMetrics(activity.getWindowManager());
-    }
-
-    /**
-     * Get the display metrics.
-     * @param manager  The current window manager
-     * @return  screen metrics
-     */
-    private static DisplayMetrics getScreenMetrics(WindowManager manager) {
-        DisplayMetrics metrics = new DisplayMetrics();
-        manager.getDefaultDisplay().getMetrics(metrics);
-        return metrics;
-    }
-
-    /**
-     * Get the available screen size in pixels.
-     * @param activity  The current activity
-     * @return  screen size
-     */
-    public static Point getScreenSize(Activity activity) {
-        DisplayMetrics metrics = getScreenMetrics(activity);
-        return new Point(metrics.widthPixels, metrics.heightPixels);
-    }
-
-    /**
-     * Get the available screen width in pixels.
-     * @param activity  The current activity
-     * @return  screen width
-     */
-    public static int getScreenWidth(Activity activity) {
-        Point size = getScreenSize(activity);
-        return size.x;
-    }
-
-    /**
-     * Get the available screen height in pixels.
-     * @param activity  The current activity
-     * @return  screen height
-     */
-    public static int getScreenHeight(Activity activity) {
-        Point size = getScreenSize(activity);
-        return size.y;
-    }
-
-    /**
-     * Get the available screen size in density-independent pixels.
-     * @param activity  The current activity
-     * @return  screen size
-     */
-    public static Point getScreenDp(Activity activity) {
-        DisplayMetrics metrics = getScreenMetrics(activity);
-        float dpWidth = metrics.widthPixels / metrics.density;
-        float dpHeight = metrics.heightPixels / metrics.density;
-        return new Point(Float.valueOf(dpWidth).intValue(), Float.valueOf(dpHeight).intValue());
-    }
-
-    /**
-     * Get the available screen width in density-independent pixels.
-     * @param activity  The current activity
-     * @return  screen width
-     */
-    public static int getScreenDpWidth(Activity activity) {
-        Point size = getScreenDp(activity);
-        return size.x;
-    }
-
-    /**
-     * Get the available screen height in density-independent pixels.
-     * @param activity  The current activity
-     * @return  screen height
-     */
-    public static int getScreenDpHeight(Activity activity) {
-        Point size = getScreenDp(activity);
-        return size.y;
-    }
-
-    /**
-     * Convert between density-independent pixels & pixels
-     * @param context   The current context
-     * @param in        Value to convert
-     * @param dimen     Value unit
-     * @return  pixel size
-     */
-    private static int convertBetweenDpAndPixels(Context context, int in, @Dimension int dimen) {
-        DisplayMetrics metrics = getScreenMetrics((WindowManager)context.getApplicationContext().getSystemService(Context.WINDOW_SERVICE));
-        float out;
-        switch (dimen) {
-            case Dimension.DP:
-                out = in * metrics.density;
-                break;
-            case Dimension.PX:
-                out = in / metrics.density;
-                break;
-            default:
-                out = 0;
-                break;
-        }
-        return Float.valueOf(out).intValue();
-    }
-
-    /**
-     * Convert density-independent pixels to pixels
-     * @param context   The current context
-     * @param dp        Dp to convert
-     * @return  pixel size
-     */
-    public static int convertDpToPixels(Context context, int dp) {
-        return convertBetweenDpAndPixels(context, dp, Dimension.DP);
-    }
-
-    /**
-     * Convert pixels to density-independent pixels
-     * @param context   The current context
-     * @param pixels    Pixels to convert
-     * @return  pixel size
-     */
-    public static int convertPixelsToDp(Context context, int pixels) {
-        return convertBetweenDpAndPixels(context, pixels, Dimension.PX);
-    }
-
-    /**
-     * Helper method to determine if the device has an extra-large screen. For
-     * example, 10" tablets are extra-large.
-     */
-    private static boolean isSize(Context context, int size) {
-        return (context.getResources().getConfiguration().screenLayout
-                & Configuration.SCREENLAYOUT_SIZE_MASK) >= size;
-    }
-
-    /**
-     * Determine if the device has an extra-large screen, i.e. at least approximately 720x960 dp units
-     * @param context   The current context
-     * @return <code>true</code> if device has an extra-large screen, <code>false</code> otherwise
-     */
-    public static boolean isXLargeScreen(Context context) {
-        return isSize(context, Configuration.SCREENLAYOUT_SIZE_XLARGE);
-    }
-
-    /**
-     * Determine if the device has a large screen, i.e. at least approximately 480x640 dp units
-     * @param context   The current context
-     * @return <code>true</code> if device has a large screen, <code>false</code> otherwise
-     */
-    public static boolean isLargeScreen(Context context) {
-        return isSize(context, Configuration.SCREENLAYOUT_SIZE_LARGE);
-    }
-
-    /**
-     * Determine if the device has a normal screen, i.e. at least approximately 320x470 dp units
-     * @param context   The current context
-     * @return <code>true</code> if device has a normal screen, <code>false</code> otherwise
-     */
-    public static boolean isNormalScreen(Context context) {
-        return isSize(context, Configuration.SCREENLAYOUT_SIZE_NORMAL);
-    }
-
-    /**
-     * Determine if the device has a small screen, i.e. at least approximately 320x426 dp units
-     * @param context   The current context
-     * @return <code>true</code> if device has a small screen, <code>false</code> otherwise
-     */
-    public static boolean isSmallScreen(Context context) {
-        return isSize(context, Configuration.SCREENLAYOUT_SIZE_SMALL);
-    }
-
-    /**
-     * Determine if the device screen is in portrait orientation
-     * @param context   The current context
-     * @return <code>true</code> if screen is in portrait orientation, <code>false</code> otherwise
-     */
-    public static boolean isPotraitScreen(Context context) {
-        return (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
-    }
-
-    /**
-     * Determine if the device screen width is at least the specified number of pixels
-     * @param activity  The current activity
-     * @param width     Width to test in density-independent pixels
-     * @return <code>true</code> if screen width at least specified size, <code>false</code> otherwise
-     */
-    public static boolean isScreenWidth(Activity activity, int width) {
-        return (getScreenDpWidth(activity) >= width);
-    }
-
-    /**
-     * Determine if the device screen height is at least the specified number of pixels
-     * @param activity  The current activity
-     * @param height    Height to test in density-independent pixels
-     * @return <code>true</code> if screen width at least specified size, <code>false</code> otherwise
-     */
-    public static boolean isScreenHeight(Activity activity, int height) {
-        return (getScreenDpHeight(activity) >= height);
-    }
-
-    /**
      * Returns a ascending numerical order sorted copy of an array
      * @param unsorted  Array to copy
      * @return  new sorted array, or empty array if <code>null</code> was passed
@@ -719,23 +514,6 @@ public class Utils {
                     calendar.add(field, 1);
                     ++span;
                 }
-//            } else {
-//                GregorianCalendar calendar = new GregorianCalendar();
-//                long future;
-//                if (ago) {
-//                    calendar.setTimeInMillis(time);
-//                    future = now;
-//                    redId = R.plurals.time_span_days_ago;
-//                } else {
-//                    calendar.setTimeInMillis(now);
-//                    future = time;
-//                    redId = R.plurals.time_span_in_days;
-//                }
-//                span = -1;
-//                while (calendar.getTimeInMillis() < future) {
-//                    calendar.add(Calendar.D, 1);
-//                    ++span;
-//                }
             }
             timeSpan = TidderApplication.getWeakApplicationContext().get()
                             .getResources().getQuantityString(

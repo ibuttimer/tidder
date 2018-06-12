@@ -21,10 +21,10 @@ import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.data.Config;
 import com.ianbuttimer.tidder.data.ConfigQueryResponse;
 import com.ianbuttimer.tidder.event.RedditClientEvent;
+import com.ianbuttimer.tidder.event.StandardEvent;
 import com.ianbuttimer.tidder.ui.util.DatabaseSettings;
 import com.ianbuttimer.tidder.ui.widgets.PostOffice;
 import com.ianbuttimer.tidder.utils.Utils;
-
 
 /**
  * Base class for Posts activity tab fragments

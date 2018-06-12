@@ -40,6 +40,7 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:maxLines="3"
             app:expandedTitleMarginStart="@dimen/collapsing_toolbar_expanded_title_margin"
+            android:textAlignment="@integer/text_alignment"
             app:toolbarId="@+id/toolbar">
 
             <android.support.v7.widget.Toolbar
