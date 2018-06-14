@@ -25,9 +25,14 @@
     <string name="admob_id" translatable="false">ca-app-pub-3940256099942544~3347511713</string> <!-- AdMob test id -->
     <string name="admob_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string> <!-- AdMob banner test unit id -->
 
-    <string name="admob_test_device_id_todo" translatable="false">replace value with AdMob test devide ID</string>
+    <string name="admob_test_device_id_todo" translatable="false">replace value with AdMob test device ID</string>
     <!-- TODO replace values with AdMob test device ID for testing purposes -->
+    <!-- see https://developers.google.com/admob/android/test-ads
+           "1. Load your ads-integrated app and make an ad request.
+            2. Check the logcat output for a message that looks like this:
+                    I/Ads: Use AdRequest.Builder.addTestDevice("33BE2250B43518CCDA7DE426D04EE231")
+                    to get test ads on this device."
+            Save your test device ID as value for 'admob_test_device_id' -->
     <string name="admob_test_device_id" translatable="false">@string/admob_test_device_id_todo</string>
-    <!--<string name="admob_test_device_id" translatable="false">009D1556DC160E7B1D41E44EBE556A09</string>-->
 
 </resources>

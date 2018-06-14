@@ -16,6 +16,19 @@
 
 <resources>
 
-    <dimen name="fab_bottom_margin">58dp</dimen>    <!-- admob standard bannder height (50) + fab_margin / 2 (8) -->
+    <dimen name="fab_bottom_margin">58dp</dimen>    <!-- AdMob standard bannder height (50) + fab_margin / 2 (8) -->
+
+    <!-- AdMob standard banner sizes taken from
+            https://developers.google.com/admob/android/banner#banner_sizes -->
+    <dimen name="admob_banner_width">320dp</dimen>          <!-- AdSize.BANNER -->
+    <dimen name="admob_banner_height">50dp</dimen>
+    <dimen name="admob_large_banner_width">320dp</dimen>    <!-- AdSize.LARGE_BANNER -->
+    <dimen name="admob_large_banner_height">100dp</dimen>
+    <dimen name="admob_medium_banner_width">300dp</dimen>   <!-- AdSize.MEDIUM_RECTANGLE -->
+    <dimen name="admob_medium_banner_height">250dp</dimen>
+    <dimen name="admob_full_banner_width">468dp</dimen>     <!-- AdSize.FULL_BANNER -->
+    <dimen name="admob_full_banner_height">60dp</dimen>
+    <dimen name="admob_leaderboard_width">728dp</dimen>     <!-- AdSize.LEADERBOARD -->
+    <dimen name="admob_leaderboard_height">90dp</dimen>
 
 </resources>

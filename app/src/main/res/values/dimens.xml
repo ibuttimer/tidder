@@ -27,7 +27,7 @@
     <dimen name="list_item_margin">2dp</dimen>
 
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="fab_bottom_margin">16dp</dimen>
+    <dimen name="fab_bottom_margin">@dimen/fab_margin</dimen>
     <dimen name="fab_size_normal">56dp</dimen>
     <dimen name="fab_size_mini">40dp</dimen>
     <dimen name="fab_mini_margin_to_centre_in_normal">8dp</dimen>
@@ -36,7 +36,6 @@
     <dimen name="login_icon_size">150dp</dimen>
 
     <dimen name="app_bar_height">200dp</dimen>
-    <dimen name="item_width">300dp</dimen>
 
     <!-- button_margin + fab_mini_margin_to_centre_in_normal -->
 

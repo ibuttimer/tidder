@@ -39,7 +39,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/container_postList"
         android:name="com.ianbuttimer.tidder.ui.PostListFragment"
-        android:layout_width="@dimen/item_width"
+        android:layout_width="@dimen/post_list_tablet_width"
         android:layout_height="match_parent"
         android:layout_marginEnd="@dimen/postlist_horizontal_margin"
         app:layoutManager="LinearLayoutManager"

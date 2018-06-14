@@ -30,6 +30,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
         android:text="@string/paid_app_feature"
+        style="@style/Base.TextAppearance.AppCompat.Large"
+        android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@+id/adView_listing_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
