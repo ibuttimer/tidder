@@ -38,6 +38,7 @@ import android.widget.TextView;
 import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.data.adapter.AbstractRecycleViewAdapter;
 import com.ianbuttimer.tidder.data.adapter.AbstractViewHolder;
+import com.ianbuttimer.tidder.event.StandardEvent;
 import com.ianbuttimer.tidder.net.UriUtils;
 import com.ianbuttimer.tidder.reddit.BaseObject;
 import com.ianbuttimer.tidder.reddit.ListingList;
@@ -256,6 +257,12 @@ public abstract class AbstractListingTabFragment<T extends BaseObject, K extends
                 }
                 ++mRegisterCount;
             }
+
+            StandardEvent event = PostOffice.removeStickyEvent(StandardEvent.class);
+            if (event != null) {
+                // repost so subscriber that missed it can receive it
+                postEvent(event);
+            }
         }
     }
 
@@ -284,12 +291,28 @@ public abstract class AbstractListingTabFragment<T extends BaseObject, K extends
         PostOffice.postEvent(event, tags);
     }
 
+    protected <E extends AbstractEvent> void postSticky(E event) {
+        postSticky(event, getAddress());
+    }
+
+    protected <E extends AbstractEvent> void postSticky(E event, String... tags) {
+        PostOffice.postSticky(event, tags);
+    }
+
     protected <E extends AbstractEvent> void postEventForActivity(E event) {
         postEventForActivity(event, getAddress());
     }
 
     protected <E extends AbstractEvent> void postEventForActivity(E event, String... tags) {
         PostOffice.postEvent(event.setAddress(getActivityTag()), tags);
+    }
+
+    protected <E extends AbstractEvent> void postStickyForActivity(E event) {
+        postStickyForActivity(event, getAddress());
+    }
+
+    protected <E extends AbstractEvent> void postStickyForActivity(E event, String... tags) {
+        PostOffice.postSticky(event.setAddress(getActivityTag()), tags);
     }
 
     protected String getActivityTag() {
@@ -308,9 +331,9 @@ public abstract class AbstractListingTabFragment<T extends BaseObject, K extends
         return true;
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onMessageEvent(AbstractEvent event) {
-        processMessageEvent(event);
+         processMessageEvent(event);
     }
 
     protected abstract void processMessageEvent(AbstractEvent event);

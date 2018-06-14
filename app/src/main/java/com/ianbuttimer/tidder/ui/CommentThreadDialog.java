@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatDialogFragment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,9 @@ import com.ianbuttimer.tidder.event.StandardEvent;
 import com.ianbuttimer.tidder.reddit.Comment;
 import com.ianbuttimer.tidder.reddit.Link;
 import com.ianbuttimer.tidder.ui.widgets.PostOffice;
+import com.ianbuttimer.tidder.utils.ScreenUtils;
+
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 public class CommentThreadDialog extends AppCompatDialogFragment
         implements PostOffice.IAddressable, CommentThreadProcessor.ICommentThread {
@@ -63,8 +67,6 @@ public class CommentThreadDialog extends AppCompatDialogFragment
         return mProcessor.onCreateView(inflater, container, savedInstanceState);
     }
 
-
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -82,7 +84,6 @@ public class CommentThreadDialog extends AppCompatDialogFragment
     @Override
     public int getLayoutId() {
         return R.layout.dialog_thread;
-//        return R.layout.content_thread;
     }
 
     @Override
@@ -103,7 +104,8 @@ public class CommentThreadDialog extends AppCompatDialogFragment
 
     @Override
     public void onStart(boolean emptyList) {
-        // no op
+        // Set the dialog width
+        ScreenUtils.setDialogSize(getDialog(), 0.75f, WRAP_CONTENT, Gravity.CENTER);
     }
 
     @Override

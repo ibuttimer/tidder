@@ -18,6 +18,7 @@ package com.ianbuttimer.tidder.ui.widgets;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.Nullable;
 
 import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.TidderApplication;
@@ -28,6 +29,9 @@ import org.greenrobot.eventbus.EventBus;
 
 import timber.log.Timber;
 
+/**
+ * Event post office
+ */
 public class PostOffice {
 
     private static final PostOffice ourInstance = new PostOffice();
@@ -42,10 +46,17 @@ public class PostOffice {
     private static final int LOG_NOT_HANDLED = 0x02;
     private static int mLogHandled;
 
+    /**
+     * Get the PostOffice
+     * @return  PostOffice object
+     */
     public static PostOffice getInstance() {
         return ourInstance;
     }
 
+    /**
+     * Constructor
+     */
     private PostOffice() {
         Context context = TidderApplication.getWeakApplicationContext().get();
 
@@ -66,7 +77,10 @@ public class PostOffice {
         PreferenceControl.registerOnSharedPreferenceChangeListener(context, sPrefListener);
     }
 
-
+    /**
+     * Set delivery logging
+     * @param context   Current context
+     */
     private void setLogDelivery(Context context) {
         String setting = PreferenceControl.getLogEventDeliveryPreference(context);
 
@@ -80,6 +94,10 @@ public class PostOffice {
         }
     }
 
+    /**
+     * Set handled logging
+     * @param context   Current context
+     */
     private void setLogHandled(Context context) {
         String setting = PreferenceControl.getLogEventHandledPreference(context);
 
@@ -93,25 +111,90 @@ public class PostOffice {
         }
     }
 
+    /**
+     * Post an event
+     * @param event Event to post
+     * @param tags  Address(s) to post too
+     * @param <T>   Event class
+     */
     public static <T extends AbstractEvent> void postEvent(T event, String... tags) {
         logPost(event.addAddress(tags));
         EventBus.getDefault().post(event);
     }
 
+    /**
+     * Post a sticky event
+     * @param event Event to post
+     * @param tags  Address(s) to post too
+     * @param <T>   Event class
+     */
+    public static <T extends AbstractEvent> void postSticky(T event, String... tags) {
+        logPost(event.addAddress(tags));
+        EventBus.getDefault().postSticky(event);
+    }
+
+    /**
+     * Get the most recent sticky event
+     * @param tClass    Class of event
+     * @param <T>       Class of event
+     * @return  Event or <code>null</code> if no events
+     */
+    @Nullable
+    public static <T extends AbstractEvent> T getStickyEvent(Class<T> tClass) {
+        return EventBus.getDefault().getStickyEvent(tClass);
+    }
+
+    /**
+     * Remove the most recent sticky event
+     * @param tClass    Class of event
+     * @param <T>       Class of event
+     * @return  Event or <code>null</code> if no events
+     */
+    @Nullable
+    public static <T extends AbstractEvent> T removeStickyEvent(Class<T> tClass) {
+        return EventBus.getDefault().removeStickyEvent(tClass);
+    }
+
+    /**
+     * Check if an addressed event should be delivered to a destination
+     * @param event         Event
+     * @param destination   Destination address
+     * @return  <code>true</code> if event should be delivered
+     */
     public static boolean deliverEvent(AbstractEvent event, String destination) {
         return deliverEvent(event, destination, destination);
     }
 
+    /**
+     * Check if an addressed event should be delivered to a destination
+     * @param event         Event
+     * @param destination   Destination address
+     * @param tag           Tag to display in log
+     * @return  <code>true</code> if event should be delivered
+     */
     public static boolean deliverEvent(AbstractEvent event, String destination, String tag) {
         boolean deliver = event.isForTag(destination);
         logDeliver(event, tag, deliver);
         return deliver;
     }
 
+    /**
+     * Check if an addressed or broadcast event should be delivered to a destination
+     * @param event         Event
+     * @param destination   Destination address
+     * @return  <code>true</code> if event should be delivered
+     */
     public static boolean deliverEventOrBroadcast(AbstractEvent event, String destination) {
         return deliverEventOrBroadcast(event, destination, destination);
     }
 
+    /**
+     * Check if an addressed or broadcast event should be delivered to a destination
+     * @param event         Event
+     * @param destination   Destination address
+     * @param tag       Tag to display in log
+     * @return  <code>true</code> if event should be delivered
+     */
     public static boolean deliverEventOrBroadcast(AbstractEvent event, String destination, String tag) {
         boolean deliver = event.isBroadcast();
         if (!deliver) {
@@ -122,13 +205,24 @@ public class PostOffice {
         return deliver;
     }
 
-
+    /**
+     * Log the posting of an event
+     * @param event     Event
+     * @param <T>       Event class
+     */
     public static <T extends AbstractEvent> void logPost(T event) {
         if (mLogPost) {
             Timber.i("postEvent: %s", event);
         }
     }
 
+    /**
+     * Log an event delivery
+     * @param event     Event
+     * @param tag       Tag to display in log
+     * @param deliver   Delivered flag
+     * @param <T>       Event class
+     */
     public static <T extends AbstractEvent> void logDeliver(T event, String tag, boolean deliver) {
         String msg = null;
         if (deliver && isSet(mLogDelivery, LOG_DELIVERY)) {
@@ -141,6 +235,13 @@ public class PostOffice {
         }
     }
 
+    /**
+     * Log an event handled status
+     * @param event     Event
+     * @param tag       Tag to display in log
+     * @param handled   Handled flag
+     * @param <T>       Event class
+     */
     public static <T extends AbstractEvent> void logHandled(T event, String tag, boolean handled) {
         String msg = null;
         if (handled && isSet(mLogHandled, LOG_HANDLED)) {
@@ -153,16 +254,29 @@ public class PostOffice {
         }
     }
 
+    /**
+     * Register a subscriber
+     * @param subscriber    Subscriber
+     */
     public static void register(Object subscriber) {
         EventBus.getDefault().register(subscriber);
         Timber.d("PostOffice: register %s", subscriber.getClass().getSimpleName());
     }
 
+    /**
+     * Unregister a subscriber
+     * @param subscriber    Subscriber
+     */
     public static void unregister(Object subscriber) {
         EventBus.getDefault().unregister(subscriber);
         Timber.d("PostOffice: unregister %s", subscriber.getClass().getSimpleName());
     }
 
+    /**
+     * Check if a subscriber is registered
+     * @param subscriber    Subscriber
+     * @return <code>true</code> if registered
+     */
     public static boolean isRegistered(Object subscriber) {
         boolean registered = EventBus.getDefault().isRegistered(subscriber);
         Timber.d("PostOffice: isRegistered %s %s", subscriber.getClass().getSimpleName(), registered);

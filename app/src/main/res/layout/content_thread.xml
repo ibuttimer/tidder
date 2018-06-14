@@ -40,12 +40,27 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content" />
 
+    <com.ianbuttimer.tidder.ui.widgets.BasicStatsView
+        android:id="@+id/bsv_post_or_thread"
+        app:layoutId="@layout/basic_stats_content_post_thread"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/text_margin"
+        android:layout_marginStart="@dimen/text_margin"
+        android:layout_marginEnd="@dimen/text_margin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title_post_or_thread"
+        />
+
     <android.support.v7.widget.CardView
         android:id="@+id/cv_thread_warn_threadA"
-        app:layout_constraintEnd_toEndOf="@+id/tv_title_post_or_thread"
-        app:layout_constraintStart_toStartOf="@+id/tv_title_post_or_thread"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title_post_or_thread"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bsv_post_or_thread"
         android:layout_margin="@dimen/small_margin"
+        android:layout_marginStart="@dimen/text_margin"
+        android:layout_marginEnd="@dimen/text_margin"
         android:layout_width="0dp"
         android:layout_height="wrap_content">
 
@@ -59,17 +74,6 @@
             android:layout_height="wrap_content" />
     </android.support.v7.widget.CardView>
 
-    <com.ianbuttimer.tidder.ui.widgets.BasicStatsView
-        android:id="@+id/bsv_post_or_thread"
-        app:layoutId="@layout/basic_stats_content_post_thread"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/text_margin"
-        app:layout_constraintStart_toStartOf="@+id/tv_title_post_or_thread"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cv_thread_warn_threadA"
-        />
-
     <include layout="@layout/listing_layout"
         android:id="@+id/inc_listing_layout"
         android:layout_width="0dp"
@@ -79,7 +83,7 @@
         android:layout_marginEnd="@dimen/text_margin"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bsv_post_or_thread"
+        app:layout_constraintTop_toBottomOf="@+id/cv_thread_warn_threadA"
         app:layout_constraintBottom_toBottomOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

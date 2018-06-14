@@ -31,6 +31,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.data.ApiResponseCallback;
@@ -47,6 +48,7 @@ import com.ianbuttimer.tidder.reddit.Response;
 import com.ianbuttimer.tidder.reddit.get.AllSubredditsRequest;
 import com.ianbuttimer.tidder.reddit.get.SubredditsSearchRequest;
 import com.ianbuttimer.tidder.reddit.post.ApiSearchSubredditsRequest;
+import com.ianbuttimer.tidder.ui.util.ISectionsPagerAdapter;
 import com.ianbuttimer.tidder.ui.widgets.PostOffice;
 import com.ianbuttimer.tidder.ui.widgets.ToastReceiver;
 import com.ianbuttimer.tidder.utils.PreferenceControl;
@@ -58,7 +60,7 @@ import java.text.MessageFormat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class FollowActivity extends AppCompatActivity {
+public class FollowActivity extends AppCompatActivity implements ISectionsPagerAdapter {
 
     private static final String TAG = FollowActivity.class.getSimpleName();
     private static final String TAG_FOLLOW_EVENT = TAG + ":onFollowEvent";
@@ -289,10 +291,30 @@ public class FollowActivity extends AppCompatActivity {
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    public class SectionsPagerAdapter extends FragmentPagerAdapter implements ISectionsPagerAdapter {
+
+        private final FragmentManager mFragmentManager;
+        private ViewGroup mContainer;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
+            mFragmentManager = fm;
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            mContainer = container;
+            return super.instantiateItem(container, position);
+        }
+
+        @Override
+        @Nullable
+        public Fragment getFragment(int position) {
+            final long itemId = getItemId(position);
+
+            // Do we have this fragment?
+            String name = makeFragmentName(mContainer.getId(), itemId);
+            return mFragmentManager.findFragmentByTag(name);
         }
 
         @Override
@@ -305,6 +327,24 @@ public class FollowActivity extends AppCompatActivity {
         public int getCount() {
             return Tabs.values().length;
         }
+
+        /**
+         * Get fragment name tag. <b>Note:</b> copied from super class
+         */
+        private String makeFragmentName(int viewId, long id) {
+            return "android:switcher:" + viewId + ":" + id;
+        }
+    }
+
+    @Nullable
+    @Override
+    public Fragment getFragment(int position) {
+        return mSectionsPagerAdapter.getFragment(position);
+    }
+
+    @Override
+    public int getCount() {
+        return mSectionsPagerAdapter.getCount();
     }
 
 

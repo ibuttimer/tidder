@@ -34,9 +34,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
 import android.util.Pair;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -129,7 +131,7 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
     @BindView(R.id.tv_title_post_or_thread) TextView tvTitle;
     @BindView(R.id.bsv_post_or_thread) BasicStatsView bsvView;
 
-    protected FloatingActionButton mFabPin;
+    @Nullable protected FloatingActionButton mFabPin;
 
     protected Link mLink = null;
     protected Subreddit mSubreddit = null;
@@ -233,12 +235,14 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
         // Adds the scroll listener to RecyclerView
         rvList.addOnScrollListener(mScrollListener);
 
+
+
         return rootView;
     }
 
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         mFabPin = (FloatingActionButton) findActivityView(R.id.fab_pin_postDetailA);
-        if (!mIsPinnable) {
+        if (!mIsPinnable && (mFabPin != null)) {
             mFabPin.setVisibility(View.GONE);
         }
         mHost.onActivityCreated();

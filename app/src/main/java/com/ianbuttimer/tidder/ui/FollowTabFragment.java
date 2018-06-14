@@ -27,6 +27,8 @@ import android.support.annotation.UiThread;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -55,6 +57,7 @@ import com.ianbuttimer.tidder.reddit.Subreddit;
 import com.ianbuttimer.tidder.reddit.get.SubredditAboutResponse;
 import com.ianbuttimer.tidder.reddit.post.ApiSearchSubredditsResponse;
 import com.ianbuttimer.tidder.reddit.util.SubredditFindByName;
+import com.ianbuttimer.tidder.ui.util.ISectionsPagerAdapter;
 import com.ianbuttimer.tidder.ui.widgets.EndlessRecyclerViewScrollListener;
 import com.ianbuttimer.tidder.ui.widgets.ListItemClickListener;
 import com.ianbuttimer.tidder.ui.widgets.NoUrlTextViewListItemClickListener;
@@ -86,8 +89,8 @@ public abstract class FollowTabFragment
     }
 
     /**
-     * Returns a new instance of this fragment for the given section
-     * number.
+     * Returns a new instance of this fragment for the given section number.
+     * @param sectionNumber Section number
      */
     public static FollowTabFragment newInstance(int sectionNumber) {
         FollowTabFragment fragment = null;
@@ -138,10 +141,36 @@ public abstract class FollowTabFragment
         @Override
         public void onChange(boolean selfChange, Uri uri) {
             // LIST FLOW 1b. request update following subreddit list
-            postEventForActivity(StandardEvent.newUpdateFollowingListRequest(),
-                    SearchTabFragment.getTabAddress(),
-                    ListTabFragment.getTabAddress(),
-                    AllTabFragment.getTabAddress());
+            FragmentActivity activity = getActivity();
+            if (activity instanceof ISectionsPagerAdapter) {
+                ISectionsPagerAdapter pagerAdapter = (ISectionsPagerAdapter)activity;
+                ArrayList<String> atHome = new ArrayList<>();
+                ArrayList<String> out = new ArrayList<>();
+
+                int count = pagerAdapter.getCount();
+                for (int i = 0; i < count; i++) {
+                    Fragment fragment = pagerAdapter.getFragment(i);
+                    if ((fragment != null) && (fragment instanceof FollowTabFragment)) {
+                        String tag = ((FollowTabFragment)fragment).getAddress();
+                        if (PostOffice.isRegistered(fragment)) {
+                            atHome.add(tag);    // add address to active list
+                        } else {
+                            out.add(tag);       // add address to inactive list
+                        }
+                    }
+                }
+                if (!atHome.isEmpty() && !out.isEmpty()) {
+                    // posting a sticky event means its also posted immediately, so both atHome & out can get it
+                    atHome.addAll(out);
+                    postStickyForActivity(StandardEvent.newUpdateFollowingListRequest(),
+                            atHome.toArray(new String[atHome.size()]));
+                }
+                if (!atHome.isEmpty() && out.isEmpty()) {
+                    // just post normal event as there are only active suscribers
+                    postEventForActivity(StandardEvent.newUpdateFollowingListRequest(),
+                            atHome.toArray(new String[atHome.size()]));
+                }
+            }
         }
     };
 

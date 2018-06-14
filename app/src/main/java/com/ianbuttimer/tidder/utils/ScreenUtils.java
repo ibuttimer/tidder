@@ -22,9 +22,12 @@ import android.graphics.Point;
 import android.support.annotation.Dimension;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 
 import com.ianbuttimer.tidder.utils.annotation.LayoutDirection;
+
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 
 /**
@@ -267,5 +270,39 @@ public class ScreenUtils {
      */
     public static boolean isScreenDirectionLtr(Context context) {
         return (getScreenDirection(context) == View.LAYOUT_DIRECTION_LTR);
+    }
+
+    /**
+     * Set the size of a Dialog
+     * @param dialog    Dialog to size
+     * @param width     Required width; WRAP_CONTENT/MATCH_PARENT, 0 < width <= 1.0 implies percent, or width > 1 implies pixel size
+     * @param height    Required height; WRAP_CONTENT/MATCH_PARENT, 0 < height <= 1.0 implies percent, or height > 1 implies pixel size
+     * @param gravity   Gravity, only relevant if width or height is WRAP_CONTENT
+     */
+    public static void setDialogSize(android.app.Dialog dialog, float width, float height, int gravity) {
+        Window window = dialog.getWindow();
+        Point size = ScreenUtils.getScreenSize(dialog.getOwnerActivity());
+        if (window != null) {
+            int iWidth = getDialogDim(width, size.x);
+            int iHeight = getDialogDim(height, size.y);
+
+            window.setLayout(iWidth, iHeight);
+            if ((iWidth == WRAP_CONTENT) || (iHeight == WRAP_CONTENT)) {
+                // gravity only relevant if wrap content
+                window.setGravity(gravity);
+            }
+        }
+    }
+
+    private static int getDialogDim(float dimen, int screen) {
+        int iDimen;
+        if ((dimen > 0f) && (dimen <= 1.0f)) {
+            // percent of screen size
+            iDimen = (int) (screen * dimen);
+        } else {
+            // < 0 implies WRAP_CONTENT/MATCH_PARENT or > 1 implies constant
+            iDimen = Float.valueOf(dimen).intValue();
+        }
+        return iDimen;
     }
 }
