@@ -86,14 +86,15 @@ dependencies {
     implementation 'com.google.guava:guava:25.0-android'
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.github.tiagohm.MarkdownView:library:0.19.0'
+    implementation 'com.google.firebase:firebase-core:16.0.0'
 
     // TODO migrate to guava version of eventbus or make local versions of guava functions used (may eliminate need for multidex)
 
-    fullImplementation 'com.google.firebase:firebase-database:15.0.0'
+    fullImplementation 'com.google.firebase:firebase-database:16.0.1'
 
     freeAnnotationProcessor "net.simonvt.schematic:schematic-compiler:$rootProject.ext.schematicVersion"
     freeImplementation "net.simonvt.schematic:schematic:$rootProject.ext.schematicVersion"
-    freeImplementation 'com.google.android.gms:play-services-ads:15.0.0'
+    freeImplementation 'com.google.android.gms:play-services-ads:15.0.1'
 
 }
 
