@@ -12,15 +12,12 @@ The application consists of two variants; full and free.
 
 | Features                  | Full variant  | Free variant |
 | ------------------------- | ------------- | ------------ |
-| View posts                | &#2713;             | &check;           |
-| Follow subreddits         | ✓             | ✓           |
-| Widget                    | ✓             | ✓           |
-| Ads                       | &#2a2f;             | ✓           |
-| Share data across devices | ✓             | &cross;           |
-| Pin posts                 | ✓             |            |
-
-<!--- check mark &#2713; (&check; html entity)
-        cross mark &#2717; (&cross; html entity) -->
+| View posts                | &check;       | &check;      |
+| Follow subreddits         | &check;       | &check;      |
+| Widget                    | &check;       | &check;      |
+| Ads                       | &cross;       | &check;      |
+| Share data across devices | &check;       | &cross;      |
+| Pin posts                 | &check;       | &cross;      |
 
 ## Technical Overview ##
 | Features                  | Full variant  | Free variant |
