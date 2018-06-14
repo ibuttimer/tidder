@@ -24,6 +24,8 @@ import org.parceler.Parcel;
 @Parcel
 public class ListingTracker<T extends BaseObject> {
 
+    public enum UpdateDir { FORWARD, BACKWARD };
+
     protected String mBefore; // before (i.e. prev) from last listing response
     protected String mAfter;  // after (i.e. next) from last listing response
     protected int mCount;     // count from last listing response
@@ -41,11 +43,26 @@ public class ListingTracker<T extends BaseObject> {
     }
 
     public void updateForward(ListingList<T> list) {
-        update(list, list.getCount());
+        update(list, UpdateDir.FORWARD);
     }
 
     public void updateBackward(ListingList<T> list) {
-        update(list, -list.getCount());
+        update(list, UpdateDir.BACKWARD);
+    }
+
+    public void update(ListingList<T> list, UpdateDir direction) {
+        int count = list.getCount();    // default forward
+        switch (direction) {
+            case BACKWARD:
+                count = -count;
+                break;
+            case FORWARD:
+                break;
+            default:
+                count = 0;
+                break;
+        }
+        update(list, count);
     }
 
     public String getBefore() {

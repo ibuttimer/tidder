@@ -366,27 +366,54 @@ public abstract class AbstractListingTabFragment<T extends BaseObject, K extends
         }
     }
 
+    /**
+     * Add a listing tracker
+     * @param key       Key for tracker
+     * @param tracker   Tracker to add
+     * @return  Tracker
+     */
     protected ListingTracker<T> addTracker(String key, ListingTracker<T> tracker) {
         mTrackers.put(key, tracker);
         return tracker;
     }
 
-    @Nullable protected ListingTracker<T> getTracker(String key) {
+    /**
+     * Get the listing tracker for the specified key
+     * @param key       Key for tracker
+     * @return  Tracker
+     */
+    @Nullable
+    protected ListingTracker<T> getTracker(String key) {
         return mTrackers.get(key);
     }
 
+    /**
+     * Update forward the listing tracker for the specified key
+     * @param key       Key for tracker
+     * @param list      Listing to update from
+     */
     protected void updateTrackerForward(String key, ListingList<T> list) {
-        ListingTracker<T> tracker = getTracker(key);
-        if (tracker != null) {
-            tracker.updateForward(list);
-            trackerDbg(key, tracker);
-        }
+        updateTracker(key, list, ListingTracker.UpdateDir.FORWARD);
     }
 
+    /**
+     * Update backward the listing tracker for the specified key
+     * @param key       Key for tracker
+     * @param list      Listing to update from
+     */
     protected void updateTrackerBackward(String key, ListingList<T> list) {
+        updateTracker(key, list, ListingTracker.UpdateDir.BACKWARD);
+    }
+
+    /**
+     * Update backward the listing tracker for the specified key
+     * @param key       Key for tracker
+     * @param list      Listing to update from
+     */
+    private void updateTracker(String key, ListingList<T> list, ListingTracker.UpdateDir dir) {
         ListingTracker<T> tracker = getTracker(key);
         if (tracker != null) {
-            tracker.updateBackward(list);
+            tracker.update(list, dir);
             trackerDbg(key, tracker);
         }
     }

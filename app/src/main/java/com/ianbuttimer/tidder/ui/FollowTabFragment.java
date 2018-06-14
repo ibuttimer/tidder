@@ -285,7 +285,7 @@ public abstract class FollowTabFragment
                         // Add whatever code is needed to append new items to the bottom of the list
 
                         // SEARCH SCROLL FLOW 1. request additional subreddits (follows SEARCH FLOW after this)
-                        ListingTracker<Subreddit> tracker = getTracker(TAG);
+                        ListingTracker<Subreddit> tracker = getTracker(getAddress());
                         if (tracker != null) {
                             postEventForActivity(FollowEvent.newSearchInterestRequest(
                                     mQuery, null, tracker.getAfter(), tracker.getCount()));
@@ -331,7 +331,7 @@ public abstract class FollowTabFragment
 
                 // SEARCH FLOW 1a. request subreddit interests search
                 event = FollowEvent.newSearchInterestRequest(mQuery);
-                addTracker(TAG, new ListingTracker<Subreddit>());
+                addTracker(getAddress(), new ListingTracker<Subreddit>());
             } else {
                 mQuery = name;
 
@@ -640,7 +640,7 @@ public abstract class FollowTabFragment
                         // Add whatever code is needed to append new items to the bottom of the list
 
                         // ALL SCROLL FLOW 1. request additional subreddits (follows ALL FLOW after this)
-                        ListingTracker<Subreddit> tracker = getTracker(TAG);
+                        ListingTracker<Subreddit> tracker = getTracker(getAddress());
                         if (tracker != null) {
                             postEventForActivity(FollowEvent.newAllSubredditRequest(
                                     null, null, tracker.getAfter(), tracker.getCount()));
@@ -659,7 +659,7 @@ public abstract class FollowTabFragment
             if (mList.isEmpty()) {
                 // ALL FLOW 1. request all subreddit list
                 postEventForActivity(FollowEvent.newAllSubredditRequest(null, null, null, 0));
-                addTracker(TAG, new ListingTracker<Subreddit>());
+                addTracker(getAddress(), new ListingTracker<Subreddit>());
 
                 showInProgress();
             }
@@ -712,7 +712,7 @@ public abstract class FollowTabFragment
 
                     noResult = false;
 
-                    updateTrackerForward(event.getAddress(), listing);
+                    updateTrackerForward(getAddress(), listing);
 
                     // ALL FLOW 5. request if following any in subreddits result
                     // SEARCH FLOW 5a. request if following any in subreddit search result
