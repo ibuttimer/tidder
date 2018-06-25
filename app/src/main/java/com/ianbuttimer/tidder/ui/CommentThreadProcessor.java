@@ -34,21 +34,22 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
 import android.util.Pair;
-import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.TidderApplication;
 import com.ianbuttimer.tidder.data.ApiResponseCallback;
+import com.ianbuttimer.tidder.data.FullnameITester;
 import com.ianbuttimer.tidder.data.IAdapterHandler;
 import com.ianbuttimer.tidder.data.ICallback;
 import com.ianbuttimer.tidder.data.ITester;
 import com.ianbuttimer.tidder.data.QueryCallback;
+import com.ianbuttimer.tidder.data.adapter.AdapterSelectController;
 import com.ianbuttimer.tidder.data.adapter.CommentAdapter;
 import com.ianbuttimer.tidder.data.adapter.CommentMoreViewHolder;
 import com.ianbuttimer.tidder.event.AbstractEvent;
@@ -57,9 +58,13 @@ import com.ianbuttimer.tidder.event.RedditClientEvent;
 import com.ianbuttimer.tidder.event.StandardEvent;
 import com.ianbuttimer.tidder.event.StandardEventProcessor;
 import com.ianbuttimer.tidder.reddit.Comment;
+import com.ianbuttimer.tidder.reddit.CommentCache;
 import com.ianbuttimer.tidder.reddit.CommentMore;
+import com.ianbuttimer.tidder.reddit.CommentProxy;
 import com.ianbuttimer.tidder.reddit.Link;
 import com.ianbuttimer.tidder.reddit.ListingTracker;
+import com.ianbuttimer.tidder.reddit.RedditCache;
+import com.ianbuttimer.tidder.reddit.RedditObject;
 import com.ianbuttimer.tidder.reddit.Response;
 import com.ianbuttimer.tidder.reddit.Subreddit;
 import com.ianbuttimer.tidder.reddit.get.CommentMoreRequest;
@@ -67,12 +72,14 @@ import com.ianbuttimer.tidder.reddit.get.CommentMoreResponse;
 import com.ianbuttimer.tidder.reddit.get.CommentTreeRequest;
 import com.ianbuttimer.tidder.reddit.get.CommentTreeResponse;
 import com.ianbuttimer.tidder.reddit.get.SubredditAboutResponse;
+import com.ianbuttimer.tidder.reddit.get.ThingAboutResponse;
 import com.ianbuttimer.tidder.ui.widgets.AutoMeasureLinearLayoutManager;
 import com.ianbuttimer.tidder.ui.widgets.BasicStatsView;
 import com.ianbuttimer.tidder.ui.widgets.EndlessRecyclerViewScrollListener;
 import com.ianbuttimer.tidder.ui.widgets.NoUrlTextViewListItemClickListener;
 import com.ianbuttimer.tidder.ui.widgets.PostOffice;
 import com.ianbuttimer.tidder.ui.widgets.TypedGestureDetector;
+import com.ianbuttimer.tidder.utils.Utils;
 
 import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout;
 
@@ -81,7 +88,6 @@ import org.parceler.Parcels;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -106,7 +112,6 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
     protected static final String LINK = "link";
     protected static final String SUBREDDIT = "subreddit";
     protected static final String TRACKER = "tracker";
-    protected static final String MAP = "map";
     protected static final String PINNED = "pinned";
 
     public static final String DETAIL_ARGS = "detail_args";
@@ -137,8 +142,6 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
     protected Subreddit mSubreddit = null;
     protected ListingTracker<Comment> mTracker;
 
-    protected HashMap<String, Comment> mMap;
-
     protected CommentAdapter mAdapter;
     protected RecyclerView.LayoutManager mLayoutManager;
     protected ArrayList<Comment> mList;
@@ -149,6 +152,8 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
     protected QueryCallback<StandardEvent> mCpStdEventHandler;
     protected StandardEventProcessor mStdEventProcessor;
 
+    protected AdapterSelectController mSelectCtrl;
+
     protected static final boolean mIsPinnable;
 
     static {
@@ -157,9 +162,11 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
     }
 
     protected ICommentThread mHost;
+    protected String mPOTag;
 
     public CommentThreadProcessor(ICommentThread host) {
         mHost = host;
+        mPOTag = mHost.getAddress() + ":" + TAG;
     }
 
     public void onAttach(Context context) {
@@ -235,7 +242,7 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
         // Adds the scroll listener to RecyclerView
         rvList.addOnScrollListener(mScrollListener);
 
-
+        mSelectCtrl = new AdapterSelectController(rvList);
 
         return rootView;
     }
@@ -249,7 +256,7 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
     }
 
     public void onStart() {
-        PostOffice.register(this);
+        PostOffice.register(this, mPOTag);
 
         if (!TextUtils.isEmpty(mPermalink)) {
             boolean emptyList = mList.isEmpty();
@@ -272,7 +279,7 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
     }
 
     public void onStop() {
-        PostOffice.unregister(this);
+        PostOffice.unregister(this, mPOTag);
     }
 
     public void onSaveInstanceState(Bundle outState) {
@@ -283,7 +290,10 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
         outState.putBoolean(THREAD, mThread);
         outState.putBoolean(TWO_PANE, mTwoPane);
         if ((mList != null) && (mList.size() > 0)) {
-            outState.putParcelable(LIST, Parcels.wrap(mList));
+            /* a large list or large comments can cause a TransactionTooLargeException in the
+                Binder transaction buffer (fixed size, currently 1Mb), store a proxy list */
+            ArrayList<CommentProxy> proxies = CommentProxy.addToCache(mList);
+            outState.putParcelable(LIST, Parcels.wrap(proxies));
         }
         if (mLink != null) {
             outState.putParcelable(LINK, Parcels.wrap(mLink));
@@ -293,9 +303,6 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
         }
         if (mTracker != null) {
             outState.putParcelable(TRACKER, Parcels.wrap(mTracker));
-        }
-        if (mMap != null) {
-            outState.putParcelable(MAP, Parcels.wrap(mMap));
         }
     }
 
@@ -320,7 +327,9 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
                 mTwoPane = savedInstanceState.getBoolean(TWO_PANE);
             }
             if (savedInstanceState.containsKey(LIST)) {
-                mList = Parcels.unwrap(savedInstanceState.getParcelable(LIST));
+                // convert proxy list to object list
+                ArrayList<CommentProxy> proxies = Parcels.unwrap(savedInstanceState.getParcelable(LIST));
+                mList = CommentProxy.getFromCache(proxies);
             }
             if (savedInstanceState.containsKey(LINK)) {
                 mLink = Parcels.unwrap(savedInstanceState.getParcelable(LINK));
@@ -331,18 +340,12 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
             if (savedInstanceState.containsKey(TRACKER)) {
                 mTracker = Parcels.unwrap(savedInstanceState.getParcelable(TRACKER));
             }
-            if (savedInstanceState.containsKey(MAP)) {
-                mMap = Parcels.unwrap(savedInstanceState.getParcelable(MAP));
-            }
         }
         if (mList == null) {
             mList = new ArrayList<>();
         }
         if (mTracker == null) {
             mTracker = new ListingTracker<>();
-        }
-        if (mMap == null) {
-            mMap = new HashMap<>();
         }
 
         mHost.processSavedInstanceState(savedInstanceState);
@@ -361,7 +364,15 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
     }
 
     protected Bundle getDetailArgs(PostEvent event) {
-        return getArgs(event.getPermalink());
+        String link = event.getPermalink();
+        if (TextUtils.isEmpty(link)) {
+            // no link so use currently selected
+            Comment comment = mAdapter.getSelectedItem();
+            if (comment != null) {
+                link = comment.getPermalink();
+            }
+        }
+        return getArgs(link);
     }
 
     protected Bundle getParentArgs() {
@@ -450,7 +461,7 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
             ArrayList<Comment> list = response.getList();
             ArrayList<Comment> toAdd = new ArrayList<>();
             for (Comment comment : list) {
-                addToMap(comment);
+                addToCache(comment);
 
                 toAdd.add(comment);
                 if (autoExpand > AUTOEXPAND_OFF) {
@@ -476,7 +487,7 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
         if (children != null) {
             for (Comment child : children) {
                 if (child.getDepth() <= toDepth) {
-                    addToMap(child);
+                    addToCache(child);
 
                     if (list.add(child)) {
                         ++added;
@@ -513,11 +524,31 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
             handled = true;
             if (event.isSubredditInfoResult()) {
                 // NEW POST FLOW 10. handle subreddit info result
-                SubredditAboutResponse response = event.getAboutResponse();
+                SubredditAboutResponse response = event.getSubredditAboutResponse();
                 if (response != null) {
                     mSubreddit = response.getSubreddit();
                     if ((mSubreddit != null) && (mLink != null)) {
                         mLink.setThumbnail(mSubreddit.getIcon());
+                    }
+                }
+            } else if (event.isThingAboutResult()) {
+                ThingAboutResponse response = event.getThingAboutResponse();
+                if (response != null) {
+                    FullnameITester<Comment> tester = new FullnameITester<>(null);
+                    for (RedditObject obj : response.getList()) {
+                        if (obj instanceof Comment) {
+                            Comment comment = (Comment) obj;
+                            tester.setFullname(comment.getName());
+
+                            Pair<Comment, Integer> result = mAdapter.findItemAndIndex(tester);
+                            if (result.first != null) {
+                                result.first.copy(comment);
+                                result.first.clearRequestInProgress();
+
+                                mAdapter.notifyItemChanged(result.second);
+                            }
+
+                        }
                     }
                 }
             } else {
@@ -591,9 +622,7 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
     @Override
     public void onItemClick(View view) {
         Comment comment = getClickedObject(view);
-        int position = mLayoutManager.getPosition(view);
-
-        Timber.i("Clicked index %d: %s", position, comment);
+        int position = mAdapter.setSelectedPos(mLayoutManager, view);
 
         if (comment instanceof CommentMore) {
             // more comments placeholder
@@ -674,12 +703,31 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
 
     @Override
     public boolean onItemLongClick(View view) {
+        mSelectCtrl.onItemLongClick(view);
         return mHost.onItemLongClick(view, getClickedObject(view));
     }
 
     @Override
     public void onItemDoubleClick(View view) {
+        mSelectCtrl.onItemDoubleClick(view);
         mHost.onItemDoubleClick(view, getClickedObject(view));
+    }
+
+    @Override
+    public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+        return mSelectCtrl.onKey(view, keyCode, keyEvent);
+    }
+
+    @Override
+    public void onItemDismiss(int position, int direction) {
+        mSelectCtrl.onItemDismiss(position, direction);
+        mHost.onItemDismiss(position, direction);
+    }
+
+    @Override
+    public boolean onItemMove(int fromPosition, int toPosition) {
+        mSelectCtrl.onItemMove(fromPosition, toPosition);
+        return mHost.onItemMove(fromPosition, toPosition);
     }
 
     protected Comment getClickedObject(View view) {
@@ -720,12 +768,12 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
             int autoExpand = getAutoExpandLevelPreference(mHost.getActivity());
 
             for (Comment reply : replies) {
-                addToMap(reply);
+                addToCache(reply);
 
                 int childDepth = reply.getDepth();
                 boolean addChild = (childDepth <= depth);
                 String parentId = reply.getParentId();
-                Comment parent = getFromMap(parentId);
+                Comment parent = getfromCache(parentId);
                 if (parent != null) {
                     // add reply to parent
                     if (parent.indexOfReply(reply) == -1) {
@@ -770,22 +818,28 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
     }
 
 
-    private void addToMap(Comment comment) {
-        Comment.Tag replyStatus = comment.getTag();
-        if (replyStatus == null) {
-            comment.setTag(new Comment.Tag());
-        }
+    private void addToCache(Comment comment) {
+        comment.tagIfNotTagged();
 
-        String id = comment.getFullname();
-        if (!TextUtils.isEmpty(id)) {
-            mMap.put(id, comment);
+        String key = comment.getCacheKey();
+        if (!TextUtils.isEmpty(key)) {
+            CommentCache.getInstance().put(key, comment);
         }
     }
 
-    private Comment getFromMap(String fullname) {
-        return mMap.get(fullname);
+    private Comment getfromCache(String key) {
+        return CommentCache.getInstance().get(key, mCacheListener);
     }
 
+
+    private RedditCache.ICacheListener<Comment> mCacheListener = new RedditCache.ICacheListener<Comment>() {
+        @Override
+        public void onCreate(String key, Comment object) {
+            object.setRequestInProgress();
+            postEvent(StandardEvent.newThingAboutRequest(object.getName())
+                                    .addAddress(mStdEventProcessor.getAddress()));
+        }
+    };
 
     /** Tester to find marked comments */
     private ITester<Comment> mMarkedTester = new ITester<Comment>() {
@@ -802,14 +856,6 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
         }
     };
 
-    /** Tester to find a more comment */
-    private ITester<Comment> mIsAMoreTester = new ITester<Comment>() {
-        @Override
-        public boolean test(Comment obj) {
-            return (obj instanceof CommentMore);
-        }
-    };
-
     private void markRepliesForRemoval(Comment comment) {
         if (comment.isRepliesExpanded()) {
             Comment[] replies = comment.getReplies();
@@ -823,16 +869,6 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
             }
             comment.clearRepliesExpanded();
         }
-    }
-
-    @Override
-    public void onItemDismiss(int position, int direction) {
-        mHost.onItemDismiss(position, direction);
-    }
-
-    @Override
-    public boolean onItemMove(int fromPosition, int toPosition) {
-        return mHost.onItemMove(fromPosition, toPosition);
     }
 
     public <T extends AbstractEvent> void postEvent(T event) {
@@ -908,7 +944,7 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
         }
     }
 
-    public interface ICommentThread {
+    public interface ICommentThread extends PostOffice.IAddressable {
 
         FragmentActivity getActivity();
 
@@ -923,8 +959,6 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
         void onActivityCreated();
 
         void onStart(boolean emptyList);
-
-        String getAddress();
 
         boolean onPostEvent(PostEvent event);
 

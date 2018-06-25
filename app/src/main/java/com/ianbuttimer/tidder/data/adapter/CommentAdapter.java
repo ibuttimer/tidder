@@ -98,15 +98,4 @@ public class CommentAdapter extends AbstractRecycleViewAdapter<Comment, CommentV
         }
         return viewType;
     }
-
-    private int getItemType(int position) {
-        int type;
-        Comment item = getItem(position);
-        if (item instanceof CommentMore) {
-            type = MORE_COMMENT;
-        } else {
-            type = STD_COMMENT;
-        }
-        return type;
-    }
 }

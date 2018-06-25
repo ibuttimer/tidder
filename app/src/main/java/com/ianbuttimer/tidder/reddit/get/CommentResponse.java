@@ -47,7 +47,7 @@ public class CommentResponse extends ListingResponse<Comment, PostEvent.Event>
      * Constructor
      * @param eventType     Event type for Event message
      */
-    public CommentResponse(PostEvent.Event eventType) {
+    protected CommentResponse(PostEvent.Event eventType) {
         super(eventType);
     }
 

@@ -19,9 +19,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="@drawable/list_item_background"
     android:layout_margin="@dimen/list_item_margin"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+    <!--android:background="?attr/selectableItemBackgroundBorderless"-->
 
     <ImageView
         android:id="@+id/img_thumbnail_link_item"

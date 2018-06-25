@@ -31,7 +31,8 @@ import java.util.Date;
  * Base class for a subreddit object.
  * See sub classes for class specific details.
  */
-public abstract class RedditObject<T extends BaseObject> extends BaseObject<T> {
+public abstract class RedditObject<T extends BaseObject, P extends AbstractProxy> extends BaseObject<T>
+                            implements RedditCache.ICacheable {
 
     protected static final String ID = "id";
     protected static final String FULLNAME = "name";
@@ -73,13 +74,26 @@ public abstract class RedditObject<T extends BaseObject> extends BaseObject<T> {
 
     /**
      * Get the reddit type
+     * @return Type string
      */
-    protected abstract String getRedditType();
+    public abstract String getRedditType();
+
+    /**
+     * Get a proxy for this object
+     * @return  Proxy object
+     */
+    public abstract P getProxy();
+
+    /**
+     * Add this object to the appropriate cache
+     * @return  Proxy object
+     */
+    public abstract P addToCache();
 
 
     @Override
-    protected boolean parseToken(JsonReader jsonReader, String name, BaseObject obj)
-            throws IOException, IllegalArgumentException {
+    protected boolean parseToken(JsonReader jsonReader, String name, T obj)
+                                            throws IOException, IllegalArgumentException {
         checkObject(obj, getClass());
 
         RedditObject object = ((RedditObject) obj);
@@ -105,6 +119,15 @@ public abstract class RedditObject<T extends BaseObject> extends BaseObject<T> {
         return mName;
     }
 
+    @Override
+    public String getCacheKey() {
+        return getName();
+    }
+
+    /**
+     * Get the fullname of object, e.g. "t5_2qh3l"
+     * @param name  Fullname
+     */
     public void setName(String name) {
         this.mName = name;
     }
@@ -123,13 +146,14 @@ public abstract class RedditObject<T extends BaseObject> extends BaseObject<T> {
 
     /**
      * Construct the fullname of the object from its id & type, e.g. "t5_2qh3l"
-     * @return
+     * @return  object fullname
      */
     public String getFullname() {
         return makeFullname(getRedditType(), mId);
     }
 
-    @Nullable public Date getCreated() {
+    @Nullable
+    public Date getCreated() {
         return mCreated;
     }
 
@@ -137,12 +161,85 @@ public abstract class RedditObject<T extends BaseObject> extends BaseObject<T> {
         this.mCreated = created;
     }
 
-    @Nullable public Tag getTag() {
+    @Nullable
+    public Tag getTag() {
         return mTag;
     }
 
     public void setTag(Tag tag) {
         this.mTag = tag;
+    }
+
+    public boolean hasTag() {
+        return (this.mTag != null);
+    }
+
+    /**
+     * Add a tag if not already tagged
+     * @return  Tag
+     */
+    public Tag tagIfNotTagged() {
+        if (!hasTag()) {
+            setTag(new Tag());
+        }
+        return getTag();
+    }
+
+    public static boolean isMarked(Tag status) {
+        return ((status != null) && (status.isMarked()));
+    }
+
+    public static void setMarked(Tag status, boolean marked) {
+        if (status != null) {
+            status.setMarked(marked);
+        }
+    }
+
+    public static boolean isFlag(Tag status, int flag) {
+        return ((status != null) && (status.isFlagged(flag)));
+    }
+
+    public static void setFlag(Tag status, int flag) {
+        if (status != null) {
+            status.setFlag(flag);
+        }
+    }
+
+    public static void clearFlag(Tag status, int flag) {
+        if (status != null) {
+            status.clearFlag(flag);
+        }
+    }
+
+    /** Object was instantiated by a cache */
+    protected static final int CACHE_INSTANTIATED = 0x01;
+    /** Object is currently being requested */
+    protected static final int REQUEST_IN_PROGRESS = 0x02;
+    /** First flag for concrete objects, they should not used falgs below this */
+    protected static final int FIRST_OBJECT_SPECIFIC_FLAG = 0x010000;
+
+    public boolean isCacheInstantiated() {
+        return isFlag(getTag(), CACHE_INSTANTIATED);
+    }
+
+    public void setCacheInstantiated() {
+        setFlag(getTag(), CACHE_INSTANTIATED);
+    }
+
+    public void clearCacheInstantiated() {
+        clearFlag(getTag(), CACHE_INSTANTIATED);
+    }
+
+    public boolean isRequestInProgress() {
+        return isFlag(getTag(), REQUEST_IN_PROGRESS);
+    }
+
+    public void setRequestInProgress() {
+        setFlag(getTag(), REQUEST_IN_PROGRESS);
+    }
+
+    public void clearRequestInProgress() {
+        clearFlag(getTag(), REQUEST_IN_PROGRESS);
     }
 
     @Parcel
@@ -163,7 +260,7 @@ public abstract class RedditObject<T extends BaseObject> extends BaseObject<T> {
             this.mMarked = marked;
         }
 
-        public boolean isFlaged(int flag) {
+        public boolean isFlagged(int flag) {
             return ((mFlags & flag) != 0);
         }
 

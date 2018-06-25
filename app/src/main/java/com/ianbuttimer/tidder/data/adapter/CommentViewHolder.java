@@ -54,8 +54,6 @@ public class CommentViewHolder extends AbstractViewHolder<Comment> {
     @Nullable @BindView(R.id.bsv_comment_item) BasicStatsView bsvView;
     @Nullable @BindView(R.id.pb_comment_item) ProgressBar pbProgress;
 
-    protected Comment mComment;
-
     /**
      * Constructor
      * @param view              View to hold
@@ -69,23 +67,38 @@ public class CommentViewHolder extends AbstractViewHolder<Comment> {
 
     @Override
     public void setViewInfo(Comment info, int position) {
-        mComment = info;
 
+        boolean isRip = info.isRequestInProgress();
         @ColorInt int background = setBackground(position);
 
-        setText(tvText, mComment.getBodyHtml());
-        setLinkColour(tvText, background);
-        setLinkMovement(tvText);
+        int visibility;
+        if (isRip) {
+            visibility = View.INVISIBLE;
+
+            showProgress();
+        } else {
+            visibility = View.VISIBLE;
+
+            hideProgress();
+
+            setText(tvText, info.getBodyHtml());
+            setLinkColour(tvText, background);
+            setLinkMovement(tvText);
+        }
+        tvText.setVisibility(visibility);
 
         if (bsvView != null) {
-            bsvView.setViewInfo(mComment);
+            if (!isRip) {
+                bsvView.setViewInfo(info);
+            }
+            bsvView.setVisibility(visibility);
         }
 
-        int visibility = View.INVISIBLE;
-        if (mComment.getReplies().length > 0) {
+        visibility = View.INVISIBLE;
+        if ((info.getReplies().length > 0) && !isRip) {
             @StringRes int strRes;
             @DrawableRes int imageRes;
-            if (mComment.isRepliesExpanded()) {
+            if (info.isRepliesExpanded()) {
                 imageRes = R.drawable.ic_collapse_arrow;
                 strRes = R.string.content_desc_collapse_replies;
             } else {
@@ -98,7 +111,7 @@ public class CommentViewHolder extends AbstractViewHolder<Comment> {
         }
         imgReplies.setVisibility(visibility);
 
-        addIndents(mComment);
+        addIndents(info);
     }
 
 
@@ -110,11 +123,11 @@ public class CommentViewHolder extends AbstractViewHolder<Comment> {
 
     /**
      * Add indents to indicate reply level
-     * @param info
+     * @param info  Comment to display in this view holder
      */
     public void addIndents(Comment info) {
         int depth = info.getDepth();
-        if (depth > 0) {
+        if ((depth > 0) && !info.isRequestInProgress()) {
             ConstraintLayout rootView = (ConstraintLayout)getView();
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             if (inflater != null) {
@@ -159,6 +172,9 @@ public class CommentViewHolder extends AbstractViewHolder<Comment> {
 
     }
 
+    /**
+     * Remove reply level indents
+     */
     protected void removeIndents() {
         ConstraintLayout rootView = (ConstraintLayout)getView();
 
@@ -180,15 +196,33 @@ public class CommentViewHolder extends AbstractViewHolder<Comment> {
         constraint.applyTo(rootView);
     }
 
-    @ColorInt protected int setBackground(int position) {
+    @ColorInt
+    protected int setBackground(int position) {
         @ColorInt int color;
-        View view = getView();
-        if ((position % 2) == 0) {
-            color = view.getResources().getColor(R.color.list_item_background);
-        } else {
+//        View view = getView();
+//        if ((position % 2) == 0) {
+//            color = view.getResources().getColor(R.color.list_item_background);
+//        } else {
             color = Color.TRANSPARENT;
-        }
-        getView().setBackgroundColor(color);
+//        }
+//        getView().setBackgroundColor(color);
         return color;
     }
+
+
+    public void showProgress() {
+        showProgress(View.VISIBLE);
+    }
+
+    public void hideProgress() {
+        showProgress(View.INVISIBLE);
+    }
+
+    protected void showProgress(int visibility) {
+        if (pbProgress != null) {
+            pbProgress.setVisibility(visibility);
+        }
+    }
+
+
 }

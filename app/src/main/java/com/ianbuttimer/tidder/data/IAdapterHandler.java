@@ -16,6 +16,7 @@
 
 package com.ianbuttimer.tidder.data;
 
+import android.view.KeyEvent;
 import android.view.View;
 
 import github.nisrulz.recyclerviewhelper.RVHAdapter;
@@ -46,4 +47,13 @@ public interface IAdapterHandler extends RVHAdapter {
      *
      */
     void onItemDoubleClick(View view);
+
+    /**
+     * Process a key event
+     * @param view      The view the key has been dispatched to.
+     * @param keyCode   The code for the physical key that was pressed
+     * @param keyEvent  The KeyEvent object containing full information about the event.
+     * @return  <code>true</code> if the listener has consumed the event, <code>false</code> otherwise.
+     */
+    boolean onKey(View view, int keyCode, KeyEvent keyEvent);
 }

@@ -100,6 +100,14 @@ public class PostEvent extends AbstractEvent<PostEvent, PostEvent.Event, PostEve
 
     /**
      * Create a new view comment request event
+     * @return  event object
+     */
+    public static PostEvent newViewThreadRequest() {
+        return newViewThreadRequest("", "", "");
+    }
+
+    /**
+     * Create a new view comment request event
      * @param name      Post name
      * @param title     Post title
      * @param link      Post permalink
@@ -161,23 +169,9 @@ public class PostEvent extends AbstractEvent<PostEvent, PostEvent.Event, PostEve
         PostEvent event = null;
         Event type = null;
         if (response != null) {
-            // TODO del before checkin
-//            Class rspClass = response.getClass();
-//            if (rspClass.equals(CommentTreeResponse.class)) {
-//                type = Event.GET_COMMENT_TREE_RESULT;
-//            } else if (rspClass.equals(CommentMoreResponse.class)) {
-//                type = Event.GET_COMMENT_MORE_RESULT;
-//            }
-
             Enum eType = response.getEventType();
             if (eType instanceof Event) {
                 type = (Event)eType;
-                // TODO del before checkin
-//                if (!eType.equals(type)) {
-//                    throw new IllegalArgumentException("wtf: " + eType + " " + type);
-//                }
-//            } else {
-//                throw new IllegalArgumentException("wtf: " + eType);
             }
         }
         if (type != null) {

@@ -35,7 +35,7 @@ public class CommentThreadActivity extends PostDetailActivity {
         if (b == null) {
             b = getIntent().getExtras();
         }
-        if (b.containsKey(PARENT_ARGS)) {
+        if ((b != null) && (b.containsKey(PARENT_ARGS))) {
             mParentArgs = b.getBundle(PARENT_ARGS);
         }
     }

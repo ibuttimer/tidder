@@ -25,8 +25,6 @@ import org.parceler.Parcel;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import timber.log.Timber;
-
 
 /**
  * Base class for a link object.
@@ -76,8 +74,18 @@ public class PreviewImages extends RedditObject {
     }
 
     @Override
-    protected String getRedditType() {
+    public String getRedditType() {
         return "";
+    }
+
+    @Override
+    public AbstractProxy getProxy() {
+        return null;
+    }
+
+    @Override
+    public AbstractProxy addToCache() {
+        return null;
     }
 
     @Override

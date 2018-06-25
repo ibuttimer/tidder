@@ -146,7 +146,6 @@ public class PostDetailFragment extends CommentThreadFragment implements PostOff
                     CommentThreadDialog dialog = new CommentThreadDialog();
                     dialog.setArguments(args);
 
-
                     dialog.show(activity.getSupportFragmentManager(), dialog.getClass().getSimpleName());
                 }
             } else {

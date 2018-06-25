@@ -29,12 +29,12 @@ allprojects {
 ext {
     compileSdkVersion = 27
     minSdkVersion = 19
-    supportLibVersion = "27.1.0"
+    supportLibVersion = "27.1.1"
     buildToolsVersion = "27.0.3"
 
     butterknifeVersion = "8.8.1"
-    glideVersion = "4.6.1"
-    parcelerVersion = "1.1.9"
+    glideVersion = "4.7.1"
+    parcelerVersion = "1.1.10"
     schematicVersion = "0.7.0"
     stethoVersion = "1.5.0"
 

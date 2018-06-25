@@ -26,8 +26,6 @@ import org.parceler.Parcel;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import timber.log.Timber;
-
 
 /**
  * Base class for a link object.
@@ -74,13 +72,23 @@ public class Preview extends RedditObject {
     }
 
     @Override
-    protected String getRedditType() {
+    public String getRedditType() {
         return "";
     }
 
     @Override
+    public AbstractProxy getProxy() {
+        return null;
+    }
+
+    @Override
+    public AbstractProxy addToCache() {
+        return null;
+    }
+
+    @Override
     protected boolean parseToken(JsonReader jsonReader, String name, BaseObject obj)
-            throws IOException, IllegalArgumentException {
+                                        throws IOException, IllegalArgumentException {
         checkObject(obj, getClass());
 
         boolean consumed = super.parseToken(jsonReader, name, obj);

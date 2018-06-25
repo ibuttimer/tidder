@@ -23,14 +23,17 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 
 import com.ianbuttimer.tidder.R;
+import com.ianbuttimer.tidder.event.PostEvent;
 import com.ianbuttimer.tidder.reddit.RedditClient;
+import com.ianbuttimer.tidder.ui.util.DoubleEnterKeyInterceptor;
+import com.ianbuttimer.tidder.ui.util.KeyInterceptor;
+import com.ianbuttimer.tidder.ui.widgets.PostOffice;
 import com.ianbuttimer.tidder.utils.Utils;
 
-import static android.content.Intent.EXTRA_TEXT;
-import static android.content.Intent.EXTRA_TITLE;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
 import static com.ianbuttimer.tidder.ui.CommentThreadProcessor.DETAIL_ARGS;
@@ -46,13 +49,15 @@ import static com.ianbuttimer.tidder.ui.CommentThreadProcessor.THREAD;
  * item details are presented side-by-side with a list of items
  * in a {@link PostListActivity}.
  */
-public class PostDetailActivity extends AppCompatActivity {
+public class PostDetailActivity extends AppCompatActivity implements KeyInterceptor.IKeyInterceptor {
 
     public static final String TAG = PostDetailActivity.class.getSimpleName();
 
     protected static final String[] FRAG_ARGS = new String[] {
             LINK_NAME, LINK_TITLE, PERMALINK
     };
+
+    private DoubleEnterKeyInterceptor mInterceptor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +83,8 @@ public class PostDetailActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        mInterceptor = new DoubleEnterKeyInterceptor(findViewById(R.id.layout_postDetailsA), this);
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
@@ -117,7 +124,8 @@ public class PostDetailActivity extends AppCompatActivity {
         return new PostDetailFragment();
     }
 
-    @IdRes protected int getContainerId() {
+    @IdRes
+    protected int getContainerId() {
         return R.id.post_detail_container;
     }
 
@@ -130,4 +138,19 @@ public class PostDetailActivity extends AppCompatActivity {
         return handled;
     }
 
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        boolean consumed = mInterceptor.dispatchKeyEvent(event);
+        if (!consumed) {
+            consumed = super.dispatchKeyEvent(event);
+        }
+        return consumed;
+    }
+
+    @Override
+    public void onIntercept() {
+        PostOffice.postEvent(PostEvent.newViewThreadRequest()
+                                    .setAddress(PostDetailFragment.getTabAddress()));
+    }
 }

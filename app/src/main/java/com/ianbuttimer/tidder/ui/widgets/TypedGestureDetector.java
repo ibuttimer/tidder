@@ -83,15 +83,6 @@ public class TypedGestureDetector extends GestureDetector {
             mLastGesture = null;
         }
 
-//        @Override
-//        public boolean onSingleTapUp(MotionEvent e) {
-//            boolean consumed = ((Gestures.SINGLE_TAP_BIT & mGestureMap) != 0);
-//            if (consumed) {
-//                mLastGesture = Gestures.SINGLE_TAP;
-//            }
-//            return consumed;
-//        }
-
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
             boolean consumed = ((Gestures.SINGLE_TAP_BIT & mGestureMap) != 0);

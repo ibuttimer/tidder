@@ -16,7 +16,7 @@
 
 package com.ianbuttimer.tidder.event;
 
-import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
@@ -28,6 +28,7 @@ import com.ianbuttimer.tidder.data.provider.ProviderUri;
 import com.ianbuttimer.tidder.reddit.Response;
 import com.ianbuttimer.tidder.reddit.Subreddit;
 import com.ianbuttimer.tidder.reddit.get.SubredditAboutRequest;
+import com.ianbuttimer.tidder.reddit.get.ThingAboutRequest;
 import com.ianbuttimer.tidder.ui.widgets.PostOffice;
 
 import java.lang.ref.WeakReference;
@@ -54,8 +55,8 @@ public class StandardEventProcessor implements IStandardEventProcessor {
 
     private ArrayList<IStandardEventProcessorExt> mExtensions;
 
-    private String mAddress;
-    private String mTag;
+    private String mAddress;    // post office address
+    private String mTag;        // tag for log messages
 
     /**
      * Constructor
@@ -158,16 +159,16 @@ public class StandardEventProcessor implements IStandardEventProcessor {
                 // LIST FLOW 5. request subreddit info
                 // NEW POST FLOW 9. request subreddit info
                 requestSubredditInfo(event);
-//            } else if (event.isSettingsRequest()) {
-//                if (Uri.EMPTY.equals(ProviderUri.CONFIG_CONTENT_URI)) {
-//                    // nothing to do
-//                    PostOffice.postEvent(StandardEvent.newSettingsResult(), event.getAddresss());
-//                } else if (mCpStdEventHandler != null) {
-//                    mCpStdEventHandler.queryList(mActivity.get(),
-//                            getLoaderId(event),
-//                            event,
-//                            ProviderUri.CONFIG_CONTENT_URI);
-//                }
+            } else if (event.isThingAboutRequest()) {
+                if (mApiResponseHandler != null) {
+                    Bundle additionalInfo = StandardEvent.getFactory().additionalInfoAll(event);
+                    mApiResponseHandler.requestGetService(
+                            ThingAboutRequest.builder()
+                                    .id(event.getNames())
+                                    .build()    // build request
+                                    .setAdditionalInfo(additionalInfo)  // add additional info
+                    );
+                }
             } else {
                 handled = false;
 
@@ -262,5 +263,9 @@ public class StandardEventProcessor implements IStandardEventProcessor {
     @Override
     public QueryCallback<StandardEvent> getCpStdEventHandler() {
         return mCpStdEventHandler;
+    }
+
+    public String getAddress() {
+        return mAddress;
     }
 }

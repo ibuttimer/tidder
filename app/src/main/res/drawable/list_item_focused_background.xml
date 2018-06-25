@@ -16,11 +16,10 @@
   -->
 
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <stroke android:width="@dimen/listview_stroke" android:color="@color/colorAccent" />
+    <stroke android:width="@dimen/listview_stroke" android:color="@color/colorAccentLight" />
     <padding android:left="@dimen/listview_padding"
                 android:top="@dimen/listview_padding"
                 android:right="@dimen/listview_padding"
                 android:bottom="@dimen/listview_padding" />
     <corners android:radius="@dimen/listview_corner" />
-    <solid android:color="@color/colorPrimaryLight"/>
 </shape>

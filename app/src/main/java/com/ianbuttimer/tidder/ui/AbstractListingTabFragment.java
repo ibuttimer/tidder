@@ -38,6 +38,7 @@ import android.widget.TextView;
 import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.data.adapter.AbstractRecycleViewAdapter;
 import com.ianbuttimer.tidder.data.adapter.AbstractViewHolder;
+import com.ianbuttimer.tidder.data.adapter.AdapterSelectController;
 import com.ianbuttimer.tidder.event.StandardEvent;
 import com.ianbuttimer.tidder.net.UriUtils;
 import com.ianbuttimer.tidder.reddit.BaseObject;
@@ -47,6 +48,7 @@ import com.ianbuttimer.tidder.event.AbstractEvent;
 import com.ianbuttimer.tidder.ui.widgets.EndlessRecyclerViewScrollListener;
 import com.ianbuttimer.tidder.ui.widgets.ListItemClickListener;
 import com.ianbuttimer.tidder.ui.widgets.PostOffice;
+import com.ianbuttimer.tidder.utils.Utils;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -90,6 +92,9 @@ public abstract class AbstractListingTabFragment<T extends BaseObject, K extends
     protected ContentObserver mObserver;
     protected int mRegisterCount;
     protected Uri mObserverUri;
+
+    protected AdapterSelectController mSelectCtrl;
+
 
     public AbstractListingTabFragment(@LayoutRes int layoutId) {
         this(layoutId, null, null);
@@ -149,6 +154,8 @@ public abstract class AbstractListingTabFragment<T extends BaseObject, K extends
 
             // Set On Click Listener
             rvList.addOnItemTouchListener(getListItemClickListener());
+
+            mSelectCtrl = new AdapterSelectController(rvList);
         }
     }
 

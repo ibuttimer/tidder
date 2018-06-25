@@ -46,11 +46,6 @@ public class PostsEvent extends AbstractEvent<PostsEvent, PostsEvent.Event, Post
         /** Get Subreddit Post response */
         GET_POST_RESULT,
 
-        /** Get Pinned Post request */
-        GET_PINNED_POST_REQUEST,
-        /** Get Pinned Post response */
-        GET_PINNED_POST_RESULT,
-
         /** Refresh posts command */
         REFRESH_POSTS_CMD,
         /** Clear posts command */
@@ -66,7 +61,6 @@ public class PostsEvent extends AbstractEvent<PostsEvent, PostsEvent.Event, Post
     private static PostsEvent mFactoryInstance;
 
     protected static final String NAME_PARAM = "name";
-    protected static final String NAMES_PARAM = "names";
     protected static final String SOURCE_PARAM = "source";
     protected static final String TITLE_PARAM = "title";
     protected static final String POSITION_PARAM = "position";
@@ -168,16 +162,6 @@ public class PostsEvent extends AbstractEvent<PostsEvent, PostsEvent.Event, Post
     }
 
     /**
-     * Create a Get Post after request event
-     * @param names   Fullnames of posts ro request
-     * @return  event object
-     */
-    public static PostsEvent newGetPinnedPostRequest(String[] names) {
-        return new PostsEvent(Event.GET_PINNED_POST_REQUEST, EventMode.NEW_REQUEST)
-                .setNames(names);
-    }
-
-    /**
      * Create a Refresh Posts Command event
      * @return  event object
      */
@@ -203,23 +187,9 @@ public class PostsEvent extends AbstractEvent<PostsEvent, PostsEvent.Event, Post
         PostsEvent event = null;
         Event type = null;
         if (response != null) {
-            // TODO del before checkin
-//            Class rspClass = response.getClass();
-//            if (rspClass.equals(SubredditLinkResponse.class)) {
-//                type = Event.GET_POST_RESULT;
-//            } else if (rspClass.equals(ThingAboutResponse.class)) {
-//                type = Event.GET_PINNED_POST_RESULT;
-//            }
-
             Enum eType = response.getEventType();
             if (eType instanceof Event) {
                 type = (Event)eType;
-                // TODO del before checkin
-//                if (!eType.equals(type)) {
-//                    throw new IllegalArgumentException("wtf: " + eType + " " + type);
-//                }
-//            } else {
-//                throw new IllegalArgumentException("wtf: " + eType);
             }
         }
         if (type != null) {
@@ -239,11 +209,6 @@ public class PostsEvent extends AbstractEvent<PostsEvent, PostsEvent.Event, Post
         return getResponse(isGetPostResult(), SubredditLinkResponse.class);
     }
 
-    @Nullable
-    public ThingAboutResponse getThingResponse() {
-        return getResponse(isGetPinnedPostResult(), ThingAboutResponse.class);
-    }
-
     @Override
     protected PostsEvent getThis() {
         return this;
@@ -259,10 +224,6 @@ public class PostsEvent extends AbstractEvent<PostsEvent, PostsEvent.Event, Post
 
     public String getTitle() {
         return getStringParam(TITLE_PARAM, "");
-    }
-
-    public String[] getNames() {
-        return getStringArrayParam(NAMES_PARAM);
     }
 
     public int getPosition() {
@@ -281,11 +242,6 @@ public class PostsEvent extends AbstractEvent<PostsEvent, PostsEvent.Event, Post
 
     public PostsEvent setTitle(String title) {
         mParamMap.put(TITLE_PARAM, title);
-        return this;
-    }
-
-    public PostsEvent setNames(String[] names) {
-        mParamMap.put(NAMES_PARAM, names);
         return this;
     }
 
@@ -310,12 +266,6 @@ public class PostsEvent extends AbstractEvent<PostsEvent, PostsEvent.Event, Post
     }
     public boolean isGetPostResult() {
         return isEvent(Event.GET_POST_RESULT);
-    }
-    public boolean isGetPinnedPostRequest() {
-        return isEvent(Event.GET_PINNED_POST_REQUEST);
-    }
-    public boolean isGetPinnedPostResult() {
-        return isEvent(Event.GET_PINNED_POST_RESULT);
     }
     public boolean isRefreshPostsCommand() {
         return isEvent(Event.REFRESH_POSTS_CMD);

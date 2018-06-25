@@ -19,7 +19,6 @@ package com.ianbuttimer.tidder.reddit;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.util.JsonReader;
-import android.util.JsonToken;
 
 import com.ianbuttimer.tidder.ui.widgets.BasicStatsView;
 import com.ianbuttimer.tidder.utils.Utils;
@@ -36,7 +35,7 @@ import timber.log.Timber;
  * See sub classes for class specific details.
  */
 @Parcel
-public class Link extends RedditObject
+public class Link extends RedditObject<Link, LinkProxy>
         implements BasicStatsView.IBasicStats, ISubredditName {
 
     protected static final String DOMAIN = "domain";
@@ -66,28 +65,6 @@ public class Link extends RedditObject
 
 
     protected static final Uri SELF_URI = Uri.parse("self");
-
-
-//    "domain": "aljazeera.com"
-//    "subreddit": "worldnews",
-//            "likes": null,
-//            "id": "7yff8f",
-//            "author": "papivebipi",
-//            "score": 3
-//            "over_18": false
-//            "subreddit_id": "t5_2qh13",
-//            "name": "t3_7yff8f"
-//            "permalink": "/r/worldnews/comments/7yff8f/palestinian_teenagers_killed_in_israeli_air_raids/"
-//            "created": 1519001369.0,
-//            "url":"http://www.aljazeera.com/news/2018/02/palestinian-teenagers-killed-israeli-air-strikes-180218070120500.html",
-//            "title": "Palestinian teenagers killed in Israeli air raids",
-//            "subreddit_name_prefixed": "r/worldnews"
-//            "num_comments": 17
-//            "is_video": false
-
-//    "secure_media_embed": {
-// "content": "&lt;iframe width=\"600\" height=\"338\" src=\"https://www.youtube.com/embed/sFTvlywhg9Q?feature=oembed&amp;enablejsapi=1&amp;enablejsapi=1&amp;enablejsapi=1\" frameborder=\"0\" allow=\"autoplay; encrypted-media\" allowfullscreen&gt;&lt;/iframe&gt;",
-// "width": 600, "scrolling": false, "media_domain_url": "https://www.redditmedia.com/mediaembed/87p2jc", "height": 338}
 
     protected String mDomain;
     protected String mSubreddit;
@@ -163,13 +140,27 @@ public class Link extends RedditObject
     }
 
     @Override
-    protected String getRedditType() {
+    public String getRedditType() {
         return TYPE_LINK;
     }
 
     @Override
-    protected boolean parseToken(JsonReader jsonReader, String name, BaseObject obj)
-            throws IOException, IllegalArgumentException {
+    public LinkProxy getProxy() {
+        return LinkProxy.getProxy(this);
+    }
+
+    @Override
+    public LinkProxy addToCache() {
+        LinkProxy proxy = getProxy();
+        if (proxy != null) {
+            proxy.addToCache(this);
+        }
+        return proxy;
+    }
+
+    @Override
+    protected boolean parseToken(JsonReader jsonReader, String name, Link obj)
+                                        throws IOException, IllegalArgumentException {
         checkObject(obj, getClass());
 
         boolean consumed = super.parseToken(jsonReader, name, obj);

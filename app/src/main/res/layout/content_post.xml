@@ -23,7 +23,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.ianbuttimer.tidder.ui.PostDetailActivity">
-    <!--app:layout_behavior="@string/content_post_view_behavior"-->
 
     <TextView
         android:id="@+id/tv_title_post_or_thread"

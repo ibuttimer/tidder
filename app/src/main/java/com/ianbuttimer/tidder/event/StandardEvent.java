@@ -28,6 +28,7 @@ import com.ianbuttimer.tidder.data.PinnedQueryResponse;
 import com.ianbuttimer.tidder.reddit.Response;
 import com.ianbuttimer.tidder.reddit.Subreddit;
 import com.ianbuttimer.tidder.reddit.get.SubredditAboutResponse;
+import com.ianbuttimer.tidder.reddit.get.ThingAboutResponse;
 import com.ianbuttimer.tidder.ui.ICommonEvents;
 
 import java.util.ArrayList;
@@ -60,6 +61,10 @@ public class StandardEvent extends AbstractEvent<StandardEvent, StandardEvent.Ev
         /** Subreddit info result */
         SUBREDDIT_INFO_RESULT,
 
+        /** Subreddit/Comment info request */
+        THING_ABOUT_REQUEST,
+        /** Subreddit/Comment info result */
+        THING_ABOUT_RESULT,
 
         // full variant specific events
 
@@ -82,6 +87,7 @@ public class StandardEvent extends AbstractEvent<StandardEvent, StandardEvent.Ev
     public static final String RANGE_END_INFO = "range_end_additional_info";
 
     protected static final String NAME_PARAM = "name";
+    protected static final String NAMES_PARAM = "names";
     protected static final String LIST_PARAM = "list";
     protected static final String START_PARAM = "start";
     protected static final String END_PARAM = "end";
@@ -207,6 +213,24 @@ public class StandardEvent extends AbstractEvent<StandardEvent, StandardEvent.Ev
         return new StandardEvent(Event.SETTINGS_RESULT);
     }
 
+    /**
+     * Create a Get Thing About request event
+     * @param name  Fullname of item ro request
+     * @return  event object
+     */
+    public static StandardEvent newThingAboutRequest(String name) {
+        return newThingAboutRequest(new String[] { name });
+    }
+
+    /**
+     * Create a Get Thing About request event
+     * @param names   Fullnames of items ro request
+     * @return  event object
+     */
+    public static StandardEvent newThingAboutRequest(String[] names) {
+        return new StandardEvent(Event.THING_ABOUT_REQUEST, EventMode.NEW_REQUEST)
+                .setNames(names);
+    }
 
     /**
      * Create a new Response result event
@@ -253,7 +277,7 @@ public class StandardEvent extends AbstractEvent<StandardEvent, StandardEvent.Ev
     }
 
     @Nullable
-    public SubredditAboutResponse getAboutResponse() {
+    public SubredditAboutResponse getSubredditAboutResponse() {
         return getResponse(isSubredditInfoResult(), SubredditAboutResponse.class);
     }
 
@@ -272,12 +296,21 @@ public class StandardEvent extends AbstractEvent<StandardEvent, StandardEvent.Ev
         return getContentProviderResponse(isSettingsResult(), ConfigQueryResponse.class);
     }
 
+    @Nullable
+    public ThingAboutResponse getThingAboutResponse() {
+        return getResponse(isThingAboutResult(), ThingAboutResponse.class);
+    }
+
     public Pair<Integer, Integer> getRange() {
         return new Pair<>(getStart(), getEnd());
     }
 
     public String getName() {
         return getStringParam(NAME_PARAM, "");
+    }
+
+    public String[] getNames() {
+        return getStringArrayParam(NAMES_PARAM);
     }
 
     public ArrayList<Subreddit> getList() {
@@ -298,6 +331,11 @@ public class StandardEvent extends AbstractEvent<StandardEvent, StandardEvent.Ev
 
     public StandardEvent setName(String name) {
         mParamMap.put(NAME_PARAM, name);
+        return this;
+    }
+
+    public StandardEvent setNames(String[] names) {
+        mParamMap.put(NAMES_PARAM, names);
         return this;
     }
 
@@ -350,6 +388,12 @@ public class StandardEvent extends AbstractEvent<StandardEvent, StandardEvent.Ev
     }
     public boolean isSettingsResult() {
         return isEvent(Event.SETTINGS_RESULT);
+    }
+    public boolean isThingAboutRequest() {
+        return isEvent(Event.THING_ABOUT_REQUEST);
+    }
+    public boolean isThingAboutResult() {
+        return isEvent(Event.THING_ABOUT_RESULT);
     }
 
     @Override

@@ -7,8 +7,10 @@ If you do not have an account, you can sign up at [reddit.com](https://www.reddi
 Check the 'Remember Me' option to avoid having to enter your credentials everytime you log in.
 * Review and accept the authorisation request to allow access to your account
 
-The application only uses the login credentials to read information regarding
-subreddits, posts and the currently logged in user.
+The application only uses the login credentials to **read** information regarding
+subreddits, posts and the currently logged in user (specifically the user's Reddit id).
+In the case of the free version, the user's Reddit id may be stored in a local database.
+In the case of the full version, the user's Reddit id is used to identify data stored in a Firebase Realtime database.
 
 ## Follow Subreddits
 
@@ -64,6 +66,12 @@ Post details along with a selection of comment are displayed.
 * Where a 'More Comments' is displayed, tap on the entry to retrieve additional replies to the comment.
 * Tap on the *Collapse* icon to hide replies to a comment.
 * Double tap on a comment to view the comment thread.
+
+When navigating using a keyboard or D-pad:
+* Select the list entry using the arrow keys.
+* Press the enter/centre key to expand/collapse replies to comments,
+or in the case of 'More Comments' to retrieve additional replies.
+* Double press the enter/centre key to view a comment thread.
 
 For the Full application version
 * Tap on the *Pin* button to add the post to the pinned list.

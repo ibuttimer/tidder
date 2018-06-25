@@ -97,31 +97,15 @@ public abstract class AbstractPostsPinnedTabFragment extends AbstractBasePostsTa
                         for (int i = 0; i < size; i++) {
                             ids[i] = list.get(i).getFullname();
                         }
-                        postEventForActivity(PostsEvent.newGetPinnedPostRequest(ids));
+                        postEventForActivity(StandardEvent.newThingAboutRequest(ids));
                     } else {
                         if (mAdapter.clear()) {
                             mAdapter.notifyDataSetChanged();
                         }
                     }
                 }
-            } else {
-                handled = false;
-            }
-
-            PostOffice.logHandled(event, TAG, handled);
-        }
-        return handled;
-    }
-
-    @Override
-    protected boolean onPostsEvent(PostsEvent event) {
-        boolean handled = super.onPostsEvent(event);
-
-        if (!handled) {
-            handled = true;
-
-            if (event.isGetPinnedPostResult()) {
-                ThingAboutResponse response = event.getThingResponse();
+            } else if (event.isThingAboutResult()) {
+                ThingAboutResponse response = event.getThingAboutResponse();
                 if (response != null) {
                     boolean isNew = event.isNewMode();
                     boolean isUpdate = event.isUpdateMode();
@@ -153,7 +137,24 @@ public abstract class AbstractPostsPinnedTabFragment extends AbstractBasePostsTa
             } else {
                 handled = false;
             }
+
+            PostOffice.logHandled(event, TAG, handled);
         }
+        return handled;
+    }
+
+    @Override
+    protected boolean onPostsEvent(PostsEvent event) {
+        boolean handled = super.onPostsEvent(event);
+
+//        if (!handled) {
+//            handled = true;
+//
+//            if (event.is???()) {
+//            } else {
+//                handled = false;
+//            }
+//        }
 
         PostOffice.logHandled(event, TAG, handled);
 

@@ -259,8 +259,17 @@ public class PostOffice {
      * @param subscriber    Subscriber
      */
     public static void register(Object subscriber) {
+        register(subscriber, subscriber.getClass().getSimpleName());
+    }
+
+    /**
+     * Register a subscriber
+     * @param subscriber    Subscriber
+     * @param tag           Tag to display in log
+     */
+    public static void register(Object subscriber, String tag) {
         EventBus.getDefault().register(subscriber);
-        Timber.d("PostOffice: register %s", subscriber.getClass().getSimpleName());
+        Timber.d("PostOffice: register %s", tag);
     }
 
     /**
@@ -268,8 +277,17 @@ public class PostOffice {
      * @param subscriber    Subscriber
      */
     public static void unregister(Object subscriber) {
+        unregister(subscriber, subscriber.getClass().getSimpleName());
+    }
+
+    /**
+     * Unregister a subscriber
+     * @param subscriber    Subscriber
+     * @param tag           Tag to display in log
+     */
+    public static void unregister(Object subscriber, String tag) {
         EventBus.getDefault().unregister(subscriber);
-        Timber.d("PostOffice: unregister %s", subscriber.getClass().getSimpleName());
+        Timber.d("PostOffice: unregister %s", tag);
     }
 
     /**

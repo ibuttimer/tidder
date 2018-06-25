@@ -19,7 +19,9 @@
 
     <integer name="search_text_sise">10</integer>
 
-    <integer name="back_to_exit_delay">2000</integer>
+    <integer name="back_to_exit_delay_msec">2000</integer>
+    <integer name="intercept_key_delay_msec">300</integer>
+    <integer name="intercept_key_extend_delay_msec">50</integer>
 
     <integer name="msec_per_min">60000</integer>
     <integer name="msec_per_5_min">300000</integer>

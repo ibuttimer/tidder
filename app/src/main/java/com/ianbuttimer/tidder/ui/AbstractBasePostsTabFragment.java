@@ -29,6 +29,7 @@ import android.support.annotation.UiThread;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Pair;
+import android.view.KeyEvent;
 import android.view.View;
 
 import com.google.common.primitives.Ints;
@@ -50,6 +51,7 @@ import com.ianbuttimer.tidder.reddit.get.SubredditAboutResponse;
 import com.ianbuttimer.tidder.reddit.util.LinkFindByName;
 import com.ianbuttimer.tidder.reddit.util.LinkFindBySubredditName;
 import com.ianbuttimer.tidder.ui.widgets.PostOffice;
+import com.ianbuttimer.tidder.utils.Utils;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.parceler.Parcels;
@@ -58,6 +60,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 
 /**
@@ -106,7 +109,7 @@ public abstract class AbstractBasePostsTabFragment
     @Override
     public void onItemClick(View view) {
         Link link = getClickedObject(view);
-        int position = mLayoutManager.getPosition(view);
+        int position = mAdapter.setSelectedPos(mLayoutManager, view);
 
         postEvent(PostsEvent.newViewPostRequest(
                 link.getName(), link.getTitle(), link.getPermalink(), position));
@@ -125,28 +128,31 @@ public abstract class AbstractBasePostsTabFragment
 
     @Override
     public boolean onItemLongClick(View view) {
-        return false;
+        return mSelectCtrl.onItemLongClick(view);
     }
 
     @Override
     public void onItemDoubleClick(View view) {
-        Link link = getClickedObject(view);
+        mSelectCtrl.onItemDoubleClick(view);
+    }
 
+    @Override
+    public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+        return mSelectCtrl.onKey(view, keyCode, keyEvent);
     }
 
     protected Link getClickedObject(View view) {
         return (Link) view.getTag(R.id.base_obj_tag);
     }
 
-
     @Override
     public void onItemDismiss(int position, int direction) {
-        // no op
+        mSelectCtrl.onItemDismiss(position, direction);
     }
 
     @Override
     public boolean onItemMove(int fromPosition, int toPosition) {
-        return false;
+        return mSelectCtrl.onItemMove(fromPosition, toPosition);
     }
 
     @Override
@@ -198,7 +204,7 @@ public abstract class AbstractBasePostsTabFragment
 
         if (event.isSubredditInfoResult()) {
             // NEW POST FLOW 10. handle subreddit info result
-            SubredditAboutResponse response = event.getAboutResponse();
+            SubredditAboutResponse response = event.getSubredditAboutResponse();
             if (response != null) {
                 Subreddit subreddit = response.getSubreddit();
                 if (subreddit != null) {

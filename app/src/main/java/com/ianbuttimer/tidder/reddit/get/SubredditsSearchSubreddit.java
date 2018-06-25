@@ -66,8 +66,8 @@ public class SubredditsSearchSubreddit extends Subreddit {
     }
 
     @Override
-    protected boolean parseToken(JsonReader jsonReader, String name, BaseObject obj)
-            throws IOException, IllegalArgumentException {
+    protected boolean parseToken(JsonReader jsonReader, String name, Subreddit obj)
+                                    throws IOException, IllegalArgumentException {
         checkObject(obj, getClass());
 
         SubredditsSearchSubreddit object = ((SubredditsSearchSubreddit) obj);

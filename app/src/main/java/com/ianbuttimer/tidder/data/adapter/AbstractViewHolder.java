@@ -26,11 +26,11 @@ import android.text.method.LinkMovementMethod;
 import android.text.method.MovementMethod;
 import android.text.style.URLSpan;
 import android.text.util.Linkify;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
-import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.data.IAdapterHandler;
 import com.ianbuttimer.tidder.net.NetworkUtils;
 import com.ianbuttimer.tidder.reddit.BaseObject;
@@ -102,6 +102,17 @@ public abstract class AbstractViewHolder<T extends BaseObject>
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 return false;
+            }
+        });
+
+        mView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+                boolean consumed = false;
+                if (mAdapterHandler != null) {
+                    consumed = mAdapterHandler.onKey(view, keyCode, keyEvent);
+                }
+                return consumed;
             }
         });
     }
@@ -212,6 +223,11 @@ public abstract class AbstractViewHolder<T extends BaseObject>
         }
     }
 
+    /**
+     * Set link colour to a contrasting colour
+     * @param textView      TextView to set link colour
+     * @param background    Colour to contrast against
+     */
     protected void setLinkColour(TextView textView, @ColorInt int background) {
         textView.setLinkTextColor(
                 ColourUtils.getFurthestColour(background, ColourUtils.APP_COLOURS));

@@ -37,7 +37,7 @@ import java.io.IOException;
  * See sub classes for class specific details.
  */
 @Parcel
-public class Subreddit extends RedditObject {
+public class Subreddit extends RedditObject<Subreddit, SubredditProxy> {
 
     @ColorInt public static int DEFAULT_KEY_COLOUR = Color.BLACK;
 
@@ -126,13 +126,27 @@ public class Subreddit extends RedditObject {
     }
 
     @Override
-    protected String getRedditType() {
+    public String getRedditType() {
         return TYPE_SUBREDDIT;
     }
 
     @Override
-    protected boolean parseToken(JsonReader jsonReader, String name, BaseObject obj)
-            throws IOException, IllegalArgumentException {
+    public SubredditProxy getProxy() {
+        return SubredditProxy.getProxy(this);
+    }
+
+    @Override
+    public SubredditProxy addToCache() {
+        SubredditProxy proxy = getProxy();
+        if (proxy != null) {
+            proxy.addToCache(this);
+        }
+        return proxy;
+    }
+
+    @Override
+    protected boolean parseToken(JsonReader jsonReader, String name, Subreddit obj)
+                                        throws IOException, IllegalArgumentException {
         checkObject(obj, getClass());
 
         Subreddit object = ((Subreddit) obj);

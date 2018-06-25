@@ -22,10 +22,12 @@
     <color name="colorPrimary">#80deea</color>
     <color name="colorPrimaryDark">#4bacb8</color>
     <color name="colorPrimaryLight">#b4ffff</color>
+    <color name="colorPrimaryVeryLight">#e0f7fa</color>
     <color name="colorPrimaryText">#000000</color>
     <color name="colorAccent">#e65100</color>
     <color name="colorAccentDark">#ac1900</color>
     <color name="colorAccentLight">#ff833a</color>
+    <color name="colorAccentVeryLight">#ffe0b2</color>
     <color name="colorAccentText">#000000</color>
 
     <color name="colorWarnText">#d50000</color>

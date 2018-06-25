@@ -41,6 +41,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import github.nisrulz.recyclerviewhelper.RVHAdapter;
+import timber.log.Timber;
 
 
 /**
@@ -59,6 +60,8 @@ public abstract class AbstractRecycleViewAdapter<T extends BaseObject, K extends
     protected ArrayTester<T> mArrayTester;
 
     protected SparseIntArray mLayoutIds;
+
+    protected int mSelectedPos = RecyclerView.NO_POSITION;
 
     /**
      * Constructor
@@ -188,7 +191,8 @@ public abstract class AbstractRecycleViewAdapter<T extends BaseObject, K extends
      * Get the item click handler
      * @return  handler for the views in this adapter
      */
-    @Nullable public IAdapterHandler getAdapterHandler() {
+    @Nullable
+    public IAdapterHandler getAdapterHandler() {
         return mAdapterHandler;
     }
 
@@ -197,10 +201,24 @@ public abstract class AbstractRecycleViewAdapter<T extends BaseObject, K extends
      * @param position   Position of the item whose data we want within the adapter's data set.
      * @return The data at the specified position. This value may be null.
      */
+    @Nullable
     public T getItem(int position) {
         T item = null;
         if (mList != null) {
             item = mList.get(position);
+        }
+        return item;
+    }
+
+    /**
+     * Get the data item associated with the currently selected position in the data set.
+     * @return The data at the specified position. This value may be null.
+     */
+    @Nullable
+    public T getSelectedItem() {
+        T item = null;
+        if (mSelectedPos != RecyclerView.NO_POSITION) {
+            item = getItem(mSelectedPos);
         }
         return item;
     }
@@ -497,7 +515,8 @@ public abstract class AbstractRecycleViewAdapter<T extends BaseObject, K extends
 
     @Override
     public boolean onItemMove(int fromPosition, int toPosition) {
-        boolean moved = false;
+        boolean moved;
+        setSelectedPos(toPosition);
         if (mAdapterHandler != null) {
             moved = mAdapterHandler.onItemMove(fromPosition, toPosition);
         } else {
@@ -511,12 +530,36 @@ public abstract class AbstractRecycleViewAdapter<T extends BaseObject, K extends
 
     @Override
     public void onItemDismiss(int position, int direction) {
+        setSelectedPos(RecyclerView.NO_POSITION);
         if (mAdapterHandler != null) {
             mAdapterHandler.onItemDismiss(position, direction);
         } else {
             remove(position);
             notifyItemRemoved(position);
         }
+    }
+
+
+    public int getSelectedPos() {
+        return mSelectedPos;
+    }
+
+    public void setSelectedPos(int selectedPos) {
+        this.mSelectedPos = selectedPos;
+        Timber.i("Adapter selected position %d", mSelectedPos);
+    }
+
+    public int setSelectedPos(RecyclerView.LayoutManager layoutManager, View view) {
+        int position = layoutManager.getPosition(view);
+
+        if ((position >= 0) && (position < getItemCount())) {
+            layoutManager.scrollToPosition(position);
+        } else {
+            position = RecyclerView.NO_POSITION;
+        }
+        setSelectedPos(position);
+
+        return mSelectedPos;
     }
 
 }

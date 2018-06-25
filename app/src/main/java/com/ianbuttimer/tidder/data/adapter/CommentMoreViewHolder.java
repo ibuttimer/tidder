@@ -32,8 +32,6 @@ import java.text.MessageFormat;
 
 public class CommentMoreViewHolder extends CommentViewHolder {
 
-    protected CommentMore mMoreComment;
-
     /**
      * Constructor
      * @param view              View to hold
@@ -45,30 +43,25 @@ public class CommentMoreViewHolder extends CommentViewHolder {
 
     @Override
     public void setViewInfo(Comment info, int position) {
-        mComment = info;
-        mMoreComment = (CommentMore) info;
+        if (info instanceof CommentMore) {
+            CommentMore moreComment = (CommentMore) info;
 
-        tvText.setText(
-            MessageFormat.format(
-                    getContext().getString(R.string.comment_more_text),
-                    mMoreComment.getCount()));
+            tvText.setText(
+                    MessageFormat.format(
+                            getContext().getString(R.string.comment_more_text),
+                            moreComment.getCount()));
 
-        addIndents(mComment);
+            addIndents(info);
+        }
+
 
         setBackground(position);
 
         hideProgress();
     }
 
-    public void showProgress() {
-        showProgress(View.VISIBLE);
-    }
-
-    public void hideProgress() {
-        showProgress(View.INVISIBLE);
-    }
-
-    private void showProgress(int visibility) {
+    @Override
+    protected void showProgress(int visibility) {
         if (pbProgress != null) {
             int imgVisibility = (visibility == View.VISIBLE ? View.INVISIBLE : View.VISIBLE);
             pbProgress.setVisibility(visibility);

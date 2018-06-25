@@ -34,6 +34,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Pair;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -200,34 +201,39 @@ public abstract class FollowTabFragment
 
 
     @Override
-    public void onItemDismiss(int position, int direction) {
-        // no op
-    }
-
-    @Override
-    public boolean onItemMove(int fromPosition, int toPosition) {
-        return false;
-    }
-
-    @Override
     public void onItemClick(View view) {
-        Subreddit subreddit = getClickedObject(view);
+        mSelectCtrl.onItemClick(view);
     }
 
     @Override
     public boolean onItemLongClick(View view) {
-        Subreddit subreddit = getClickedObject(view);
-        return false;
+        return mSelectCtrl.onItemLongClick(view);
     }
 
     @Override
     public void onItemDoubleClick(View view) {
-        Subreddit subreddit = getClickedObject(view);
+        mSelectCtrl.onItemDoubleClick(view);
+    }
+
+    @Override
+    public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+        return mSelectCtrl.onKey(view, keyCode, keyEvent);
     }
 
     protected Subreddit getClickedObject(View view) {
         return (Subreddit) view.getTag(R.id.base_obj_tag);
     }
+
+    @Override
+    public void onItemDismiss(int position, int direction) {
+        mSelectCtrl.onItemDismiss(position, direction);
+    }
+
+    @Override
+    public boolean onItemMove(int fromPosition, int toPosition) {
+        return mSelectCtrl.onItemMove(fromPosition, toPosition);
+    }
+
 
     @Override
     protected ListItemClickListener getListItemClickListener() {
@@ -402,7 +408,7 @@ public abstract class FollowTabFragment
                 handled = true;
 
                 if (event.isSubredditInfoResult()) {
-                    SubredditAboutResponse response = event.getAboutResponse();
+                    SubredditAboutResponse response = event.getSubredditAboutResponse();
                     if (response != null) {
                         Subreddit subreddit = response.getSubreddit();
                         if (subreddit != null) {
@@ -601,7 +607,7 @@ public abstract class FollowTabFragment
                 }
             } else if (event.isSubredditInfoResult()) {
                 // LIST FLOW 7. handle subreddit info result
-                SubredditAboutResponse response = event.getAboutResponse();
+                SubredditAboutResponse response = event.getSubredditAboutResponse();
                 if (response != null) {
                     Subreddit subreddit = response.getSubreddit();
                     if (subreddit != null) {

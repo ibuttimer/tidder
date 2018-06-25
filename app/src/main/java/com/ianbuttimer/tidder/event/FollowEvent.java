@@ -147,27 +147,10 @@ public class FollowEvent extends AbstractEvent<FollowEvent, FollowEvent.Event, F
         FollowEvent event = null;
         Event type = null;
         if (response != null) {
-            // TODO del before checkin
-//            Class rspClass = response.getClass();
-//            if (rspClass.equals(ApiSearchSubredditsResponse.class)) {
-//                type = Event.SEARCH_NAME_RESULT;
-//            } else if (rspClass.equals(SubredditsSearchResponse.class)) {
-//                type = Event.SEARCH_INTEREST_RESULT;
-//            } else if (rspClass.equals(AllSubredditsResponse.class)) {
-//                type = Event.ALL_SUBREDDIT_RESULT;
-//            }
-
             Enum eType = response.getEventType();
             if (eType instanceof Event) {
                 type = (Event)eType;
-                // TODO del before checkin
-//                if (!eType.equals(type)) {
-//                    throw new IllegalArgumentException("wtf: " + eType + " " + type);
-//                }
-//            } else {
-//                throw new IllegalArgumentException("wtf: " + eType);
             }
-
         }
         if (type != null) {
             event = new FollowEvent(type);

@@ -22,6 +22,7 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.util.JsonReader;
 import android.util.JsonToken;
+import android.util.Pair;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -364,8 +365,29 @@ public abstract class BaseObject<T extends BaseObject> {
         }
     }
 
+    /**
+     * Make a reddit object fullname
+     * @param type  Type of object
+     * @param id    Id of object
+     * @return  Fullname
+     */
     public static String makeFullname(String type, String id) {
         return type + TYPE_ID_SEPARATOR + id;
+    }
+
+    /**
+     * Split a reddit object fullname into its constitute parts
+     * @param fullname  Fiullname to split
+     * @return  Pair with type as irst & id as second, or <code>null</code> if not valid fullname
+     */
+    @Nullable
+    public static Pair<String, String> splitFullname(String fullname) {
+        String[] splits = fullname.split(TYPE_ID_SEPARATOR);
+        Pair<String, String> result = null;
+        if (splits.length == 2) {
+            result = new Pair<>(splits[0], splits[1]);
+        }
+        return result;
     }
 
 }

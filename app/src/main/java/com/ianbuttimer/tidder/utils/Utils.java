@@ -44,9 +44,11 @@ import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import timber.log.Timber;
 
@@ -594,7 +596,7 @@ public class Utils {
     }
 
     /**
-     * Copy fields from <code>src</code> to <code>dest</code>, excluding final, static & volatile fields
+     * Copy fields from <code>src</code> to <code>dest</code>, excluding final, static & volatile fields.
      * @param src   Source object
      * @param dest  Destination object
      * @return  <code>true</code> if copied successfully
@@ -604,7 +606,7 @@ public class Utils {
         if ((src != null) && (dest != null)) {
             Class<?> srcClass = src.getClass();
             Class<?> destClass = dest.getClass();
-            Field[] fields = getFields(srcClass, destClass);
+            List<Field> fields = getFields(srcClass, destClass);
             if (fields == null) {
                 fields = getFields(srcClass.getSuperclass(), destClass.getSuperclass());
             }
@@ -653,12 +655,30 @@ public class Utils {
         return copied;
     }
 
-    private static Field[] getFields(Class<?> srcClass, Class<?> destClass) {
-        Field[] fields = null;
-        if (srcClass.isAssignableFrom(destClass)) {
-            fields = srcClass.getDeclaredFields();
-        } else if (destClass.isAssignableFrom(srcClass)) {
-            fields = destClass.getDeclaredFields();
+    /**
+     * Get the common fields of the argument classes
+     * @param classA    First class
+     * @param classB    Second class
+     * @return  Field list or <code>null</code> if no common fields
+     */
+    private static List<Field> getFields(Class<?> classA, Class<?> classB) {
+        List<Field> fields = null;
+        Class<?> fieldClass = null;
+        if (classA.isAssignableFrom(classB)) {
+            // classA may be assigned from destination, so use classA fields
+            fieldClass = classA;
+        } else if (classB.isAssignableFrom(classA)) {
+            // classB may be assigned from classA, so use classB fields
+            fieldClass = classB;
+        }
+        if (fieldClass != null) {
+            fields = new ArrayList<>(Arrays.asList(fieldClass.getDeclaredFields()));
+
+            // get super class fields
+            Class superClazz = fieldClass;
+            while ((superClazz = superClazz.getSuperclass()) != Object.class){
+                fields.addAll(Arrays.asList(superClazz.getDeclaredFields()));
+            }
         }
         return fields;
     }
@@ -774,6 +794,19 @@ public class Utils {
             }
         }
         return isNull;
+    }
+
+    /**
+     * Determine the size of a bundle
+     * @param bundle    To to determine size of
+     * @return  Bundle size in bytes
+     */
+    public static int getBundleSizeInBytes(Bundle bundle) {
+        Parcel parcel = Parcel.obtain();
+        parcel.writeValue(bundle);
+        byte[] bytes = parcel.marshall();
+        parcel.recycle();
+        return bytes.length;
     }
 
 }

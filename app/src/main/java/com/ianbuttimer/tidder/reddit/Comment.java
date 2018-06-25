@@ -38,7 +38,7 @@ import java.util.Objects;
  * Class representing a Reddit comment
  */
 @Parcel
-public class Comment extends RedditObject implements BasicStatsView.IBasicStats {
+public class Comment extends RedditObject<Comment, CommentProxy> implements BasicStatsView.IBasicStats {
 
     public static final String SUBREDDIT_ID = "subreddit_id";
     public static final String LINK_ID = "link_id";
@@ -96,20 +96,38 @@ public class Comment extends RedditObject implements BasicStatsView.IBasicStats 
         mParent = null;
     }
 
-    @Override
-    protected Subreddit getInstance() {
-        return new Subreddit();
+    public boolean copy(Comment comment) {
+        return Utils.copyFields(comment, this);
     }
 
     @Override
-    protected String getRedditType() {
+    protected Comment getInstance() {
+        return new Comment();
+    }
+
+    @Override
+    public CommentProxy getProxy() {
+        return CommentProxy.getProxy(this);
+    }
+
+    @Override
+    public CommentProxy addToCache() {
+        CommentProxy proxy = getProxy();
+        if (proxy != null) {
+            proxy.addToCache(this);
+        }
+        return proxy;
+    }
+
+    @Override
+    public String getRedditType() {
         return TYPE_COMMENT;
     }
 
 
     @Override
-    protected boolean parseToken(JsonReader jsonReader, String name, BaseObject obj)
-            throws IOException, IllegalArgumentException {
+    protected boolean parseToken(JsonReader jsonReader, String name, Comment obj)
+                                        throws IOException, IllegalArgumentException {
         checkObject(obj, getClass());
 
         Comment object = ((Comment) obj);
@@ -305,7 +323,7 @@ public class Comment extends RedditObject implements BasicStatsView.IBasicStats 
         this.mBodyHtml = bodyHtml;
     }
 
-    public boolean ismStickied() {
+    public boolean isStickied() {
         return mStickied;
     }
 
@@ -416,34 +434,8 @@ public class Comment extends RedditObject implements BasicStatsView.IBasicStats 
                 '}';
     }
 
-    private static final int REPLIES_EXPANDED = 0x01;
-    private static final int IS_DISPLAYED = 0x02;
-
-    public static boolean isMarked(Comment.Tag status) {
-        return ((status != null) && (status.isMarked()));
-    }
-
-    public static void setMarked(Comment.Tag status, boolean marked) {
-        if (status != null) {
-            status.setMarked(marked);
-        }
-    }
-
-    public static boolean isFlag(Comment.Tag status, int flag) {
-        return ((status != null) && (status.isFlaged(flag)));
-    }
-
-    public static void setFlag(Comment.Tag status, int flag) {
-        if (status != null) {
-            status.setFlag(flag);
-        }
-    }
-
-    public static void clearFlag(Comment.Tag status, int flag) {
-        if (status != null) {
-            status.clearFlag(flag);
-        }
-    }
+    private static final int REPLIES_EXPANDED = FIRST_OBJECT_SPECIFIC_FLAG;
+    private static final int IS_DISPLAYED = FIRST_OBJECT_SPECIFIC_FLAG << 1;
 
     public boolean isRepliesExpanded() {
         return isFlag(getTag(), REPLIES_EXPANDED);
@@ -476,116 +468,5 @@ public class Comment extends RedditObject implements BasicStatsView.IBasicStats 
     public void setMarked(boolean marked) {
         setMarked(getTag(), marked);
     }
-
-
-
-    //    				"subreddit_id": "t5_2qh6e",
-//                            "approved_at_utc": null,
-//                            "mod_reason_by": null,
-//                            "banned_by": null,
-//                            "removal_reason": null,
-//                            "link_id": "t3_81fafq",
-//                            "likes": null,
-//                            "replies": {
-//        "kind": "Listing",
-//                "data": {
-//            "after": null, "whitelist_status": "all_ads", "modhash": "", "dist": null,
-//                    "children": [
-//            {"kind": "t1",
-//                    "data": {
-//                "subreddit_id": "t5_2qh6e",
-//                        "approved_at_utc": null,
-//                        "mod_reason_by": null,
-//                        "banned_by": null,
-//                        "removal_reason": null,
-//                        "link_id": "t3_81fafq",
-//                        "likes": null,
-//                        "replies": "",
-//                        "user_reports": [],
-//                "saved": false,
-//                        "id": "dv9e7md",
-//                        "banned_at_utc": null,
-//                        "mod_reason_title": null,
-//                        "gilded": 0,
-//                        "archived": false,
-//                        "report_reasons": null,
-//                        "author": "JTM1218",
-//                        "can_mod_post": false,
-//                        "ups": 0,
-//                        "parent_id": "t1_dv9e65q",
-//                        "score": 0,
-//                        "approved_by": null,
-//                        "downs": 0,
-//                        "body": "Also catch up on Sneaky Pete (Amazon also) before season 2 on Friday.",
-//                        "edited": false,
-//                        "author_flair_css_class": null,
-//                        "collapsed": false,
-//                        "is_submitter": false,
-//                        "collapsed_reason": null,
-//                        "body_html": "&lt;div class=\"md\"&gt;&lt;p&gt;Also catch up on Sneaky Pete (Amazon also) before season 2 on Friday.&lt;/p&gt;\n&lt;/div&gt;",
-//                        "stickied": false,
-//                        "subreddit_type":
-//                "public",
-//                        "can_gild": true,
-//                        "subreddit": "television",
-//                        "score_hidden": false,
-//                        "permalink": "/r/television/comments/81fafq/rtelevisions_weekend_recommendations_what_are_you/dv9e7md/",
-//                        "num_reports": null,
-//                        "name": "t1_dv9e7md",
-//                        "created": 1520362975.0,
-//                        "author_flair_text": null,
-//                        "created_utc": 1520334175.0,
-//                        "subreddit_name_prefixed": "r/television",
-//                        "controversiality": 0,
-//                        "depth": 1,
-//                        "mod_reports": [],
-//                "mod_note": null,
-//                        "distinguished": null
-//            }
-//            }
-//						],
-//            "before": null
-//        }
-//    },
-//            "user_reports": [],
-//            "saved": false,
-//            "id": "dv9e65q",
-//            "banned_at_utc": null,
-//            "mod_reason_title": null,
-//            "gilded": 0,
-//            "archived": false,
-//            "report_reasons": null,
-//            "author": "JTM1218",
-//            "can_mod_post": false,
-//            "ups": 1,
-//            "parent_id": "t3_81fafq",
-//            "score": 1,
-//            "approved_by": null,
-//            "downs": 0,
-//            "body": "If you haven't given Patriot on Amazon a try, definitely do! It's very 'Fargo'-y in it's plot progression to me, and had me interested the whole way through.",
-//            "edited": false,
-//            "author_flair_css_class": null,
-//            "collapsed": false,
-//            "is_submitter": false,
-//            "collapsed_reason": null,
-//            "body_html": "&lt;div class=\"md\"&gt;&lt;p&gt;If you haven&amp;#39;t given Patriot on Amazon a try, definitely do! It&amp;#39;s very &amp;#39;Fargo&amp;#39;-y in it&amp;#39;s plot progression to me, and had me interested the whole way through.&lt;/p&gt;\n&lt;/div&gt;",
-//            "stickied": false,
-//            "subreddit_type": "public",
-//            "can_gild": true,
-//            "subreddit": "television",
-//            "score_hidden": false,
-//            "permalink": "/r/television/comments/81fafq/rtelevisions_weekend_recommendations_what_are_you/dv9e65q/",
-//            "num_reports": null,
-//            "name": "t1_dv9e65q",
-//            "created": 1520362882.0,
-//            "author_flair_text": null,
-//            "created_utc": 1520334082.0,
-//            "subreddit_name_prefixed": "r/television",
-//            "controversiality": 0,
-//            "depth": 0,
-//            "mod_reports": [],
-//            "mod_note": null,
-//            "distinguished": null
-
 
 }

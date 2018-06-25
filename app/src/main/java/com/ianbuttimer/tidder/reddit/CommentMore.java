@@ -53,19 +53,19 @@ public class CommentMore extends Comment implements BasicStatsView.IBasicStats {
     }
 
     @Override
-    protected Subreddit getInstance() {
-        return new Subreddit();
+    protected CommentMore getInstance() {
+        return new CommentMore();
     }
 
     @Override
-    protected String getRedditType() {
+    public String getRedditType() {
         return TYPE_MORE;
     }
 
 
     @Override
-    protected boolean parseToken(JsonReader jsonReader, String name, BaseObject obj)
-            throws IOException, IllegalArgumentException {
+    protected boolean parseToken(JsonReader jsonReader, String name, Comment obj)
+                                        throws IOException, IllegalArgumentException {
         checkObject(obj, getClass());
 
         CommentMore object = ((CommentMore) obj);

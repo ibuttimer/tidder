@@ -17,6 +17,7 @@
 package com.ianbuttimer.tidder.ui;
 
 import android.appwidget.AppWidgetManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -36,6 +37,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ianbuttimer.tidder.R;
+import com.ianbuttimer.tidder.TidderApplication;
 import com.ianbuttimer.tidder.data.ApiResponseCallback;
 import com.ianbuttimer.tidder.data.ICallback;
 import com.ianbuttimer.tidder.data.QueryCallback;
@@ -48,7 +50,6 @@ import com.ianbuttimer.tidder.event.StandardEventProcessor.IStandardEventProcess
 import com.ianbuttimer.tidder.reddit.RedditClient;
 import com.ianbuttimer.tidder.reddit.Response;
 import com.ianbuttimer.tidder.reddit.get.SubredditLinkRequest;
-import com.ianbuttimer.tidder.reddit.get.ThingAboutRequest;
 import com.ianbuttimer.tidder.ui.widgets.PostOffice;
 import com.ianbuttimer.tidder.utils.Dialog;
 import com.ianbuttimer.tidder.utils.Utils;
@@ -100,6 +101,14 @@ public abstract class AbstractPostListActivity extends AppCompatActivity
             return value;
         }
     }
+
+    private static final int sBackKeyDelay;
+
+    static {
+        Context context = TidderApplication.getWeakApplicationContext().get();
+        sBackKeyDelay = context.getResources().getInteger(R.integer.back_to_exit_delay_msec);
+    }
+    private boolean mBackPressed = false;   // back key pressed flag
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -310,14 +319,6 @@ public abstract class AbstractPostListActivity extends AppCompatActivity
                             .build()    // build request
                             .setAdditionalInfo(additionalInfo)  // add additional info
             );
-        } else if (event.isGetPinnedPostRequest()) {
-            Bundle additionalInfo = PostsEvent.getFactory().additionalInfoAll(event);
-            mApiResponseHandler.requestGetService(
-                    ThingAboutRequest.builder()
-                            .id(event.getNames())
-                            .build()    // build request
-                            .setAdditionalInfo(additionalInfo)  // add additional info
-            );
         } else if (event.isClearPostsCommand()) {
             if (fabPin != null) {
                 fabPin.setVisibility(View.INVISIBLE);
@@ -400,8 +401,6 @@ public abstract class AbstractPostListActivity extends AppCompatActivity
         }
     }
 
-    private boolean mBackPressed = false;
-
     @Override
     public void onBackPressed() {
         if (mBackPressed) {
@@ -417,9 +416,7 @@ public abstract class AbstractPostListActivity extends AppCompatActivity
             public void run() {
                 mBackPressed = false;
             }
-        }, getResources().getInteger(R.integer.back_to_exit_delay));
+        }, sBackKeyDelay);
     }
-
-
 
 }
