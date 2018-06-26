@@ -102,14 +102,6 @@ public abstract class AbstractPostListActivity extends AppCompatActivity
         }
     }
 
-    private static final int sBackKeyDelay;
-
-    static {
-        Context context = TidderApplication.getWeakApplicationContext().get();
-        sBackKeyDelay = context.getResources().getInteger(R.integer.back_to_exit_delay_msec);
-    }
-    private boolean mBackPressed = false;   // back key pressed flag
-
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -247,7 +239,7 @@ public abstract class AbstractPostListActivity extends AppCompatActivity
 
     /**
      * Return list of standard event processor extensions
-     * @return
+     * @return  List of extensions
      */
     protected abstract ArrayList<IStandardEventProcessorExt> getExtensions();
 
@@ -399,24 +391,6 @@ public abstract class AbstractPostListActivity extends AppCompatActivity
                 }
             }
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (mBackPressed) {
-            super.onBackPressed();
-            return;
-        }
-        mBackPressed = true;
-        Snackbar.make(this.getWindow().getDecorView().findViewById(android.R.id.content),
-                            getText(R.string.back_to_exit), Snackbar.LENGTH_SHORT).show();
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mBackPressed = false;
-            }
-        }, sBackKeyDelay);
     }
 
 }
