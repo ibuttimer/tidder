@@ -95,12 +95,10 @@ public class BasicStatsView extends ConstraintLayout {
         Context context = getContext();
 
         if (tvScore != null) {
-            tvScore.setText(
-                    getCountIndication(source.getScore(), 0, 0));
+            Utils.setCountIndication(tvScore, source.getScore(), 0, 0);
         }
         if (tvComments != null) {
-            tvComments.setText(
-                    getCountIndication(source.getNumComments(), R.string.item_comment, R.string.item_comments));
+            Utils.setCountIndication(tvComments, source.getNumComments(), R.string.item_comment, R.string.item_comments);
         }
         if (tvAge != null) {
             Date created = source.getCreated();

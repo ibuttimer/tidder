@@ -44,6 +44,12 @@
     <string name="following_toast">"Now following {0}"</string>
     <string name="unfollowing_toast">"No longer following {0}"</string>
     <string name="unfollowing_all_toast">"No longer following anything"</string>
+    <string name="follow_content_desc">"Follow subreddit"</string>
+    <string name="unfollow_content_desc">"Do not follow subreddit"</string>
+    <string name="follow_subreddit_content_desc">"Follow {0}"</string>
+    <string name="unfollow_subreddit_content_desc">"Do not follow {0}"</string>
+
+    <string name="unfollow_all_content_desc">"Clear following list"</string>
 
     <string name="no_search_result">"No results found matching search criteria"</string>
     <string name="no_subreddit_result">"No subreddits found"</string>

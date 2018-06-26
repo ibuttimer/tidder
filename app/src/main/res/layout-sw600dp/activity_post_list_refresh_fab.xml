@@ -24,4 +24,5 @@
     android:layout_margin="@dimen/fab_margin"
     app:layout_anchor="@+id/frameLayout_postListA"
     app:layout_anchorGravity="top|start"
+    android:contentDescription="@string/refresh_content_deesc"
     app:srcCompat="@drawable/ic_refresh" />

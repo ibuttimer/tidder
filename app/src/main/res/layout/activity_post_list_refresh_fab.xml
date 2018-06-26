@@ -24,5 +24,6 @@
     android:layout_gravity="bottom|end"
     android:layout_marginEnd="@dimen/fab_margin"
     android:layout_marginBottom="@dimen/fab_bottom_margin"
+    android:contentDescription="@string/refresh_content_deesc"
     app:srcCompat="@drawable/ic_refresh" />
 

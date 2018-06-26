@@ -69,6 +69,7 @@
         android:layout_margin="@dimen/fab_margin"
         app:layout_anchor="@+id/post_detail_container"
         app:layout_anchorGravity="top|end"
+        android:contentDescription="@string/pin_content_desc"
         app:srcCompat="@drawable/ic_pin" />
 
 </android.support.design.widget.CoordinatorLayout>

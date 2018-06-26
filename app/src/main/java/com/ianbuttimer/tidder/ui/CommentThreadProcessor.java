@@ -86,6 +86,7 @@ import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout;
 import org.greenrobot.eventbus.Subscribe;
 import org.parceler.Parcels;
 
+import java.text.MessageFormat;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 
@@ -934,12 +935,18 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
         mPinned = pinned;
         if ((mFabPin != null) && mIsPinnable) {
             @DrawableRes int pinRes;
+            @StringRes int contentDec;
             if (mPinned) {
                 pinRes = R.drawable.ic_unpin;
+                contentDec = R.string.unpin_post_content_desc;
             } else {
                 pinRes = R.drawable.ic_pin;
+                contentDec = R.string.pin_post_content_desc;
             }
             mFabPin.setImageResource(pinRes);
+            mFabPin.setContentDescription(
+                    MessageFormat.format(
+                            mFabPin.getContext().getString(contentDec), getTitle()));
             mFabPin.setVisibility(View.VISIBLE);
         }
     }

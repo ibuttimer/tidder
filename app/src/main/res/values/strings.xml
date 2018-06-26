@@ -164,6 +164,9 @@
     <string name="count_indication_1">{0}</string>
     <string name="count_indication_k">{0}k</string>
     <string name="count_indication_m">{0}m</string>
+    <string name="count_indication_content_desc_1">{0} {1}</string>
+    <string name="count_indication_content_desc_k">{0} thousand {1}</string>
+    <string name="count_indication_content_desc_m">{0} million {1}</string>
 
     <string name="no_entries_in_list">No entries in list</string>
 

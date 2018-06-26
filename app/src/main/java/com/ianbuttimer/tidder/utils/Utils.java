@@ -28,7 +28,9 @@ import android.support.annotation.StringRes;
 import android.support.v4.app.NavUtils;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
+import android.util.Pair;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.TidderApplication;
@@ -535,39 +537,47 @@ public class Utils {
      * @param count     Count to get indication of
      * @param item      Singular item
      * @param items     Multiple items
-     * @return  Indication string
+     * @return  Pair with first item being the indication string, and second content description
      */
-    public static String getCountIndication(int count, String item, String items) {
+    public static Pair<String, String> getCountIndication(int count, String item, String items) {
         double indicationCount = count;
         String format = "###,##0.0";
         String itemName = items;
         @StringRes int resId;
         @StringRes int resIdItem;
+        @StringRes int resCdItem;
         if (indicationCount < ONE_K) {
             format = "#0";
             resId = R.string.count_indication_1;
             resIdItem = R.string.count_indication_1_item;
+            resCdItem = R.string.count_indication_content_desc_1;
             if (count == 1) {
                 itemName = item;
             }
         } else if (indicationCount < ONE_M) {
             resId = R.string.count_indication_k;
             resIdItem = R.string.count_indication_k_item;
+            resCdItem = R.string.count_indication_content_desc_k;
             indicationCount /= ONE_K;
         } else {
             resId = R.string.count_indication_m;
             resIdItem = R.string.count_indication_m_item;
+            resCdItem = R.string.count_indication_content_desc_m;
             indicationCount /= ONE_M;
         }
         DecimalFormat df = new DecimalFormat(format);
         Context context = TidderApplication.getWeakApplicationContext().get();
-        String indication = df.format(indicationCount);
+        String cntIndication = df.format(indicationCount);
+        String indication;
+        String contentDesc;
         if (TextUtils.isEmpty(itemName)) {
-            indication = MessageFormat.format(context.getString(resId), indication);
+            indication = MessageFormat.format(context.getString(resId), cntIndication);
+            contentDesc = MessageFormat.format(context.getString(resCdItem), cntIndication);
         } else {
-            indication = MessageFormat.format(context.getString(resIdItem), indication, itemName);
+            indication = MessageFormat.format(context.getString(resIdItem), cntIndication, itemName);
+            contentDesc = MessageFormat.format(context.getString(resCdItem), cntIndication, itemName);
         }
-        return indication;
+        return new Pair<>(indication, contentDesc);
     }
 
     /**
@@ -580,9 +590,9 @@ public class Utils {
      * @param count     Count to get indication of
      * @param item      Singular item
      * @param items     Multiple items
-     * @return  Indication string
+     * @return  Pair with first item being the indication string, and second content description
      */
-    public static String getCountIndication(int count, @StringRes int item, @StringRes int items) {
+    public static Pair<String, String> getCountIndication(int count, @StringRes int item, @StringRes int items) {
         Context context = TidderApplication.getWeakApplicationContext().get();
         String itemStr = null;
         String itemsStr = null;
@@ -593,6 +603,27 @@ public class Utils {
             itemsStr = context.getString(items);
         }
         return getCountIndication(count, itemStr, itemsStr);
+    }
+
+    /**
+     * Get a count indication string of the form<br>
+     * <ul>
+     *     <li>0 items</li>
+     *     <li>0.0k items</li>
+     *     <li>0.0m items</li>
+     * </ul>
+     * @param textView  TextView to apply to
+     * @param count     Count to get indication of
+     * @param item      Singular item
+     * @param items     Multiple items
+     * @return  Pair with first item being the indication string, and second content description
+     */
+    public static void setCountIndication(TextView textView, int count, @StringRes int item, @StringRes int items) {
+        if (textView != null) {
+            Pair<String, String> cntIndication = getCountIndication(count, item, items);
+            textView.setText(cntIndication.first);
+            textView.setContentDescription(cntIndication.second);
+        }
     }
 
     /**

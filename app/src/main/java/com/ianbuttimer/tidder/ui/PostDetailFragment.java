@@ -321,13 +321,13 @@ public class PostDetailFragment extends CommentThreadFragment implements PostOff
                         DatabaseIntentService.Actions.INSERT_OR_UPDATE_PINNED)
                         .cv(cv);
 
-                toastResult = R.string.pining_toast;
+                toastResult = R.string.pinning_toast;
             } else {
                 builder = DatabaseIntentService.Builder.builder(
                         context,
                         DatabaseIntentService.Actions.DELETE_PINNED);
 
-                toastResult = R.string.unpining_toast;
+                toastResult = R.string.unpinning_toast;
 
                 // TODO should include uuid in delete sql
             }

@@ -18,6 +18,7 @@ package com.ianbuttimer.tidder.data.adapter;
 
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.StringRes;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -25,11 +26,12 @@ import android.widget.TextView;
 
 import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.data.IAdapterHandler;
-import com.ianbuttimer.tidder.reddit.Subreddit;
 import com.ianbuttimer.tidder.event.FollowEvent;
+import com.ianbuttimer.tidder.reddit.Subreddit;
 import com.ianbuttimer.tidder.ui.widgets.PostOffice;
 import com.ianbuttimer.tidder.utils.Utils;
 
+import java.text.MessageFormat;
 import java.util.Date;
 
 import butterknife.BindView;
@@ -37,7 +39,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.ianbuttimer.tidder.utils.ColourUtils.getContrastColor;
-import static com.ianbuttimer.tidder.utils.Utils.getCountIndication;
 
 
 /**
@@ -77,8 +78,7 @@ public class SubredditViewHolder extends AbstractViewHolder<Subreddit> {
 
         setText(tvDescription, mSubreddit.getDescriptionHtml());
 
-        tvFollowers.setText(
-                getCountIndication(mSubreddit.getSuscribers(), R.string.item_follower, R.string.item_followers));
+        Utils.setCountIndication(tvFollowers, mSubreddit.getSuscribers(), R.string.item_follower, R.string.item_followers);
 
         Date created = mSubreddit.getCreated();
         if (created != null) {
@@ -106,12 +106,18 @@ public class SubredditViewHolder extends AbstractViewHolder<Subreddit> {
     private void setFollowing(boolean following) {
         mSubreddit.setFollowing(following);
         @DrawableRes int icon;
+        @StringRes int contentDesc;
         if (following) {
             icon = R.drawable.ic_unlike;
+            contentDesc = R.string.unfollow_subreddit_content_desc;
         } else {
             icon = R.drawable.ic_like;
+            contentDesc = R.string.follow_subreddit_content_desc;
         }
         fabLike.setImageResource(icon);
+        fabLike.setContentDescription(
+                MessageFormat.format(
+                        getContext().getString(contentDesc), mSubreddit.getTitle()));
     }
 
 

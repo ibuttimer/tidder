@@ -34,7 +34,11 @@
     <string name="viewing_comment_thread">You are viewing a single comment\'s thread</string>
 
     <!-- Note: to be parsed by MessageFormat, play particular attention to quotes -->
-    <string name="pining_toast">"Pinned {0}"</string>
-    <string name="unpining_toast">"Unpinned {0}"</string>
+    <string name="pinning_toast">"Pinned {0}"</string>
+    <string name="unpinning_toast">"Unpinned {0}"</string>
+    <string name="pin_content_desc">"Pin post"</string>
+    <string name="unpin_content_desc">"Unpin post"</string>
+    <string name="pin_post_content_desc">"Pin {0}"</string>
+    <string name="unpin_post_content_desc">"Unpin {0}"</string>
 
 </resources>
