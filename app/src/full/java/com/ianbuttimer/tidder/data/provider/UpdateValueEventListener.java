@@ -48,9 +48,11 @@ public class UpdateValueEventListener extends AbstractValueEventListener<Integer
 
         ArrayList<DataSnapshot> filtered = mFbQuery.filterChildren(dataSnapshot);
         for (DataSnapshot objSnapshot : filtered) {
-            Object dbObj = objSnapshot.getValue(mClass);
-            mClass.cast(dbObj).update(mValues);
-            ++mCount;
+            if (objSnapshot != null) {
+                Object dbObj = objSnapshot.getValue(mClass);
+                mClass.cast(dbObj).update(mValues);
+                ++mCount;
+            }
         }
 
         super.onDataChange(dataSnapshot);

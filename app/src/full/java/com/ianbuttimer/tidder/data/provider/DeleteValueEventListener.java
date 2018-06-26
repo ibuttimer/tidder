@@ -37,8 +37,10 @@ public class DeleteValueEventListener extends AbstractValueEventListener<Integer
 
         ArrayList<DataSnapshot> filtered = mFbQuery.filterChildren(dataSnapshot);
         for (DataSnapshot objSnapshot : filtered) {
-            objSnapshot.getRef().removeValue();
-            ++mCount;
+            if (objSnapshot != null) {
+                objSnapshot.getRef().removeValue();
+                ++mCount;
+            }
         }
 
         super.onDataChange(dataSnapshot);

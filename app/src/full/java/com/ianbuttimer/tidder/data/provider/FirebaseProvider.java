@@ -263,20 +263,6 @@ public class FirebaseProvider extends ContentProvider {
      */
     private Cursor fbQueryObject(String node, IFbCursorable fbCursorable, Uri uri,
                                String[] projection, ArrayList<Pair<String, String[]>> whereList) {
-//        FbQuery query = makeFbQuery(node, whereList, sortOrder);
-//
-//        QueryObjectValueEventListener listener = new QueryObjectValueEventListener(fbCursorable);
-//
-//        listener.addToQueryAsSingleValueEvent(query);
-//
-//        Cursor cursor = listener.getResult();
-//
-//        listener.removeFromQuery();
-//
-//        setNotificationUri(cursor, uri);
-//
-//        return cursor;
-
         return fbQuery(node, new QueryObjectValueEventListener(fbCursorable), uri,
                             projection, whereList, null);
     }

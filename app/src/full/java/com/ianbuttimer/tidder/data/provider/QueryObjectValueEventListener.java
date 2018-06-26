@@ -23,15 +23,19 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.ianbuttimer.tidder.data.db.IFbCursorable;
 
-import java.util.ArrayList;
-
-
+/**
+ * Event listener for a Firebase Realtime database query
+ */
 public class QueryObjectValueEventListener extends AbstractValueEventListener<Cursor> {
 
     private IFbCursorable mFbCursorable;
 
     private MatrixCursor mCursor;
 
+    /**
+     * Constructor
+     * @param fbCursorable  Cursorable object to hold results
+     */
     public QueryObjectValueEventListener(IFbCursorable fbCursorable) {
         super();
         mFbCursorable = fbCursorable;
@@ -44,7 +48,9 @@ public class QueryObjectValueEventListener extends AbstractValueEventListener<Cu
         mCursor = mFbCursorable.getCursor(1);
 
         IFbCursorable obj = dataSnapshot.getValue(mFbCursorable.getClass());
-        obj.addToCursor(mCursor);
+        if (obj != null) {
+            obj.addToCursor(mCursor);
+        }
 
         super.onDataChange(dataSnapshot);
     }

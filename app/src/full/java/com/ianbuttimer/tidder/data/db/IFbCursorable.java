@@ -18,14 +18,34 @@ package com.ianbuttimer.tidder.data.db;
 
 import android.database.MatrixCursor;
 
+/**
+ * Interface for object which may be transformed to Cursors
+ */
 public interface IFbCursorable {
 
+    /**
+     * Get a new Cursor with the specified initial capacity
+     * @param initialCapacity   Initial capacity of cursor
+     * @return  Cursor
+     */
     MatrixCursor getCursor(int initialCapacity);
 
+    /**
+     * Add a new row to the specified cursor
+     * @param cursor    Cursor to add to
+     */
     void addToCursor(MatrixCursor cursor);
 
+    /**
+     * Get the object id
+     * @return  Id
+     */
     String getId();
 
+    /**
+     * Set the object id
+     * @param id    Id
+     */
     void setId(String id);
 
 }

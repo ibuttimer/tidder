@@ -46,10 +46,12 @@ public class QueryValueEventListener extends AbstractValueEventListener<Cursor> 
 
         ArrayList<DataSnapshot> filtered = mFbQuery.filterChildren(dataSnapshot);
         for (DataSnapshot objSnapshot : filtered) {
-            IFbCursorable obj = objSnapshot.getValue(mFbCursorable.getClass());
-            if (obj != null) {
-                obj.setId(objSnapshot.getKey());
-                obj.addToCursor(mCursor);
+            if (objSnapshot != null) {
+                IFbCursorable obj = objSnapshot.getValue(mFbCursorable.getClass());
+                if (obj != null) {
+                    obj.setId(objSnapshot.getKey());
+                    obj.addToCursor(mCursor);
+                }
             }
         }
 
