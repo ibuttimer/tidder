@@ -18,7 +18,7 @@ package com.ianbuttimer.tidder.data;
 
 import android.database.Cursor;
 
-import com.ianbuttimer.tidder.event.StandardEvent;
+import com.ianbuttimer.tidder.event.EventType;
 
 import java.util.ArrayList;
 
@@ -26,7 +26,7 @@ import java.util.ArrayList;
  * No-op class representing the result of a 'config' query which isn't required for free variant
  */
 
-public class ConfigQueryResponse extends QueryResponse<Config, StandardEvent.Event> {
+public class ConfigQueryResponse extends QueryResponse<Config> {
 
     public ConfigQueryResponse(ArrayList<Config> list) {
         super(list, Config.class, EventType.SETTINGS_RESULT);
