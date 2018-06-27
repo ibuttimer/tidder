@@ -18,6 +18,8 @@ package com.ianbuttimer.tidder.data;
 
 import android.support.annotation.Nullable;
 
+import com.ianbuttimer.tidder.event.EventType;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,17 +28,17 @@ import java.util.Arrays;
  * Class representing the result of a 'is following' query
  */
 
-public abstract class QueryResponse<T extends AbstractDbRow, E extends Enum> extends ContentProviderResponse<E> {
+public abstract class QueryResponse<T extends AbstractDbRow> extends ContentProviderResponse {
 
     private ArrayList<T> mList;
     private Class<? extends AbstractDbRow> mClazz;
 
-    public QueryResponse(ArrayList<T> list, Class<? extends AbstractDbRow> clazz, E eventType) {
+    public QueryResponse(ArrayList<T> list, Class<? extends AbstractDbRow> clazz, @EventType int eventType) {
         super(eventType);
         init(list, clazz);
     }
 
-    public QueryResponse(T[] array, Class<? extends AbstractDbRow> clazz, E eventType) {
+    public QueryResponse(T[] array, Class<? extends AbstractDbRow> clazz, @EventType int eventType) {
         super(eventType);
         ArrayList<T> list;
         if (array != null) {

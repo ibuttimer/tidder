@@ -19,7 +19,7 @@ package com.ianbuttimer.tidder.reddit.get;
 import android.util.JsonReader;
 
 import com.ianbuttimer.tidder.TidderApplication;
-import com.ianbuttimer.tidder.event.FollowEvent;
+import com.ianbuttimer.tidder.event.EventType;
 import com.ianbuttimer.tidder.reddit.BaseObject;
 import com.ianbuttimer.tidder.reddit.ListingList;
 import com.ianbuttimer.tidder.reddit.ListingResponse;
@@ -34,21 +34,21 @@ import java.io.IOException;
  * @see <a href="https://www.reddit.com/dev/api#GET_subreddits_search">/subreddits/search</a>
  */
 
-public class SubredditsSearchResponse extends ListingResponse<Subreddit, FollowEvent.Event>
+public class SubredditsSearchResponse extends ListingResponse<Subreddit>
                                     implements ListingList<Subreddit> {
 
     /**
      * Default constructor
      */
     public SubredditsSearchResponse() {
-        super(FollowEvent.Event.SEARCH_INTEREST_RESULT);
+        super(EventType.SEARCH_INTEREST_RESULT);
     }
 
     /**
      * Constructor
      * @param eventType     Event type for Event message
      */
-    public SubredditsSearchResponse(FollowEvent.Event eventType) {
+    public SubredditsSearchResponse(@EventType int eventType) {
         super(eventType);
     }
 

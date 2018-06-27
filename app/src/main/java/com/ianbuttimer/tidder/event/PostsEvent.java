@@ -32,31 +32,8 @@ import com.ianbuttimer.tidder.ui.ICommonEvents;
  * Class representing events related to posts activities
  */
 
-public class PostsEvent extends AbstractEvent<PostsEvent, PostsEvent.Event, PostsEvent.EventMode>
+public class PostsEvent extends AbstractEvent<PostsEvent>
                             implements ICommonEvents<PostsEvent, Response> {
-
-    public enum Event {
-        FACTORY_INSTANCE,
-
-        /** View Subreddit Post request */
-        VIEW_POST_REQUEST,
-
-        /** Get Subreddit Post request */
-        GET_POST_REQUEST,
-        /** Get Subreddit Post response */
-        GET_POST_RESULT,
-
-        /** Refresh posts command */
-        REFRESH_POSTS_CMD,
-        /** Clear posts command */
-        CLEAR_POSTS_CMD
-
-    }
-
-    public enum EventMode {
-        NEW_REQUEST,
-        UPDATE_REQUEST
-    }
 
     private static PostsEvent mFactoryInstance;
 
@@ -67,17 +44,17 @@ public class PostsEvent extends AbstractEvent<PostsEvent, PostsEvent.Event, Post
 
 
 
-    public PostsEvent(Event event) {
+    public PostsEvent(@EventType int event) {
         super(event);
     }
 
-    public PostsEvent(Event event, @Nullable EventMode mode) {
+    public PostsEvent(@EventType int event, @EventMode int mode) {
         super(event, mode);
     }
 
     public static ICommonEvents<PostsEvent, Response> getFactory() {
         if (mFactoryInstance == null) {
-            mFactoryInstance = new PostsEvent(Event.FACTORY_INSTANCE);
+            mFactoryInstance = new PostsEvent(EventType.FACTORY_INSTANCE);
         }
         return mFactoryInstance;
     }
@@ -96,7 +73,7 @@ public class PostsEvent extends AbstractEvent<PostsEvent, PostsEvent.Event, Post
      * @return  event object
      */
     public static PostsEvent newViewPostRequest(String name, String title, String link, int position) {
-        return new PostsEvent(Event.VIEW_POST_REQUEST)
+        return new PostsEvent(EventType.VIEW_POST_REQUEST)
                         .setName(name)
                         .setTitle(title)
                         .setSource(link)
@@ -114,7 +91,7 @@ public class PostsEvent extends AbstractEvent<PostsEvent, PostsEvent.Event, Post
      * @param limit     maximum number of items desired in listing
      * @return  event object
      */
-    private static PostsEvent newListingRequest(Event type, String name, String source,
+    private static PostsEvent newListingRequest(@EventType int type, String name, String source,
                                                 String before, String after, int count, int limit) {
         return new PostsEvent(type).setName(name)
                     .setSource(source)
@@ -132,7 +109,7 @@ public class PostsEvent extends AbstractEvent<PostsEvent, PostsEvent.Event, Post
      * @return  event object
      */
     public static PostsEvent newGetPostAfterRequest(String name, String source, String before, String after, int count, int limit) {
-        return newListingRequest(Event.GET_POST_REQUEST, name, source, before, after, count, limit);
+        return newListingRequest(EventType.GET_POST_REQUEST, name, source, before, after, count, limit);
     }
 
     /**
@@ -144,7 +121,7 @@ public class PostsEvent extends AbstractEvent<PostsEvent, PostsEvent.Event, Post
      * @return  event object
      */
     public static PostsEvent newGetPostAfterRequest(String name, String source, ListingTracker<Link> tracker, int limit) {
-        return newListingRequest(Event.GET_POST_REQUEST, name, source,
+        return newListingRequest(EventType.GET_POST_REQUEST, name, source,
                             null, tracker.getAfter(), tracker.getCount(), limit);
     }
 
@@ -157,7 +134,7 @@ public class PostsEvent extends AbstractEvent<PostsEvent, PostsEvent.Event, Post
      * @return  event object
      */
     public static PostsEvent newGetPostBeforeRequest(String name, String source, ListingTracker<Link> tracker, int limit) {
-        return newListingRequest(Event.GET_POST_REQUEST, name, source,
+        return newListingRequest(EventType.GET_POST_REQUEST, name, source,
                             tracker.getBefore(), null, tracker.getCount(), limit);
     }
 
@@ -166,7 +143,7 @@ public class PostsEvent extends AbstractEvent<PostsEvent, PostsEvent.Event, Post
      * @return  event object
      */
     public static PostsEvent newRefreshPostsCommand() {
-        return new PostsEvent(Event.REFRESH_POSTS_CMD);
+        return new PostsEvent(EventType.REFRESH_POSTS_CMD);
     }
 
     /**
@@ -174,7 +151,7 @@ public class PostsEvent extends AbstractEvent<PostsEvent, PostsEvent.Event, Post
      * @return  event object
      */
     public static PostsEvent newClearPostsCommand() {
-        return new PostsEvent(Event.CLEAR_POSTS_CMD);
+        return new PostsEvent(EventType.CLEAR_POSTS_CMD);
     }
 
     /**
@@ -185,16 +162,12 @@ public class PostsEvent extends AbstractEvent<PostsEvent, PostsEvent.Event, Post
     @Override
     public PostsEvent newResponseResult(Response response) {
         PostsEvent event = null;
-        Event type = null;
         if (response != null) {
-            Enum eType = response.getEventType();
-            if (eType instanceof Event) {
-                type = (Event)eType;
+            @EventType int type = response.getEventType();
+            if (type != EventType.TYPE_NA) {
+                event = new PostsEvent(type);
+                event.mSrvResponse = response;
             }
-        }
-        if (type != null) {
-            event = new PostsEvent(type);
-            event.mSrvResponse = response;
         }
         return event;
     }
@@ -250,28 +223,20 @@ public class PostsEvent extends AbstractEvent<PostsEvent, PostsEvent.Event, Post
         return this;
     }
 
-    public boolean isNewMode() {
-        return isMode(EventMode.NEW_REQUEST);
-    }
-
-    public boolean isUpdateMode() {
-        return isMode(EventMode.UPDATE_REQUEST);
-    }
-
     public boolean isViewPostRequest() {
-        return isEvent(Event.VIEW_POST_REQUEST);
+        return isEvent(EventType.VIEW_POST_REQUEST);
     }
     public boolean isGetPostRequest() {
-        return isEvent(Event.GET_POST_REQUEST);
+        return isEvent(EventType.GET_POST_REQUEST);
     }
     public boolean isGetPostResult() {
-        return isEvent(Event.GET_POST_RESULT);
+        return isEvent(EventType.GET_POST_RESULT);
     }
     public boolean isRefreshPostsCommand() {
-        return isEvent(Event.REFRESH_POSTS_CMD);
+        return isEvent(EventType.REFRESH_POSTS_CMD);
     }
     public boolean isClearPostsCommand() {
-        return isEvent(Event.CLEAR_POSTS_CMD);
+        return isEvent(EventType.CLEAR_POSTS_CMD);
     }
 
     @Override
@@ -292,6 +257,10 @@ public class PostsEvent extends AbstractEvent<PostsEvent, PostsEvent.Event, Post
             super(event);
         }
 
+        @Override
+        protected AdditionalInfoBuilder getThis() {
+            return this;
+        }
     }
 
     @Override
@@ -300,7 +269,8 @@ public class PostsEvent extends AbstractEvent<PostsEvent, PostsEvent.Event, Post
     }
 
     @Override
-    @Nullable public Bundle additionalInfoTag(@NonNull PostsEvent event) {
+    @Nullable
+    public Bundle additionalInfoTag(@NonNull PostsEvent event) {
         // additional info bundle for request
         return infoBuilder(event)
                 .tag()
@@ -308,7 +278,8 @@ public class PostsEvent extends AbstractEvent<PostsEvent, PostsEvent.Event, Post
     }
 
     @Override
-    @Nullable public Bundle additionalInfoAll(@NonNull PostsEvent event) {
+    @Nullable
+    public Bundle additionalInfoAll(@NonNull PostsEvent event) {
         // additional info bundle for request
         return infoBuilder(event)
                 .all()
@@ -320,7 +291,7 @@ public class PostsEvent extends AbstractEvent<PostsEvent, PostsEvent.Event, Post
      */
     public static class AdditionalInfoExtractor
             extends
-                AbstractEvent.AdditionalInfoExtractor<AdditionalInfoExtractor, PostsEvent, PostsEvent.EventMode>
+                AbstractEvent.AdditionalInfoExtractor<AdditionalInfoExtractor, PostsEvent>
             implements
                 ICommonEvents.IAdditionalInfoExtractor<PostsEvent, AdditionalInfoExtractor> {
 
@@ -328,21 +299,15 @@ public class PostsEvent extends AbstractEvent<PostsEvent, PostsEvent.Event, Post
             super(event, bundle);
         }
 
-//        @Override
-//        public AdditionalInfoExtractor tag() {
-//            return (AdditionalInfoExtractor) super.tag();
-//        }
-//
-//        @Override
-//        public AdditionalInfoExtractor mode() {
-//            return (AdditionalInfoExtractor) super.mode();
-//        }
-//
         @Override
         public AdditionalInfoExtractor all() {
             return super.all();
         }
 
+        @Override
+        protected AdditionalInfoExtractor getThis() {
+            return this;
+        }
     }
 
     @Override

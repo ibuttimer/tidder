@@ -31,36 +31,8 @@ import com.ianbuttimer.tidder.ui.ICommonEvents;
  * Class representing events related to post activities
  */
 
-public class PostEvent extends AbstractEvent<PostEvent, PostEvent.Event, PostEvent.EventMode>
+public class PostEvent extends AbstractEvent<PostEvent>
                             implements ICommonEvents<PostEvent, Response> {
-
-    public enum Event {
-        FACTORY_INSTANCE,
-
-        /** View Comment Thread request */
-        VIEW_THREAD_REQUEST,
-
-        /** Get Comment Tree request */
-        GET_COMMENT_TREE_REQUEST,
-        /** Get Subreddit Post response */
-        GET_COMMENT_TREE_RESULT,
-
-        /** Get Comment More request */
-        GET_COMMENT_MORE_REQUEST,
-        /** Get Comment More response */
-        GET_COMMENT_MORE_RESULT,
-
-
-        /** Pinned Status change occurred */
-        PINNED_STATUS_CHANGE
-
-
-    }
-
-    public enum EventMode {
-        NEW_REQUEST,
-        UPDATE_REQUEST
-    }
 
     private static PostEvent mFactoryInstance;
 
@@ -77,17 +49,17 @@ public class PostEvent extends AbstractEvent<PostEvent, PostEvent.Event, PostEve
     protected static final String NAME_PARAM = "name";
     protected static final String TITLE_PARAM = "title";
 
-    public PostEvent(Event event) {
+    public PostEvent(@EventType int event) {
         super(event);
     }
 
-    public PostEvent(Event event, @Nullable EventMode mode) {
+    public PostEvent(@EventType int event, @EventMode int mode) {
         super(event, mode);
     }
 
     public static ICommonEvents<PostEvent, Response> getFactory() {
         if (mFactoryInstance == null) {
-            mFactoryInstance = new PostEvent(Event.FACTORY_INSTANCE);
+            mFactoryInstance = new PostEvent(EventType.FACTORY_INSTANCE);
         }
         return mFactoryInstance;
     }
@@ -114,7 +86,7 @@ public class PostEvent extends AbstractEvent<PostEvent, PostEvent.Event, PostEve
      * @return  event object
      */
     public static PostEvent newViewThreadRequest(String name, String title, String link) {
-        PostEvent event = new PostEvent(Event.VIEW_THREAD_REQUEST);
+        PostEvent event = new PostEvent(EventType.VIEW_THREAD_REQUEST);
         event.setName(name);
         event.setTitle(title);
         event.setPermalink(link);
@@ -128,7 +100,7 @@ public class PostEvent extends AbstractEvent<PostEvent, PostEvent.Event, PostEve
      * @return  event object
      */
     public static PostEvent newGetCommentTreeRequest(String permalink, int limit) {
-        PostEvent event = new PostEvent(Event.GET_COMMENT_TREE_REQUEST);
+        PostEvent event = new PostEvent(EventType.GET_COMMENT_TREE_REQUEST);
         event.setPermalink(permalink);
         event.setLimit(limit);
         return event;
@@ -142,7 +114,7 @@ public class PostEvent extends AbstractEvent<PostEvent, PostEvent.Event, PostEve
      * @return  event object
      */
     public static PostEvent newGetCommentMoreRequest(String id, String linkId, String[] children, int position) {
-        PostEvent event = new PostEvent(Event.GET_COMMENT_MORE_REQUEST);
+        PostEvent event = new PostEvent(EventType.GET_COMMENT_MORE_REQUEST);
         event.setId(id);
         event.setLinkId(linkId);
         event.setChildren(children);
@@ -155,7 +127,7 @@ public class PostEvent extends AbstractEvent<PostEvent, PostEvent.Event, PostEve
      * @return  event object
      */
     public static PostEvent newPinnedStatusChange() {
-        PostEvent event = new PostEvent(Event.PINNED_STATUS_CHANGE);
+        PostEvent event = new PostEvent(EventType.PINNED_STATUS_CHANGE);
         return event;
     }
 
@@ -167,16 +139,12 @@ public class PostEvent extends AbstractEvent<PostEvent, PostEvent.Event, PostEve
     @Override
     public PostEvent newResponseResult(Response response) {
         PostEvent event = null;
-        Event type = null;
         if (response != null) {
-            Enum eType = response.getEventType();
-            if (eType instanceof Event) {
-                type = (Event)eType;
+            @EventType int type = response.getEventType();
+            if (type != EventType.TYPE_NA) {
+                event = new PostEvent(type);
+                event.mSrvResponse = response;
             }
-        }
-        if (type != null) {
-            event = new PostEvent(type);
-            event.mSrvResponse = response;
         }
         return event;
     }
@@ -257,31 +225,23 @@ public class PostEvent extends AbstractEvent<PostEvent, PostEvent.Event, PostEve
         mParamMap.put(TITLE_PARAM, title);
     }
 
-    public boolean isNewMode() {
-        return isMode(EventMode.NEW_REQUEST);
-    }
-
-    public boolean isUpdateMode() {
-        return isMode(EventMode.UPDATE_REQUEST);
-    }
-
     public boolean isViewThreadRequest() {
-        return isEvent(Event.VIEW_THREAD_REQUEST);
+        return isEvent(EventType.VIEW_THREAD_REQUEST);
     }
     public boolean isGetCommentTreeRequest() {
-        return isEvent(Event.GET_COMMENT_TREE_REQUEST);
+        return isEvent(EventType.GET_COMMENT_TREE_REQUEST);
     }
     public boolean isGetCommentTreeResult() {
-        return isEvent(Event.GET_COMMENT_TREE_RESULT);
+        return isEvent(EventType.GET_COMMENT_TREE_RESULT);
     }
     public boolean isGetCommentMoreRequest() {
-        return isEvent(Event.GET_COMMENT_MORE_REQUEST);
+        return isEvent(EventType.GET_COMMENT_MORE_REQUEST);
     }
     public boolean isGetCommentMoreResult() {
-        return isEvent(Event.GET_COMMENT_MORE_RESULT);
+        return isEvent(EventType.GET_COMMENT_MORE_RESULT);
     }
     public boolean isPinnedStatusChange() {
-        return isEvent(Event.PINNED_STATUS_CHANGE);
+        return isEvent(EventType.PINNED_STATUS_CHANGE);
     }
 
     @Override
@@ -300,6 +260,11 @@ public class PostEvent extends AbstractEvent<PostEvent, PostEvent.Event, PostEve
 
         public AdditionalInfoBuilder(PostEvent event) {
             super(event);
+        }
+
+        @Override
+        protected AdditionalInfoBuilder getThis() {
+            return this;
         }
 
         public AdditionalInfoBuilder position() {
@@ -339,12 +304,17 @@ public class PostEvent extends AbstractEvent<PostEvent, PostEvent.Event, PostEve
      */
     public static class AdditionalInfoExtractor
             extends
-                AbstractEvent.AdditionalInfoExtractor<AdditionalInfoExtractor, PostEvent, PostEvent.EventMode>
+                AbstractEvent.AdditionalInfoExtractor<AdditionalInfoExtractor, PostEvent>
             implements
                 IAdditionalInfoExtractor<PostEvent, AdditionalInfoExtractor> {
 
         public AdditionalInfoExtractor(PostEvent event, Bundle bundle) {
             super(event, bundle);
+        }
+
+        @Override
+        protected AdditionalInfoExtractor getThis() {
+            return this;
         }
 
         @SuppressWarnings("ConstantConditions")

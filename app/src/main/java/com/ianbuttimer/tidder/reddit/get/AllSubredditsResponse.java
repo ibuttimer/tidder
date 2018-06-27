@@ -16,7 +16,7 @@
 
 package com.ianbuttimer.tidder.reddit.get;
 
-import com.ianbuttimer.tidder.event.FollowEvent;
+import com.ianbuttimer.tidder.event.EventType;
 import com.ianbuttimer.tidder.reddit.BaseObject;
 import com.ianbuttimer.tidder.reddit.ListingList;
 import com.ianbuttimer.tidder.reddit.Subreddit;
@@ -35,7 +35,7 @@ public class AllSubredditsResponse extends SubredditsSearchResponse
      * Default constructor
      */
     public AllSubredditsResponse() {
-        super(FollowEvent.Event.ALL_SUBREDDIT_RESULT);
+        super(EventType.ALL_SUBREDDIT_RESULT);
     }
 
     /**

@@ -17,21 +17,22 @@
 package com.ianbuttimer.tidder.reddit;
 
 import com.ianbuttimer.tidder.data.IEmpty;
+import com.ianbuttimer.tidder.event.EventType;
 
 /**
  * Base class for reddit responses
  */
 
-public abstract class Response<E extends Enum> extends BaseObject implements IEmpty {
+public abstract class Response extends BaseObject implements IEmpty {
 
     protected boolean mEmpty;
-    protected E mEventType;
+    @EventType protected int mEventType;
 
     public Response() {
         setEmpty(true);
     }
 
-    public Response(E eventType) {
+    public Response(@EventType int eventType) {
         setEmpty(true);
         mEventType = eventType;
     }
@@ -46,7 +47,8 @@ public abstract class Response<E extends Enum> extends BaseObject implements IEm
         mEmpty = empty;
     }
 
-    public E getEventType() {
+    @EventType
+    public int getEventType() {
         return mEventType;
     }
 

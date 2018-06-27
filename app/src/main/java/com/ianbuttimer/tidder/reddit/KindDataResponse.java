@@ -18,13 +18,15 @@ package com.ianbuttimer.tidder.reddit;
 
 import android.util.JsonReader;
 
+import com.ianbuttimer.tidder.event.EventType;
+
 import java.io.IOException;
 
 /**
  * Base class for a reddit kind/data response which may be part of a listing or object response
  */
 
-public abstract class KindDataResponse<E extends Enum> extends Response<E> {
+public abstract class KindDataResponse extends Response {
 
     static final String RESPONSE_KIND = "kind";
     static final String RESPONSE_DATA = "data";
@@ -36,7 +38,7 @@ public abstract class KindDataResponse<E extends Enum> extends Response<E> {
         init();
     }
 
-    public KindDataResponse(E eventType) {
+    public KindDataResponse(@EventType int eventType) {
         super(eventType);
         init();
     }

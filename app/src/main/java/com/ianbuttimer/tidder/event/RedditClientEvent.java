@@ -16,7 +16,6 @@
 
 package com.ianbuttimer.tidder.event;
 
-import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 
 import com.ianbuttimer.tidder.reddit.RedditClient;
@@ -31,14 +30,7 @@ import static com.ianbuttimer.tidder.reddit.RedditClient.ClientStatus.UNAUTHORIS
  * RedditClient status change event class
  */
 
-public class RedditClientEvent extends AbstractEvent<RedditClientEvent, RedditClientEvent.EventType, RedditClientEvent.EventMode>{
-
-    public enum EventType { STATUS_CHANGE, AUTH_ERROR, USER_VALID, COMMS_ERROR }
-
-    public enum EventMode {
-        NEW_REQUEST,
-        UPDATE_REQUEST
-    }
+public class RedditClientEvent extends AbstractEvent<RedditClientEvent> {
 
     private RedditClient.ClientStatus mOldStatus;
     private RedditClient.ClientStatus mNewStatus;
@@ -48,11 +40,11 @@ public class RedditClientEvent extends AbstractEvent<RedditClientEvent, RedditCl
     private String mMessage;
     @StringRes private int mMessageRes;
 
-    public RedditClientEvent(EventType event) {
+    public RedditClientEvent(@EventType int event) {
         super(event);
     }
 
-    public RedditClientEvent(EventType event, @Nullable EventMode mode) {
+    public RedditClientEvent(@EventType int event, @EventMode int mode) {
         super(event, mode);
     }
 
@@ -151,20 +143,20 @@ public class RedditClientEvent extends AbstractEvent<RedditClientEvent, RedditCl
     protected String toStringExtra() {
         StringBuilder sb = new StringBuilder();
         switch (getEvent()) {
-            case STATUS_CHANGE:
+            case EventType.STATUS_CHANGE:
                 sb.append(mOldStatus).append(" -> ").append(mNewStatus);
                 break;
-            case AUTH_ERROR:
+            case EventType.AUTH_ERROR:
                 sb.append(mError).append(" http ").append(mHttpCode);
                 // fall through
-            case COMMS_ERROR:
+            case EventType.COMMS_ERROR:
                 sb.append(" ").append(mMessage).append(" ").append(mMessageRes);
                 break;
         }
         return sb.toString();
     }
 
-    public static Builder getBuilder(EventType type) {
+    public static Builder getBuilder(@EventType int type) {
         return new Builder(type);
     }
 
@@ -173,7 +165,7 @@ public class RedditClientEvent extends AbstractEvent<RedditClientEvent, RedditCl
 
         private RedditClientEvent mEvent;
 
-        public Builder(EventType type) {
+        public Builder(@EventType int type) {
             mEvent = new RedditClientEvent(type);
         }
 

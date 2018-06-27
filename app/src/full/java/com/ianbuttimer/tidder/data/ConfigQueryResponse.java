@@ -18,7 +18,7 @@ package com.ianbuttimer.tidder.data;
 
 import android.database.Cursor;
 
-import com.ianbuttimer.tidder.event.StandardEvent;
+import com.ianbuttimer.tidder.event.EventType;
 
 import java.util.ArrayList;
 
@@ -26,14 +26,14 @@ import java.util.ArrayList;
  * Class representing the result of a 'config' query
  */
 
-public class ConfigQueryResponse extends QueryResponse<Config, StandardEvent.Event> {
+public class ConfigQueryResponse extends QueryResponse<Config> {
 
     public ConfigQueryResponse(ArrayList<Config> list) {
-        super(list, Config.class, StandardEvent.Event.SETTINGS_RESULT);
+        super(list, Config.class, EventType.SETTINGS_RESULT);
     }
 
     public ConfigQueryResponse(Config[] array) {
-        super(array, Config.class, StandardEvent.Event.SETTINGS_RESULT);
+        super(array, Config.class, EventType.SETTINGS_RESULT);
     }
 
     public ConfigQueryResponse(Cursor cursor) {

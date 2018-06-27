@@ -19,30 +19,53 @@ package com.ianbuttimer.tidder.event;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.SparseArray;
 
 import com.google.common.base.Joiner;
 import com.ianbuttimer.tidder.data.ContentProviderResponse;
 import com.ianbuttimer.tidder.reddit.ListingList;
 import com.ianbuttimer.tidder.reddit.Response;
+import com.ianbuttimer.tidder.utils.Utils;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
+import java.util.List;
+
+import timber.log.Timber;
 
 /**
  * Base class representing events<br>
- * The parameter <code>T</code> represents the enum for the event types utilised.
- * The parameter <code>M</code> represents the enum for the mode modifier for the event types.
  */
 
-public abstract class AbstractEvent<E extends AbstractEvent, T extends Enum, M extends Enum> {
+public abstract class AbstractEvent<E extends AbstractEvent> {
+
+    protected static final SparseArray<String> mEventNames;
+    protected static final SparseArray<String> mModeNames;
+
+    static {
+        List<Field> fields = Utils.getFields(EventType.class);
+        if (fields != null) {
+            mEventNames = getIntNames(fields);
+        } else {
+            mEventNames = new SparseArray<>();
+        }
+        fields = Utils.getFields(EventMode.class);
+        if (fields != null) {
+            mModeNames = getIntNames(fields);
+        } else {
+            mModeNames = new SparseArray<>();
+        }
+    }
 
     protected static final String DESTINATION_INFO = "dest_additional_info";
     protected static final String MODE_INFO = "mode_additional_info";
 
     private static final String TAG_SEPARATOR = ",";
 
-    private T mEvent;
+    @EventType private int mEvent;
 
-    @Nullable private M mMode;
+    @EventMode private int mMode;
 
     protected HashMap<String, Object> mParamMap;
 
@@ -62,41 +85,39 @@ public abstract class AbstractEvent<E extends AbstractEvent, T extends Enum, M e
     protected Response mSrvResponse;
 
 
-    public AbstractEvent(T event) {
-        this(event, null);
+    public AbstractEvent(@EventType int event) {
+        this(event, EventMode.MODE_NA);
     }
 
-    public AbstractEvent(T event, @Nullable M mode) {
-        if (event == null) {
-            throw new IllegalArgumentException("Event must be specified");
-        }
+    public AbstractEvent(@EventType int event, @EventMode int mode) {
         this.mEvent = event;
         this.mMode = mode;
         this.mParamMap = new HashMap<>();
     }
 
     protected void init() {
-        this.mMode = null;
+        this.mMode = EventMode.MODE_NA;
         this.mParamMap = new HashMap<>();
     }
 
     protected abstract E getThis();
 
-    public T getEvent() {
+    @EventType
+    public int getEvent() {
         return mEvent;
     }
 
-    protected E setEvent(T event) {
+    protected E setEvent(@EventType int event) {
         mEvent = event;
         return getThis();
     }
 
-    @Nullable
-    public M getMode() {
+    @EventMode
+    public int getMode() {
         return mMode;
     }
 
-    protected E setMode(@Nullable M mode) {
+    protected E setMode(@EventMode int mode) {
         mMode = mode;
         return getThis();
     }
@@ -177,10 +198,8 @@ public abstract class AbstractEvent<E extends AbstractEvent, T extends Enum, M e
     }
 
     public E setAddress(String... tags) {
-        for (String tag : tags) {
-            String destination = Joiner.on(TAG_SEPARATOR).join(tags);
-            addAddress(destination);
-        }
+        String destination = Joiner.on(TAG_SEPARATOR).join(tags);
+        addAddress(destination);
         return getThis();
     }
 
@@ -252,20 +271,20 @@ public abstract class AbstractEvent<E extends AbstractEvent, T extends Enum, M e
     }
 
 
-    public boolean isEvent(T event) {
-        boolean is = false;
-        if (event != null) {
-            is = event.equals(mEvent);
-        }
-        return is;
+    public boolean isEvent(@EventType int event) {
+        return (mEvent == event);
     }
 
-    public boolean isMode(M mode) {
-        boolean is = false;
-        if (mode != null) {
-            is = mode.equals(mMode);
-        }
-        return is;
+    public boolean isMode(@EventMode int mode) {
+        return (mMode == mode);
+    }
+
+    public boolean isNewMode() {
+        return isMode(EventMode.NEW_REQUEST);
+    }
+
+    public boolean isUpdateMode() {
+        return isMode(EventMode.UPDATE_REQUEST);
     }
 
     /**
@@ -299,11 +318,13 @@ public abstract class AbstractEvent<E extends AbstractEvent, T extends Enum, M e
     public String toString() {
         StringBuilder sb = new StringBuilder(getClass().getSimpleName()).append('{');
 
-        T event = getEvent();
-        sb.append(event != null ? event : "null event");
+        @EventMode int event = getEvent();
+        String name = mEventNames.get(event);
+        sb.append(name != null ? name : "null event (" + event + ")");
 
-        M mode = getMode();
-        sb.append(" mode=").append(mode != null ? mode : "na");
+        @EventMode int mode = getMode();
+        name = mModeNames.get(mode);
+        sb.append(" mode=").append(name != null ? name : "na (" + mode + ")");
 
         sb.append(" tag=").append(getAddress());
 
@@ -339,23 +360,26 @@ public abstract class AbstractEvent<E extends AbstractEvent, T extends Enum, M e
             mEvent = event;
         }
 
+        protected abstract B getThis();
+
         public B tag() {
             mBundle.putString(DESTINATION_INFO, mEvent.getAddress());
-            return (B)this;
+            return getThis();
         }
 
         public B mode() {
-            mBundle.putSerializable(MODE_INFO, mEvent.getMode());
-            return (B)this;
+            mBundle.putInt(MODE_INFO, mEvent.getMode());
+            return getThis();
         }
 
         public B all() {
-            return (B)mode().tag();
+            mode().tag();
+            return getThis();
         }
 
         public B clear() {
             mBundle.clear();
-            return (B)this;
+            return getThis();
         }
 
         public Bundle build() {
@@ -368,7 +392,7 @@ public abstract class AbstractEvent<E extends AbstractEvent, T extends Enum, M e
      * The parameter <code>E</code> represents the class of the extractor.
      * The parameter <code>T</code> represents the class for the event.
      */
-    public abstract static class AdditionalInfoExtractor<E extends AdditionalInfoExtractor, T extends AbstractEvent, M extends Enum> {
+    public abstract static class AdditionalInfoExtractor<E extends AdditionalInfoExtractor, T extends AbstractEvent> {
 
         @Nullable protected Bundle mBundle;
         @Nullable protected T mEvent;
@@ -378,24 +402,27 @@ public abstract class AbstractEvent<E extends AbstractEvent, T extends Enum, M e
             mEvent = event;
         }
 
+        protected abstract E getThis();
+
         @SuppressWarnings("ConstantConditions")
         public E tag() {
             if (proceed()) {
                 mEvent.setAddress(mBundle.getString(DESTINATION_INFO));
             }
-            return (E)this;
+            return getThis();
         }
 
         @SuppressWarnings("ConstantConditions")
         public E mode() {
             if (proceed()) {
-                mEvent.setMode((Enum)mBundle.getSerializable(MODE_INFO));
+                mEvent.setMode(mBundle.getInt(MODE_INFO));
             }
-            return (E)this;
+            return getThis();
         }
 
         public E all() {
-            return (E)mode().tag();
+            mode().tag();
+            return getThis();
         }
 
         public boolean proceed() {
@@ -406,4 +433,33 @@ public abstract class AbstractEvent<E extends AbstractEvent, T extends Enum, M e
             return mEvent;
         }
     }
+
+    /**
+     * Get the names of the static final integers int the specified field list
+     * @param fields    List of fields
+     * @return  SparseArray of names with field values as the key
+     */
+    private static SparseArray<String> getIntNames(List<Field> fields) {
+        SparseArray<String> list = new SparseArray<>();
+        for (Field field : fields) {
+            Class fieldClass = field.getType();
+            int modifiers = field.getModifiers();
+            if ((fieldClass.equals(Integer.class) || fieldClass.equals(int.class))
+                    && Modifier.isFinal(modifiers)
+                    && Modifier.isStatic(modifiers)) {
+                // add to names list
+                try {
+                    int value = field.getInt(null);
+                    if (list.get(value) != null) {
+                        throw new IllegalStateException("Duplicate entries: " + field.getName() + " " + list.get(value));
+                    }
+                    list.put(field.getInt(null), field.getName());
+                } catch (IllegalAccessException e) {
+                    Timber.e(e);
+                }
+            }
+        }
+        return list;
+    }
+
 }

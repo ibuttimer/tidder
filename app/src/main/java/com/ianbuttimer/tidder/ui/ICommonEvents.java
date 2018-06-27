@@ -21,8 +21,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.ianbuttimer.tidder.data.ContentProviderResponse;
-import com.ianbuttimer.tidder.reddit.Response;
 import com.ianbuttimer.tidder.event.AbstractEvent;
+import com.ianbuttimer.tidder.reddit.Response;
 
 /**
  * Interface for processing common events

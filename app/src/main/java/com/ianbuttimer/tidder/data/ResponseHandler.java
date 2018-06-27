@@ -21,6 +21,7 @@ import android.support.annotation.StringRes;
 import android.text.TextUtils;
 
 import com.ianbuttimer.tidder.R;
+import com.ianbuttimer.tidder.event.EventType;
 import com.ianbuttimer.tidder.event.RedditClientEvent;
 import com.ianbuttimer.tidder.utils.Dialog;
 
@@ -89,7 +90,7 @@ public abstract class ResponseHandler<T> implements Runnable {
     public void run() {
         if (hasDialog()) {
             RedditClientEvent.Builder builder =
-                    RedditClientEvent.getBuilder(RedditClientEvent.EventType.COMMS_ERROR);
+                    RedditClientEvent.getBuilder(EventType.COMMS_ERROR);
 
             // display error, string takes precedence over resource
             if (!TextUtils.isEmpty(mErrorMsg)) {

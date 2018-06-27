@@ -19,6 +19,8 @@ package com.ianbuttimer.tidder.reddit;
 import android.support.annotation.Nullable;
 import android.util.JsonReader;
 
+import com.ianbuttimer.tidder.event.EventType;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -29,8 +31,8 @@ import static com.ianbuttimer.tidder.reddit.ListingRequest.QUERY_BEFORE;
  * Base class for a reddit listing response
  */
 
-public abstract class ListingResponse<T extends BaseObject, E extends Enum>
-                            extends KindDataResponse<E>
+public abstract class ListingResponse<T extends BaseObject>
+                            extends KindDataResponse
                             implements ListingList<T> {
 
     static final String RESPONSE_DIST = "dist";
@@ -50,7 +52,7 @@ public abstract class ListingResponse<T extends BaseObject, E extends Enum>
         init();
     }
 
-    public ListingResponse(E eventType) {
+    public ListingResponse(@EventType int eventType) {
         super(eventType);
         init();
     }

@@ -16,20 +16,23 @@
 
 package com.ianbuttimer.tidder.data;
 
+import com.ianbuttimer.tidder.event.EventType;
+
 /**
  * Class representing the result of a content provider request
  */
 
-public abstract class ContentProviderResponse<E extends Enum> {
+public abstract class ContentProviderResponse {
 
-    protected E mEventType;
+    @EventType
+    protected int mEventType;
 
-    public ContentProviderResponse(E eventType) {
+    public ContentProviderResponse(@EventType int eventType) {
         this.mEventType = eventType;
     }
 
-
-    public E getEventType() {
+    @EventType
+    public int getEventType() {
         return mEventType;
     }
 

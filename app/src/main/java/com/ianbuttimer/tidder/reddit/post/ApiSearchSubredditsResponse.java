@@ -19,10 +19,10 @@ package com.ianbuttimer.tidder.reddit.post;
 import android.support.annotation.Nullable;
 import android.util.JsonReader;
 
-import com.ianbuttimer.tidder.event.FollowEvent;
+import com.ianbuttimer.tidder.event.EventType;
+import com.ianbuttimer.tidder.reddit.BaseObject;
 import com.ianbuttimer.tidder.reddit.ListingList;
 import com.ianbuttimer.tidder.reddit.Response;
-import com.ianbuttimer.tidder.reddit.BaseObject;
 import com.ianbuttimer.tidder.reddit.Subreddit;
 
 import java.io.IOException;
@@ -34,8 +34,7 @@ import java.util.ArrayList;
  * @see <a href="https://www.reddit.com/dev/api#POST_api_search_subreddits">/api/search_subreddits</a>
  */
 
-public class ApiSearchSubredditsResponse extends Response<FollowEvent.Event>
-                                            implements ListingList<Subreddit> {
+public class ApiSearchSubredditsResponse extends Response implements ListingList<Subreddit> {
 
     private static final String SUBREDDITS = "subreddits";
 
@@ -46,7 +45,7 @@ public class ApiSearchSubredditsResponse extends Response<FollowEvent.Event>
      * Default constructor
      */
     public ApiSearchSubredditsResponse() {
-        super(FollowEvent.Event.SEARCH_NAME_RESULT);
+        super(EventType.SEARCH_NAME_RESULT);
         init();
     }
 

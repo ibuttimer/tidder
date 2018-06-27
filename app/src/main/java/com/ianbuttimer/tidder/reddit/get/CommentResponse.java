@@ -18,7 +18,7 @@ package com.ianbuttimer.tidder.reddit.get;
 
 import android.util.JsonReader;
 
-import com.ianbuttimer.tidder.event.PostEvent;
+import com.ianbuttimer.tidder.event.EventType;
 import com.ianbuttimer.tidder.reddit.BaseObject;
 import com.ianbuttimer.tidder.reddit.Comment;
 import com.ianbuttimer.tidder.reddit.CommentMore;
@@ -33,21 +33,21 @@ import java.io.IOException;
  * @see <a href="https://www.reddit.com/dev/api#GET_comments_{article}">[/r/subreddit]/comments/article</a>
  */
 
-public class CommentResponse extends ListingResponse<Comment, PostEvent.Event>
+public class CommentResponse extends ListingResponse<Comment>
                                     implements ListingList<Comment> {
 
     /**
      * Default constructor
      */
     public CommentResponse() {
-        super(PostEvent.Event.GET_COMMENT_TREE_RESULT);
+        super(EventType.GET_COMMENT_TREE_RESULT);
     }
 
     /**
      * Constructor
      * @param eventType     Event type for Event message
      */
-    protected CommentResponse(PostEvent.Event eventType) {
+    protected CommentResponse(@EventType int eventType) {
         super(eventType);
     }
 

@@ -18,7 +18,7 @@ package com.ianbuttimer.tidder.data;
 
 import android.database.Cursor;
 
-import com.ianbuttimer.tidder.event.StandardEvent;
+import com.ianbuttimer.tidder.event.EventType;
 
 import java.util.ArrayList;
 
@@ -26,14 +26,14 @@ import java.util.ArrayList;
  * Class representing the result of a 'pinned' query
  */
 
-public class PinnedQueryResponse extends QueryResponse<Pinned, StandardEvent.Event> {
+public class PinnedQueryResponse extends QueryResponse<Pinned> {
 
     public PinnedQueryResponse(ArrayList<Pinned> list) {
-        super(list, Pinned.class, StandardEvent.Event.PINNED_LIST_RESULT);
+        super(list, Pinned.class, EventType.PINNED_LIST_RESULT);
     }
 
     public PinnedQueryResponse(Pinned[] array) {
-        super(array, Pinned.class, StandardEvent.Event.PINNED_LIST_RESULT);
+        super(array, Pinned.class, EventType.PINNED_LIST_RESULT);
     }
 
     public PinnedQueryResponse(Cursor cursor) {

@@ -19,7 +19,7 @@ package com.ianbuttimer.tidder.reddit.get;
 import android.support.annotation.Nullable;
 import android.util.JsonReader;
 
-import com.ianbuttimer.tidder.event.StandardEvent;
+import com.ianbuttimer.tidder.event.EventType;
 import com.ianbuttimer.tidder.reddit.BaseObject;
 import com.ianbuttimer.tidder.reddit.KindDataResponse;
 import com.ianbuttimer.tidder.reddit.Subreddit;
@@ -32,7 +32,7 @@ import java.io.IOException;
  * @see <a href="https://www.reddit.com/dev/api#GET_r_{subreddit}_about">/r/<i>subreddit</i>/about</a>
  */
 
-public class SubredditAboutResponse extends KindDataResponse<StandardEvent.Event> {
+public class SubredditAboutResponse extends KindDataResponse {
 
     private Subreddit mSubreddit;
 
@@ -40,7 +40,7 @@ public class SubredditAboutResponse extends KindDataResponse<StandardEvent.Event
      * Default constructor
      */
     public SubredditAboutResponse() {
-        super(StandardEvent.Event.SUBREDDIT_INFO_RESULT);
+        super(EventType.SUBREDDIT_INFO_RESULT);
     }
 
     /**

@@ -32,35 +32,8 @@ import com.ianbuttimer.tidder.ui.ICommonEvents;
  * Class representing events related to follow activities
  */
 
-public class FollowEvent extends AbstractEvent<FollowEvent, FollowEvent.Event, FollowEvent.EventMode>
+public class FollowEvent extends AbstractEvent<FollowEvent>
                             implements ICommonEvents<FollowEvent, Response> {
-
-    public enum Event {
-        FACTORY_INSTANCE,
-
-        /** Subreddit search interests request */
-        SEARCH_INTEREST_REQUEST,
-        /** Subreddit search interests result */
-        SEARCH_INTEREST_RESULT,
-        /** Subreddit search names request */
-        SEARCH_NAME_REQUEST,
-        /** Subreddit search names result */
-        SEARCH_NAME_RESULT,
-
-        /** Subreddit Follow State Change request */
-        FOLLOW_STATE_CHANGE_REQUEST,
-
-        /** All subreddits request */
-        ALL_SUBREDDIT_REQUEST,
-        /** All subreddits result */
-        ALL_SUBREDDIT_RESULT
-
-    }
-
-    public enum EventMode {
-        NEW_REQUEST,
-        UPDATE_REQUEST
-    }
 
     private static FollowEvent mFactoryInstance;
 
@@ -71,17 +44,17 @@ public class FollowEvent extends AbstractEvent<FollowEvent, FollowEvent.Event, F
     protected static final String ICON_PARAM = "icon";
 
 
-    public FollowEvent(Event event) {
+    public FollowEvent(@EventType int event) {
         super(event);
     }
 
-    public FollowEvent(Event event, @Nullable EventMode mode) {
+    public FollowEvent(@EventType int event, @EventMode int mode) {
         super(event, mode);
     }
 
     public static ICommonEvents<FollowEvent, Response> getFactory() {
         if (mFactoryInstance == null) {
-            mFactoryInstance = new FollowEvent(Event.FACTORY_INSTANCE);
+            mFactoryInstance = new FollowEvent(EventType.FACTORY_INSTANCE);
         }
         return mFactoryInstance;
     }
@@ -109,10 +82,10 @@ public class FollowEvent extends AbstractEvent<FollowEvent, FollowEvent.Event, F
      * @param count     number of items already seen in listing
      * @return  event object
      */
-    private static FollowEvent newListingRequest(Event type, String query, String before, String after, int count) {
+    private static FollowEvent newListingRequest(@EventType int type, String query, String before, String after, int count) {
         FollowEvent event = new FollowEvent(type);
-        event.newListingRequest(before, after, count);
-        return event.setQuery(query);
+        return event.newListingRequest(before, after, count)
+                .setQuery(query);
     }
 
     /**
@@ -124,7 +97,7 @@ public class FollowEvent extends AbstractEvent<FollowEvent, FollowEvent.Event, F
      * @return  event object
      */
     public static FollowEvent newSearchInterestRequest(String query, String before, String after, int count) {
-        return newListingRequest(Event.SEARCH_INTEREST_REQUEST, query, before, after, count);
+        return newListingRequest(EventType.SEARCH_INTEREST_REQUEST, query, before, after, count);
     }
 
     /**
@@ -133,8 +106,7 @@ public class FollowEvent extends AbstractEvent<FollowEvent, FollowEvent.Event, F
      * @return  event object
      */
     public static FollowEvent newSearchNameRequest(String query) {
-        FollowEvent event = new FollowEvent(Event.SEARCH_NAME_REQUEST);
-        return event.setQuery(query);
+        return new FollowEvent(EventType.SEARCH_NAME_REQUEST).setQuery(query);
     }
 
     /**
@@ -145,16 +117,12 @@ public class FollowEvent extends AbstractEvent<FollowEvent, FollowEvent.Event, F
     @Override
     public FollowEvent newResponseResult(Response response) {
         FollowEvent event = null;
-        Event type = null;
         if (response != null) {
-            Enum eType = response.getEventType();
-            if (eType instanceof Event) {
-                type = (Event)eType;
+            @EventType int type = response.getEventType();
+            if (type != EventType.TYPE_NA) {
+                event = new FollowEvent(type);
+                event.mSrvResponse = response;
             }
-        }
-        if (type != null) {
-            event = new FollowEvent(type);
-            event.mSrvResponse = response;
         }
         return event;
     }
@@ -170,7 +138,7 @@ public class FollowEvent extends AbstractEvent<FollowEvent, FollowEvent.Event, F
      * @return  event object
      */
     public static FollowEvent newAllSubredditRequest(String query, String before, String after, int count) {
-        return newListingRequest(Event.ALL_SUBREDDIT_REQUEST, query, before, after, count);
+        return newListingRequest(EventType.ALL_SUBREDDIT_REQUEST, query, before, after, count);
     }
 
     /**
@@ -178,7 +146,7 @@ public class FollowEvent extends AbstractEvent<FollowEvent, FollowEvent.Event, F
      * @return  event object
      */
     public static FollowEvent newFollowStateChangeRequest(boolean follow, String displayName, int keyColour, String icon) {
-        FollowEvent event = new FollowEvent(Event.FOLLOW_STATE_CHANGE_REQUEST);
+        FollowEvent event = new FollowEvent(EventType.FOLLOW_STATE_CHANGE_REQUEST);
         return event.setFollow(follow)
             .setName(displayName)
             .setKeyColour(keyColour)
@@ -250,34 +218,26 @@ public class FollowEvent extends AbstractEvent<FollowEvent, FollowEvent.Event, F
         return getResponse(isAllSubredditResult(), AllSubredditsResponse.class);
     }
 
-    public boolean isNewMode() {
-        return isMode(EventMode.NEW_REQUEST);
-    }
-
-    public boolean isUpdateMode() {
-        return isMode(EventMode.UPDATE_REQUEST);
-    }
-
     public boolean isSearchInterestRequest() {
-        return isEvent(Event.SEARCH_INTEREST_REQUEST);
+        return isEvent(EventType.SEARCH_INTEREST_REQUEST);
     }
     public boolean isSearchInterestResult() {
-        return isEvent(Event.SEARCH_INTEREST_RESULT);
+        return isEvent(EventType.SEARCH_INTEREST_RESULT);
     }
     public boolean isSearchNameRequest() {
-        return isEvent(Event.SEARCH_NAME_REQUEST);
+        return isEvent(EventType.SEARCH_NAME_REQUEST);
     }
     public boolean isSearchNameResult() {
-        return isEvent(Event.SEARCH_NAME_RESULT);
+        return isEvent(EventType.SEARCH_NAME_RESULT);
     }
     public boolean isAllSubredditRequest() {
-        return isEvent(Event.ALL_SUBREDDIT_REQUEST);
+        return isEvent(EventType.ALL_SUBREDDIT_REQUEST);
     }
     public boolean isAllSubredditResult() {
-        return isEvent(Event.ALL_SUBREDDIT_RESULT);
+        return isEvent(EventType.ALL_SUBREDDIT_RESULT);
     }
     public boolean isFollowStateChangeRequest() {
-        return isEvent(Event.FOLLOW_STATE_CHANGE_REQUEST);
+        return isEvent(EventType.FOLLOW_STATE_CHANGE_REQUEST);
     }
 
     @Override
@@ -298,6 +258,10 @@ public class FollowEvent extends AbstractEvent<FollowEvent, FollowEvent.Event, F
             super(event);
         }
 
+        @Override
+        protected AdditionalInfoBuilder getThis() {
+            return this;
+        }
     }
 
     @Override
@@ -327,7 +291,7 @@ public class FollowEvent extends AbstractEvent<FollowEvent, FollowEvent.Event, F
      */
     public static class AdditionalInfoExtractor
             extends
-                AbstractEvent.AdditionalInfoExtractor<AdditionalInfoExtractor, FollowEvent, FollowEvent.EventMode>
+                AbstractEvent.AdditionalInfoExtractor<AdditionalInfoExtractor, FollowEvent>
             implements
                 ICommonEvents.IAdditionalInfoExtractor<FollowEvent, AdditionalInfoExtractor> {
 
@@ -335,6 +299,10 @@ public class FollowEvent extends AbstractEvent<FollowEvent, FollowEvent.Event, F
             super(event, bundle);
         }
 
+        @Override
+        protected AdditionalInfoExtractor getThis() {
+            return this;
+        }
     }
 
     @Override

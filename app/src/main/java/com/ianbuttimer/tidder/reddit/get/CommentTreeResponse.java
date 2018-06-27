@@ -19,7 +19,7 @@ package com.ianbuttimer.tidder.reddit.get;
 import android.support.annotation.Nullable;
 import android.util.JsonReader;
 
-import com.ianbuttimer.tidder.event.PostEvent;
+import com.ianbuttimer.tidder.event.EventType;
 import com.ianbuttimer.tidder.reddit.BaseObject;
 import com.ianbuttimer.tidder.reddit.Comment;
 import com.ianbuttimer.tidder.reddit.Link;
@@ -34,7 +34,7 @@ import java.io.IOException;
  * @see <a href="https://www.reddit.com/dev/api#GET_comments_{article}">[/r/subreddit]/comments/article</a>
  */
 
-public class CommentTreeResponse extends ListingResponse<Comment, PostEvent.Event>
+public class CommentTreeResponse extends ListingResponse<Comment>
                                     implements ListingList<Comment> {
 
     private Link mLink = null;
@@ -43,7 +43,7 @@ public class CommentTreeResponse extends ListingResponse<Comment, PostEvent.Even
      * Default constructor
      */
     public CommentTreeResponse() {
-        super(PostEvent.Event.GET_COMMENT_TREE_RESULT);
+        super(EventType.GET_COMMENT_TREE_RESULT);
     }
 
     /**

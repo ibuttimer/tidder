@@ -23,6 +23,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.support.annotation.PluralsRes;
 import android.support.annotation.StringRes;
 import android.support.v4.app.NavUtils;
@@ -692,6 +693,7 @@ public class Utils {
      * @param classB    Second class
      * @return  Field list or <code>null</code> if no common fields
      */
+    @Nullable
     private static List<Field> getFields(Class<?> classA, Class<?> classB) {
         List<Field> fields = null;
         Class<?> fieldClass = null;
@@ -702,13 +704,24 @@ public class Utils {
             // classB may be assigned from classA, so use classB fields
             fieldClass = classB;
         }
-        if (fieldClass != null) {
-            fields = new ArrayList<>(Arrays.asList(fieldClass.getDeclaredFields()));
+        return getFields(fieldClass);
+    }
 
+    /**
+     * Get the fields of the argument class
+     * @param clazz    Class t olass fields
+     * @return  Field list or <code>null</code> if no class argument
+     */
+    @Nullable
+    public static List<Field> getFields(Class<?> clazz) {
+        List<Field> fields = null;
+        if (clazz != null) {
+            fields = new ArrayList<>(Arrays.asList(clazz.getDeclaredFields()));
             // get super class fields
-            Class superClazz = fieldClass;
-            while ((superClazz = superClazz.getSuperclass()) != Object.class){
-                fields.addAll(Arrays.asList(superClazz.getDeclaredFields()));
+            for (Class superCls = clazz.getSuperclass();
+                    (superCls != Object.class) && (superCls != null);
+                        superCls = superCls.getSuperclass()) {
+                fields.addAll(Arrays.asList(superCls.getDeclaredFields()));
             }
         }
         return fields;

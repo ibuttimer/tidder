@@ -18,7 +18,7 @@ package com.ianbuttimer.tidder.data;
 
 import android.database.Cursor;
 
-import com.ianbuttimer.tidder.event.StandardEvent;
+import com.ianbuttimer.tidder.event.EventType;
 
 import java.util.ArrayList;
 
@@ -26,14 +26,14 @@ import java.util.ArrayList;
  * Class representing the result of a 'is following' query
  */
 
-public class FollowQueryResponse extends QueryResponse<Follow, StandardEvent.Event> {
+public class FollowQueryResponse extends QueryResponse<Follow> {
 
     public FollowQueryResponse(ArrayList<Follow> list) {
-        super(list, Follow.class, StandardEvent.Event.FOLLOWING_LIST_RESULT);
+        super(list, Follow.class, EventType.FOLLOWING_LIST_RESULT);
     }
 
     public FollowQueryResponse(Follow[] array) {
-        super(array, Follow.class, StandardEvent.Event.FOLLOWING_LIST_RESULT);
+        super(array, Follow.class, EventType.FOLLOWING_LIST_RESULT);
     }
 
     public FollowQueryResponse(Cursor cursor) {

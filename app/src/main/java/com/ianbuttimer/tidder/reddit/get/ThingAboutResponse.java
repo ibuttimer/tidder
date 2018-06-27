@@ -19,7 +19,7 @@ package com.ianbuttimer.tidder.reddit.get;
 import android.util.JsonReader;
 
 import com.ianbuttimer.tidder.TidderApplication;
-import com.ianbuttimer.tidder.event.StandardEvent;
+import com.ianbuttimer.tidder.event.EventType;
 import com.ianbuttimer.tidder.reddit.BaseObject;
 import com.ianbuttimer.tidder.reddit.Comment;
 import com.ianbuttimer.tidder.reddit.Link;
@@ -37,14 +37,14 @@ import java.io.IOException;
  * @see <a href="https://www.reddit.com/dev/api#GET_api_info">GET [/r/<i>subreddit</i>]/api/info</a>
  */
 
-public class ThingAboutResponse extends ListingResponse<RedditObject, StandardEvent.Event>
+public class ThingAboutResponse extends ListingResponse<RedditObject>
                                     implements ListingList<RedditObject> {
 
     /**
      * Default constructor
      */
     public ThingAboutResponse() {
-        super(StandardEvent.Event.THING_ABOUT_RESULT);
+        super(EventType.THING_ABOUT_RESULT);
     }
 
     /**

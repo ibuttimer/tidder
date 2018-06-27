@@ -14,29 +14,25 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ianbuttimer.tidder.data;
+package com.ianbuttimer.tidder.event;
 
-import android.database.Cursor;
+import java.lang.annotation.Retention;
 
-import com.ianbuttimer.tidder.event.StandardEvent;
+import static java.lang.annotation.RetentionPolicy.SOURCE;
 
-import java.util.ArrayList;
+@Retention(SOURCE)
+public @interface EventMode {
 
-/**
- * No-op class representing the result of a 'config' query which isn't required for free variant
- */
+    int MODE_NA = 0;
+    int NEW_REQUEST = 1;
+    int UPDATE_REQUEST = 2;
 
-public class ConfigQueryResponse extends QueryResponse<Config, StandardEvent.Event> {
+    /** Defines the allowed constants for this element */
+    int[] value() default {
+            MODE_NA, NEW_REQUEST, UPDATE_REQUEST
+    };
 
-    public ConfigQueryResponse(ArrayList<Config> list) {
-        super(list, Config.class, EventType.SETTINGS_RESULT);
-    }
-
-    public ConfigQueryResponse(Config[] array) {
-        super(array, Config.class, EventType.SETTINGS_RESULT);
-    }
-
-    public ConfigQueryResponse(Cursor cursor) {
-        this((Config[])null);
-    }
+    /** Defines whether the constants can be used as a flag, or just as an enum (the default) */
+    boolean flag() default false;
 }
+

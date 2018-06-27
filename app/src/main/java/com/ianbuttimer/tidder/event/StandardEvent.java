@@ -37,49 +37,8 @@ import java.util.ArrayList;
  * Class representing events related to standard activities
  */
 
-public class StandardEvent extends AbstractEvent<StandardEvent, StandardEvent.Event, StandardEvent.EventMode>
+public class StandardEvent extends AbstractEvent<StandardEvent>
                             implements ICommonEvents<StandardEvent, Response> {
-
-    public enum Event {
-        FACTORY_INSTANCE,
-
-        /** Query Follow Status of Subreddit List request */
-        QUERY_FOLLOW_STATUS_LIST_REQUEST,
-
-        /** Get Subreddit Following List request */
-        FOLLOWING_LIST_REQUEST,
-        /** Get Subreddit Following List response */
-        FOLLOWING_LIST_RESULT,
-
-        /** Get Pinned List request */
-        PINNED_LIST_REQUEST,
-        /** Get Pinned List response */
-        PINNED_LIST_RESULT,
-
-        /** Subreddit info request */
-        SUBREDDIT_INFO_REQUEST,
-        /** Subreddit info result */
-        SUBREDDIT_INFO_RESULT,
-
-        /** Subreddit/Comment info request */
-        THING_ABOUT_REQUEST,
-        /** Subreddit/Comment info result */
-        THING_ABOUT_RESULT,
-
-        // full variant specific events
-
-        /** Settings info request */
-        SETTINGS_REQUEST,
-        /** Settings info result */
-        SETTINGS_RESULT
-
-    }
-
-
-    public enum EventMode {
-        NEW_REQUEST,
-        UPDATE_REQUEST
-    }
 
     private static StandardEvent mFactoryInstance;
 
@@ -92,17 +51,17 @@ public class StandardEvent extends AbstractEvent<StandardEvent, StandardEvent.Ev
     protected static final String START_PARAM = "start";
     protected static final String END_PARAM = "end";
 
-    public StandardEvent(Event event) {
+    public StandardEvent(@EventType int event) {
         super(event);
     }
 
-    public StandardEvent(Event event, @Nullable EventMode mode) {
+    public StandardEvent(@EventType int event, @EventMode int mode) {
         super(event, mode);
     }
 
     public static ICommonEvents<StandardEvent, Response> getFactory() {
         if (mFactoryInstance == null) {
-            mFactoryInstance = new StandardEvent(Event.FACTORY_INSTANCE);
+            mFactoryInstance = new StandardEvent(EventType.FACTORY_INSTANCE);
         }
         return mFactoryInstance;
     }
@@ -117,7 +76,7 @@ public class StandardEvent extends AbstractEvent<StandardEvent, StandardEvent.Ev
      * @return  event object
      */
     public static StandardEvent newFollowingListRequest() {
-        return new StandardEvent(Event.FOLLOWING_LIST_REQUEST, EventMode.NEW_REQUEST);
+        return new StandardEvent(EventType.FOLLOWING_LIST_REQUEST, EventMode.NEW_REQUEST);
     }
 
     /**
@@ -125,7 +84,7 @@ public class StandardEvent extends AbstractEvent<StandardEvent, StandardEvent.Ev
      * @return  event object
      */
     public static StandardEvent newUpdateFollowingListRequest() {
-        return new StandardEvent(Event.FOLLOWING_LIST_REQUEST, EventMode.UPDATE_REQUEST);
+        return new StandardEvent(EventType.FOLLOWING_LIST_REQUEST, EventMode.UPDATE_REQUEST);
     }
 
     /**
@@ -136,7 +95,7 @@ public class StandardEvent extends AbstractEvent<StandardEvent, StandardEvent.Ev
      * @return  event object
      */
     public static StandardEvent newFollowingListRequest(ArrayList<Subreddit> list, int start, int end) {
-        StandardEvent event = new StandardEvent(Event.QUERY_FOLLOW_STATUS_LIST_REQUEST);
+        StandardEvent event = new StandardEvent(EventType.QUERY_FOLLOW_STATUS_LIST_REQUEST);
         return event.setList(list)
                 .setStart(start)
                 .setEnd(end);
@@ -182,8 +141,8 @@ public class StandardEvent extends AbstractEvent<StandardEvent, StandardEvent.Ev
      *
      * @return  event object
      */
-    private static StandardEvent newPinnedListRequest(EventMode mode, String name) {
-        StandardEvent event = new StandardEvent(Event.PINNED_LIST_REQUEST, mode);
+    private static StandardEvent newPinnedListRequest(@EventMode int mode, String name) {
+        StandardEvent event = new StandardEvent(EventType.PINNED_LIST_REQUEST, mode);
         return event.setName(name);
     }
 
@@ -193,7 +152,7 @@ public class StandardEvent extends AbstractEvent<StandardEvent, StandardEvent.Ev
      * @return  event object
      */
     public static StandardEvent newSubredditInfoRequest(String name) {
-        StandardEvent event = new StandardEvent(Event.SUBREDDIT_INFO_REQUEST);
+        StandardEvent event = new StandardEvent(EventType.SUBREDDIT_INFO_REQUEST);
         return event.setName(name);
     }
 
@@ -202,7 +161,7 @@ public class StandardEvent extends AbstractEvent<StandardEvent, StandardEvent.Ev
      * @return  event object
      */
     public static StandardEvent newSettingsRequest() {
-        return new StandardEvent(Event.SETTINGS_REQUEST);
+        return new StandardEvent(EventType.SETTINGS_REQUEST);
     }
 
     /**
@@ -210,7 +169,7 @@ public class StandardEvent extends AbstractEvent<StandardEvent, StandardEvent.Ev
      * @return  event object
      */
     public static StandardEvent newSettingsResult() {
-        return new StandardEvent(Event.SETTINGS_RESULT);
+        return new StandardEvent(EventType.SETTINGS_RESULT);
     }
 
     /**
@@ -228,7 +187,7 @@ public class StandardEvent extends AbstractEvent<StandardEvent, StandardEvent.Ev
      * @return  event object
      */
     public static StandardEvent newThingAboutRequest(String[] names) {
-        return new StandardEvent(Event.THING_ABOUT_REQUEST, EventMode.NEW_REQUEST)
+        return new StandardEvent(EventType.THING_ABOUT_REQUEST, EventMode.NEW_REQUEST)
                 .setNames(names);
     }
 
@@ -240,16 +199,12 @@ public class StandardEvent extends AbstractEvent<StandardEvent, StandardEvent.Ev
     @Override
     @Nullable public StandardEvent newResponseResult(Response response) {
         StandardEvent event = null;
-        Event type = null;
         if (response != null) {
-            Enum eType = response.getEventType();
-            if (eType instanceof Event) {
-                type = (Event)eType;
+            @EventType int type = response.getEventType();
+            if (type != EventType.TYPE_NA) {
+                event = new StandardEvent(type);
+                event.mSrvResponse = response;
             }
-        }
-        if (type != null) {
-            event = new StandardEvent(type);
-            event.mSrvResponse = response;
         }
         return event;
     }
@@ -257,16 +212,12 @@ public class StandardEvent extends AbstractEvent<StandardEvent, StandardEvent.Ev
     @Override
     @Nullable public <T extends ContentProviderResponse> StandardEvent newCpResponseResult(T response) {
         StandardEvent event = null;
-        Event type = null;
         if (response != null) {
-            Enum eType = response.getEventType();
-            if (eType instanceof Event) {
-                type = (Event)eType;
+            @EventType int type = response.getEventType();
+            if (type != EventType.TYPE_NA) {
+                event = new StandardEvent(type);
+                event.mCpResponse = response;
             }
-        }
-        if (type != null) {
-            event = new StandardEvent(type);
-            event.mCpResponse = response;
         }
         return event;
     }
@@ -354,46 +305,38 @@ public class StandardEvent extends AbstractEvent<StandardEvent, StandardEvent.Ev
         return this;
     }
 
-    public boolean isNewMode() {
-        return isMode(EventMode.NEW_REQUEST);
-    }
-
-    public boolean isUpdateMode() {
-        return isMode(EventMode.UPDATE_REQUEST);
-    }
-
     public boolean isQueryFollowStatusListRequest() {
-        return isEvent(Event.QUERY_FOLLOW_STATUS_LIST_REQUEST);
+        return isEvent(EventType.QUERY_FOLLOW_STATUS_LIST_REQUEST);
     }
     public boolean isFollowingListRequest() {
-        return isEvent(Event.FOLLOWING_LIST_REQUEST);
+        return isEvent(EventType.FOLLOWING_LIST_REQUEST);
     }
     public boolean isFollowingListResult() {
-        return isEvent(Event.FOLLOWING_LIST_RESULT);
+        return isEvent(EventType.FOLLOWING_LIST_RESULT);
     }
     public boolean isPinnedListRequest() {
-        return isEvent(Event.PINNED_LIST_REQUEST);
+        return isEvent(EventType.PINNED_LIST_REQUEST);
     }
     public boolean isPinnedListResult() {
-        return isEvent(Event.PINNED_LIST_RESULT);
+        return isEvent(EventType.PINNED_LIST_RESULT);
     }
     public boolean isSubredditInfoRequest() {
-        return isEvent(Event.SUBREDDIT_INFO_REQUEST);
+        return isEvent(EventType.SUBREDDIT_INFO_REQUEST);
     }
     public boolean isSubredditInfoResult() {
-        return isEvent(Event.SUBREDDIT_INFO_RESULT);
+        return isEvent(EventType.SUBREDDIT_INFO_RESULT);
     }
     public boolean isSettingsRequest() {
-        return isEvent(Event.SETTINGS_REQUEST);
+        return isEvent(EventType.SETTINGS_REQUEST);
     }
     public boolean isSettingsResult() {
-        return isEvent(Event.SETTINGS_RESULT);
+        return isEvent(EventType.SETTINGS_RESULT);
     }
     public boolean isThingAboutRequest() {
-        return isEvent(Event.THING_ABOUT_REQUEST);
+        return isEvent(EventType.THING_ABOUT_REQUEST);
     }
     public boolean isThingAboutResult() {
-        return isEvent(Event.THING_ABOUT_RESULT);
+        return isEvent(EventType.THING_ABOUT_RESULT);
     }
 
     @Override
@@ -417,6 +360,11 @@ public class StandardEvent extends AbstractEvent<StandardEvent, StandardEvent.Ev
         public AdditionalInfoBuilder range() {
             mBundle.putInt(RANGE_START_INFO, mEvent.getStart());
             mBundle.putInt(RANGE_END_INFO, mEvent.getEnd());
+            return this;
+        }
+
+        @Override
+        protected AdditionalInfoBuilder getThis() {
             return this;
         }
 
@@ -452,12 +400,17 @@ public class StandardEvent extends AbstractEvent<StandardEvent, StandardEvent.Ev
      */
     public static class AdditionalInfoExtractor
             extends
-                AbstractEvent.AdditionalInfoExtractor<AdditionalInfoExtractor, StandardEvent, StandardEvent.EventMode>
+                AbstractEvent.AdditionalInfoExtractor<AdditionalInfoExtractor, StandardEvent>
             implements
                 IAdditionalInfoExtractor<StandardEvent, AdditionalInfoExtractor> {
 
         public AdditionalInfoExtractor(StandardEvent event, Bundle bundle) {
             super(event, bundle);
+        }
+
+        @Override
+        protected AdditionalInfoExtractor getThis() {
+            return this;
         }
 
         @SuppressWarnings("ConstantConditions")

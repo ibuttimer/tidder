@@ -18,7 +18,7 @@ package com.ianbuttimer.tidder.reddit.get;
 
 import android.util.JsonReader;
 
-import com.ianbuttimer.tidder.event.PostEvent;
+import com.ianbuttimer.tidder.event.EventType;
 import com.ianbuttimer.tidder.reddit.BaseObject;
 import com.ianbuttimer.tidder.reddit.Comment;
 import com.ianbuttimer.tidder.reddit.ListingList;
@@ -43,7 +43,7 @@ public class CommentMoreResponse extends CommentResponse
      * Default constructor
      */
     public CommentMoreResponse() {
-        super(PostEvent.Event.GET_COMMENT_MORE_RESULT);
+        super(EventType.GET_COMMENT_MORE_RESULT);
     }
 
     /**
