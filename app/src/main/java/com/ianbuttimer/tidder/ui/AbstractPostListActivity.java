@@ -50,6 +50,8 @@ import com.ianbuttimer.tidder.event.StandardEventProcessor.IStandardEventProcess
 import com.ianbuttimer.tidder.reddit.RedditClient;
 import com.ianbuttimer.tidder.reddit.Response;
 import com.ianbuttimer.tidder.reddit.get.SubredditLinkRequest;
+import com.ianbuttimer.tidder.ui.util.AbstractSectionPagerAdapter;
+import com.ianbuttimer.tidder.ui.util.ISectionsPagerAdapter;
 import com.ianbuttimer.tidder.ui.widgets.PostOffice;
 import com.ianbuttimer.tidder.utils.Dialog;
 import com.ianbuttimer.tidder.utils.Utils;
@@ -82,7 +84,7 @@ import static com.ianbuttimer.tidder.ui.CommentThreadProcessor.TWO_PANE;
  * item details side-by-side using two vertical panes.
  */
 public abstract class AbstractPostListActivity extends AppCompatActivity
-                                                implements PostOffice.IAddressable {
+                                                implements PostOffice.IAddressable, ISectionsPagerAdapter {
 
     private static final String TAG_POSTS_EVENT =
             AbstractPostListActivity.class.getSimpleName() + ":onPostsEvent";
@@ -335,7 +337,7 @@ public abstract class AbstractPostListActivity extends AppCompatActivity
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    public class SectionsPagerAdapter extends AbstractSectionPagerAdapter {
 
         private Object mCurrentPrimaryItem = null;
 
@@ -392,5 +394,17 @@ public abstract class AbstractPostListActivity extends AppCompatActivity
             }
         }
     }
+
+    @Nullable
+    @Override
+    public Fragment getFragment(int position) {
+        return mSectionsPagerAdapter.getFragment(position);
+    }
+
+    @Override
+    public int getCount() {
+        return mSectionsPagerAdapter.getCount();
+    }
+
 
 }

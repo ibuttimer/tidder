@@ -16,7 +16,7 @@ In the case of the full version, the user's Reddit id is used to identify data s
 
 The application allows the user to maintain a list of Subreddits from which posts are retrieved.
 
-**Note** this list is seperate to any follow list which may be stored in the
+**Note** this list is separate to any follow list which may be stored in the
 user's settings on Reddit.com.
 
 The Follow functionality may be accessed via the *Follow* option in the menu.
@@ -45,7 +45,8 @@ The all tab allows the user to scroll through the list of all Subreddits.
 A list of posts from the Subreddit Follow list are displayed on the New Posts tab.
 The Post Source Listing may be changed in Settings.
 
-The Full application version allows the user to pin posts, and these may be viewed on the Pinned tab.
+The FreeMax and Full application versions allow the user to pin posts,
+and these may be viewed on the Pinned tab.
 
 ### New tab
 * Tap on a post to view the post content.
@@ -53,7 +54,7 @@ The Full application version allows the user to pin posts, and these may be view
 * Tap on the *Refresh* button to retrieve new posts.
 
 ### Pinned tab
-**Note** only available in the Full application version.
+**Note** only available in the FreeMax and Full application version.
 
 * Tap on a post to view the post content.
 

@@ -15,16 +15,17 @@
   ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
-    <declare-styleable name="BasicStatsView">
-        <attr name="layoutId" format="reference" />
-    </declare-styleable>
-    <declare-styleable name="UnorderedListItem">
-        <attr name="bulletId" format="reference" />
-        <attr name="textId" format="reference" />
-        <attr name="textAppearance" format="reference" />
-        <attr name="textAlignment" format="reference" />
-        <attr name="textColorLink" format="reference" />
-        <attr name="textColor" format="reference" />
-    </declare-styleable>
-</resources>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.ianbuttimer.tidder"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        tools:node="merge">
+
+        <provider
+            android:name=".data.db.gen.TidderProvider"
+            android:authorities="@string/authority_provider"
+            android:exported="true" />
+    </application>
+
+</manifest>

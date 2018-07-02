@@ -25,6 +25,7 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.util.Pair;
 
+import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.data.InfoCache;
 import com.ianbuttimer.tidder.data.Pinned;
 import com.ianbuttimer.tidder.data.PinnedQueryResponse;
@@ -98,10 +99,13 @@ public abstract class AbstractPostsPinnedTabFragment extends AbstractBasePostsTa
                             ids[i] = list.get(i).getFullname();
                         }
                         postEventForActivity(StandardEvent.newThingAboutRequest(ids));
+
+                        hideInProgressMessage();
                     } else {
                         if (mAdapter.clear()) {
                             mAdapter.notifyDataSetChanged();
                         }
+                        showMessage(R.string.no_pinned_posts);
                     }
                 }
             } else if (event.isThingAboutResult()) {
@@ -159,6 +163,14 @@ public abstract class AbstractPostsPinnedTabFragment extends AbstractBasePostsTa
         PostOffice.logHandled(event, TAG, handled);
 
         return handled;
+    }
+
+    protected void requestPinned() {
+        if (mList.size() == 0) {
+            postEventForActivity(StandardEvent.newPinnedListRequest());
+        } else {
+            postEventForActivity(StandardEvent.newUpdatePinnedListRequest());
+        }
     }
 
 }

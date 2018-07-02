@@ -8,22 +8,22 @@ forums (subreddits) separate to their subreddit subscription settings on the web
 Posts are retrieved in an equal manner ensuring that all configured subreddits receive equal
 attention.
 
-The application consists of two variants; full and free.
+The application consists of three variants; full, free and freeMax.
 
-| Features                  | Full variant  | Free variant |
-| ------------------------- | ------------- | ------------ |
-| View posts                | &check;       | &check;      |
-| Follow subreddits         | &check;       | &check;      |
-| Widget                    | &check;       | &check;      |
-| Ads                       | &cross;       | &check;      |
-| Share data across devices | &check;       | &cross;      |
-| Pin posts                 | &check;       | &cross;      |
+| Features                  | Full variant  | Free variant | FreeMax variant |
+| ------------------------- | ------------- | ------------ | --------------- |
+| View posts                | &check;       | &check;      | &check;         |
+| Follow subreddits         | &check;       | &check;      | &check;         |
+| Widget                    | &check;       | &check;      | &check;         |
+| Ads                       | &cross;       | &check;      | &check;         |
+| Share data across devices | &check;       | &cross;      | &cross;         |
+| Pin posts                 | &check;       | &cross;      | &check;         |
 
 ## Technical Overview ##
-| Features                  | Full variant  | Free variant |
-| ------------------------- | ------------- | ------------ |
-| Storage                   | Firebase Realtime Database | Local SQLite Database |
-| Advertising               | n/a                        | AdMob                 |
+| Features                  | Full variant  | Free variant | FreeMax variant |
+| ------------------------- | ------------- | ------------ | --------------- |
+| Storage                   | Firebase Realtime Database | Local SQLite Database | Local SQLite Database |
+| Advertising               | n/a                        | AdMob                 | n/a                   |
 
 ## Development Setup ##
 The development environment may be configured as follows:

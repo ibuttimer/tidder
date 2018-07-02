@@ -25,6 +25,7 @@ import android.support.annotation.IntegerRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.annotation.StyleRes;
+import android.text.Spanned;
 import android.text.method.MovementMethod;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -46,6 +47,11 @@ public class UnorderedListItem extends LinearLayout {
     @BindView(R.id.tv_ul_bullet) TextView tvBullet;
     @BindView(R.id.tv_ul_item) TextView tvItem;
 
+    @StyleRes private int mAppearance = android.R.style.TextAppearance_Small;
+    @IntegerRes private int mAlignment = R.integer.text_alignment;
+    @ColorRes private int mColour = R.color.colorTextDefault;
+    @ColorRes private int mColourLink = R.color.colorPrimaryDark;
+
     public UnorderedListItem(Context context) {
         this(context, null);
     }
@@ -58,19 +64,15 @@ public class UnorderedListItem extends LinearLayout {
         super(context, attrs, defStyleAttr);
 
         @StringRes int bulletId = R.string.unordered_list_bullet;
-        @StringRes int itemId = 0;
-        @StyleRes int appearance = android.R.style.TextAppearance_Small;
-        @IntegerRes int alignment = R.integer.text_alignment;
-        @ColorRes int colour = R.color.colorTextDefault;
-        @ColorRes int colourLink = R.color.colorPrimaryDark;
+        @StringRes int textId = 0;
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.UnorderedListItem, 0, 0);
             bulletId = a.getResourceId(R.styleable.UnorderedListItem_bulletId, bulletId);
-            itemId = a.getResourceId(R.styleable.UnorderedListItem_itemId, itemId);
-            appearance = a.getResourceId(R.styleable.UnorderedListItem_textAppearance, appearance);
-            alignment = a.getResourceId(R.styleable.UnorderedListItem_textAlignment, alignment);
-            colour = a.getResourceId(R.styleable.UnorderedListItem_textColor, colour);
-            colourLink = a.getResourceId(R.styleable.UnorderedListItem_textColorLink, colourLink);
+            textId = a.getResourceId(R.styleable.UnorderedListItem_textId, textId);
+            mAppearance = a.getResourceId(R.styleable.UnorderedListItem_textAppearance, mAppearance);
+            mAlignment = a.getResourceId(R.styleable.UnorderedListItem_textAlignment, mAlignment);
+            mColour = a.getResourceId(R.styleable.UnorderedListItem_textColor, mColour);
+            mColourLink = a.getResourceId(R.styleable.UnorderedListItem_textColorLink, mColourLink);
 
             a.recycle();
         }
@@ -81,25 +83,71 @@ public class UnorderedListItem extends LinearLayout {
 
             ButterKnife.bind(this, view);
 
-            Resources resources = context.getResources();
-            @ColorInt int textColour = resources.getColor(colour);
-            @ColorInt int textLinkColour = resources.getColor(colourLink);
-            int textAlignment = resources.getInteger(alignment);
-            for (TextView tv : new TextView[]{tvItem, tvBullet}) {
-                tv.setTextAppearance(context, appearance);
-                tv.setTextAlignment(textAlignment);
-                tv.setTextColor(textColour);
-                tv.setLinkTextColor(textLinkColour);
-            }
-
-            tvBullet.setText(bulletId);
-            if (itemId != 0) {
-                tvItem.setText(itemId);
-            } else {
-                tvItem.setText(null);
-            }
+            setTexts(bulletId, textId);
+            setStyle();
         }
     }
+
+    private void setTexts(@StringRes int bulletId, @StringRes int itemId) {
+        setBullet(bulletId);
+        setText(itemId);
+    }
+
+    private void setStyle() {
+        Context context = tvBullet.getContext();
+        Resources resources = context.getResources();
+        @ColorInt int textColour = resources.getColor(mColour);
+        @ColorInt int textLinkColour = resources.getColor(mColourLink);
+        int textAlignment = resources.getInteger(mAlignment);
+        for (TextView tv : new TextView[]{tvItem, tvBullet}) {
+            tv.setTextAppearance(context, mAppearance);
+            tv.setTextAlignment(textAlignment);
+            tv.setTextColor(textColour);
+            tv.setLinkTextColor(textLinkColour);
+        }
+    }
+
+
+    public void setBullet(@StringRes int bulletId) {
+        tvBullet.setText(bulletId);
+    }
+
+    public void setText(@StringRes int textId) {
+        if (textId != 0) {
+            tvItem.setText(textId);
+        } else {
+            tvItem.setText(null);
+        }
+    }
+
+    public void setText(String text) {
+        tvItem.setText(text);
+    }
+
+    public void setText(Spanned text) {
+        tvItem.setText(text);
+    }
+
+    public void setAppearance(@StyleRes int appearance) {
+        mAppearance = appearance;
+        setStyle();
+    }
+
+    public void setAlignment(@IntegerRes int alignment) {
+        mAlignment = alignment;
+        setStyle();
+    }
+
+    public void setColour(@ColorRes int colour) {
+        mColour = colour;
+        setStyle();
+    }
+
+    public void setColourLink(@ColorRes int colourLink) {
+        mColourLink = colourLink;
+        setStyle();
+    }
+
 
     /**
      * Sets the movement method (arrow key handler) to be used for this object

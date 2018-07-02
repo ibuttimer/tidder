@@ -27,6 +27,7 @@
     tools:context="com.ianbuttimer.tidder.ui.AboutActivity">
 
     <RelativeLayout
+        android:id="@+id/rl_aboutA"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
@@ -95,35 +96,30 @@
             android:textColor="@color/colorTextDefault" />
 
         <TextView
-            android:id="@+id/tv_acknowledgements_aboutA"
+            android:id="@+id/tv_privacylink_aboutA"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_licencelink_aboutA"
+            android:text="@string/about_privacy_link"
+            android:paddingBottom="@dimen/fab_margin"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textAlignment="@integer/text_alignment"
+            android:textColorLink="@color/colorPrimaryDark"
+            android:textColor="@color/colorTextDefault" />
+
+        <TextView
+            android:id="@+id/tv_acknowledgements_aboutA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_privacylink_aboutA"
             android:text="@string/acknowledgements"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textAlignment="@integer/text_alignment"
             android:textColor="@color/colorTextDefault" />
 
-        <com.ianbuttimer.tidder.ui.widgets.UnorderedListItem
-            android:id="@+id/ulli_icons8_aboutA"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_acknowledgements_aboutA"
-            app:itemId="@string/ack_icons8" />
+        <!-- UnorderedListItem's are added here -->
 
-        <com.ianbuttimer.tidder.ui.widgets.UnorderedListItem
-            android:id="@+id/ulli_icons_material_aboutA"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/ulli_icons8_aboutA"
-            app:itemId="@string/ack_icons_material" />
 
-        <com.ianbuttimer.tidder.ui.widgets.UnorderedListItem
-            android:id="@+id/ulli_noto_font_aboutA"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/ulli_icons_material_aboutA"
-            app:itemId="@string/ack_noto_font" />
     </RelativeLayout>
 
 </ScrollView>

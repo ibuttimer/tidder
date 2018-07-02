@@ -35,4 +35,6 @@
             Save your test device ID as value for 'admob_test_device_id' -->
     <string name="admob_test_device_id" translatable="false">@string/admob_test_device_id_todo</string>
 
+    <string name="ack_schematic">Schematic (<a href="https://github.com/SimonVT/schematic">Simon Vig Therkildsen</a>) licensed under the (<a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>).</string>
+
 </resources>

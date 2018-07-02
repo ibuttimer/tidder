@@ -44,7 +44,7 @@ public class PostsNewTabFragment extends AbstractPostsNewTabFragment {
     public void onStart() {
         super.onStart();
 
-        // free version doesn't need valid user info to access db
+        // local db variants don't need valid user info to access db
         requestFollowing();
     }
 

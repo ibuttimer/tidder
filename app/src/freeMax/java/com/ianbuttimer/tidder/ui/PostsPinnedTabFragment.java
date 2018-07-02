@@ -14,29 +14,34 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ianbuttimer.tidder.data;
+package com.ianbuttimer.tidder.ui;
 
-import android.database.Cursor;
+import com.ianbuttimer.tidder.R;
+import com.ianbuttimer.tidder.event.RedditClientEvent;
 
-import com.ianbuttimer.tidder.event.EventType;
-
-import java.util.ArrayList;
 
 /**
- * No-op class representing the result of a 'config' query which isn't required for free variant
+ * Base class for Posts activity tab fragments
  */
 
-public class ConfigQueryResponse extends QueryResponse<Config> {
+public class PostsPinnedTabFragment extends AbstractPostsPinnedTabFragment {
 
-    public ConfigQueryResponse(ArrayList<Config> list) {
-        super(list, Config.class, EventType.SETTINGS_RESULT);
+    public PostsPinnedTabFragment() {
+        super(R.layout.fragment_posts);
     }
 
-    public ConfigQueryResponse(Config[] array) {
-        super(array, Config.class, EventType.SETTINGS_RESULT);
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // local db variants don't need valid user info to access db
+        requestPinned();
     }
 
-    public ConfigQueryResponse(Cursor cursor) {
-        this((Config[])null);
+    @Override
+    protected boolean onClientEvent(RedditClientEvent event) {
+        // no op
+        return false;
     }
+
 }

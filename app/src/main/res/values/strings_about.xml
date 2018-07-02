@@ -25,11 +25,24 @@
     <string name="about_license">This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</string>
     <string name="about_license_link">You should have received a copy of the GNU General Public License along with this program. If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</string>
 
+    <string name="about_privacy_link">The application privacy policy is available on the <a href="https://github.com/ibuttimer/tidder/wiki/Tidder-Privacy-Policy">application wiki</a>.</string>
+
     <string name="acknowledgements">Acknowledgements</string>
     <string name="unordered_list_bullet">&#x2022; </string>
     <string name="ack_icons8">Some icons courtesy of icons8 (<a href="http://icons8.com/">icons8</a>) licensed under the (<a href="http://creativecommons.org/licenses/by-nd/3.0/">Creative Commons Attribution-NoDerivs 3.0 Unported License</a>).</string>
     <string name="ack_icons_material">Some icons courtesy of Material Design (<a href="https://material.io/icons/">material.io</a>) licensed under the (<a href="https://github.com/google/material-design-icons/blob/master/LICENSE">Apache License, Version 2.0</a>).</string>
     <string name="ack_noto_font">Noto Sans font courtesy of Google (<a href="https://fonts.google.com/specimen/Noto+Sans">fonts.google.com</a>) licensed under the (<a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>).</string>
+    <string name="ack_okhttp">OkHttp (<a href="https://square.github.io/okhttp/">Square, Inc</a>) licensed under the (<a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>).</string>
+    <string name="ack_timber">Timber (<a href="https://github.com/JakeWharton/timber">Jake Wharton</a>) licensed under the (<a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>).</string>
+    <string name="ack_butterknife">Butter Knife (<a href="http://jakewharton.github.io/butterknife/">Jake Wharton</a>) licensed under the (<a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>).</string>
+    <string name="ack_glide">Glide (<a href="https://bumptech.github.io/glide/">Sam Judd</a>) licensed under the (<a href="https://github.com/bumptech/glide/blob/master/LICENSE">BSD, part MIT and Apache 2.0</a>).</string>
+    <string name="ack_parceler">Parceler (<a href="http://parceler.org">John Ericksen</a>) licensed under the (<a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>).</string>
+    <string name="ack_eventbus">EventBus (<a href="http://greenrobot.org/eventbus/">Markus Junginger, greenrobot</a>) licensed under the (<a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>).</string>
+    <string name="ack_recyclerviewhelper">Recyclerviewhelper (<a href="http://nisrulz.github.io/recyclerviewhelper/">Nishant Srivastava</a>) licensed under the (<a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>).</string>
+    <string name="ack_multilinecollapsingtoolbar">Multiline-collapsingtoolbar (<a href="https://github.com/opacapp/multiline-collapsingtoolbar">Web Opac App</a>) licensed under the (<a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>).</string>
+    <string name="ack_guava">Guava (<a href="https://github.com/google/guava">Google, Inc</a>) licensed under the (<a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>).</string>
+    <string name="ack_gson">Gson (<a href="https://github.com/google/gson">Google, Inc</a>) licensed under the (<a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>).</string>
+    <string name="ack_markdownview">MarkdownView (<a href="https://github.com/tiagohm/MarkdownView">tiagohm</a>) licensed under the (<a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>).</string>
 
 
 </resources>

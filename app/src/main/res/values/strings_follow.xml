@@ -54,6 +54,7 @@
     <string name="no_search_result">"No results found matching search criteria"</string>
     <string name="no_subreddit_result">"No subreddits found"</string>
     <string name="not_following_anything">"Not currently following any subreddits"</string>
+    <string name="no_pinned_posts">"There are currently no pinned posts"</string>
 
 
 </resources>

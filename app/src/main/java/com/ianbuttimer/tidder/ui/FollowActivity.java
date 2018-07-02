@@ -48,6 +48,7 @@ import com.ianbuttimer.tidder.reddit.Response;
 import com.ianbuttimer.tidder.reddit.get.AllSubredditsRequest;
 import com.ianbuttimer.tidder.reddit.get.SubredditsSearchRequest;
 import com.ianbuttimer.tidder.reddit.post.ApiSearchSubredditsRequest;
+import com.ianbuttimer.tidder.ui.util.AbstractSectionPagerAdapter;
 import com.ianbuttimer.tidder.ui.util.ISectionsPagerAdapter;
 import com.ianbuttimer.tidder.ui.widgets.PostOffice;
 import com.ianbuttimer.tidder.ui.widgets.ToastReceiver;
@@ -291,30 +292,10 @@ public class FollowActivity extends AppCompatActivity implements ISectionsPagerA
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter implements ISectionsPagerAdapter {
-
-        private final FragmentManager mFragmentManager;
-        private ViewGroup mContainer;
+    public class SectionsPagerAdapter extends AbstractSectionPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
-            mFragmentManager = fm;
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            mContainer = container;
-            return super.instantiateItem(container, position);
-        }
-
-        @Override
-        @Nullable
-        public Fragment getFragment(int position) {
-            final long itemId = getItemId(position);
-
-            // Do we have this fragment?
-            String name = makeFragmentName(mContainer.getId(), itemId);
-            return mFragmentManager.findFragmentByTag(name);
         }
 
         @Override
@@ -326,13 +307,6 @@ public class FollowActivity extends AppCompatActivity implements ISectionsPagerA
         @Override
         public int getCount() {
             return Tabs.values().length;
-        }
-
-        /**
-         * Get fragment name tag. <b>Note:</b> copied from super class
-         */
-        private String makeFragmentName(int viewId, long id) {
-            return "android:switcher:" + viewId + ":" + id;
         }
     }
 

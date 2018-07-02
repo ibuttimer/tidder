@@ -14,31 +14,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ianbuttimer.tidder.data;
+package com.ianbuttimer.tidder.ui;
 
-import android.database.Cursor;
+public class AboutActivity extends AbstractAboutActivity {
 
-import org.parceler.Parcel;
 
-/**
- * No-op Class representing the result of a database config table query which isn't required for free variant
- */
-@Parcel
-public class Config extends AbstractDbRow implements Cloneable {
-
-    /**
-     * Default constructor
-     */
-    public Config() {
-        super();
+    @Override
+    protected int[] getSpecificAcks() {
+        // no specific acks
+        return null;
     }
-
-    /**
-     * Constructor
-     * @param cursor    Cursor from whose current row to create object
-     */
-    public Config(Cursor cursor) {
-        super(cursor);
-    }
-
 }

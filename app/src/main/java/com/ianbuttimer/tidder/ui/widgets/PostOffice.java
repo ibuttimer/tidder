@@ -129,7 +129,7 @@ public class PostOffice {
      * @param <T>   Event class
      */
     public static <T extends AbstractEvent> void postSticky(T event, String... tags) {
-        logPost(event.addAddress(tags));
+        logPostSticky(event.addAddress(tags));
         EventBus.getDefault().postSticky(event);
     }
 
@@ -211,8 +211,27 @@ public class PostOffice {
      * @param <T>       Event class
      */
     public static <T extends AbstractEvent> void logPost(T event) {
+        logPost(event, false);
+    }
+
+    /**
+     * Log the posting of a sticky event
+     * @param event     Event
+     * @param <T>       Event class
+     */
+    public static <T extends AbstractEvent> void logPostSticky(T event) {
+        logPost(event, true);
+    }
+
+    /**
+     * Log the posting of an event
+     * @param event     Event
+     * @param sticky    Sticky flag
+     * @param <T>       Event class
+     */
+    private static <T extends AbstractEvent> void logPost(T event, boolean sticky) {
         if (mLogPost) {
-            Timber.i("postEvent: %s", event);
+            Timber.i("postEvent%s: %s", (sticky ? "[STICKY]" : ""), event);
         }
     }
 

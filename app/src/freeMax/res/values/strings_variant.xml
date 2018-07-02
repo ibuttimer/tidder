@@ -16,15 +16,10 @@
   -->
 
 <resources>
-    <declare-styleable name="BasicStatsView">
-        <attr name="layoutId" format="reference" />
-    </declare-styleable>
-    <declare-styleable name="UnorderedListItem">
-        <attr name="bulletId" format="reference" />
-        <attr name="textId" format="reference" />
-        <attr name="textAppearance" format="reference" />
-        <attr name="textAlignment" format="reference" />
-        <attr name="textColorLink" format="reference" />
-        <attr name="textColor" format="reference" />
-    </declare-styleable>
+
+    <string name="app_name">Tidder</string>
+
+    <string name="ack_schematic">Schematic (<a href="https://github.com/SimonVT/schematic">Simon Vig Therkildsen</a>) licensed under the (<a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>).</string>
+
+
 </resources>

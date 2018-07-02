@@ -16,31 +16,25 @@
 
 package com.ianbuttimer.tidder.ui;
 
-import com.ianbuttimer.tidder.R;
-import com.ianbuttimer.tidder.event.RedditClientEvent;
-import com.ianbuttimer.tidder.event.StandardEvent;
 
+import com.ianbuttimer.tidder.R;
 
 /**
  * Base class for Posts activity tab fragments
  */
 
-public class PostsPinnedTabFragment extends AbstractPostsPinnedTabFragment {
+public class PostsNewTabFragment extends AbstractPostsNewTabFragment {
 
-    public PostsPinnedTabFragment() {
+    public PostsNewTabFragment() {
         super(R.layout.fragment_posts);
     }
 
     @Override
-    protected boolean onClientEvent(RedditClientEvent event) {
-        boolean handled = true;
-        if (event.isUserValidEvent()) {
-            // full version requires valid user info to access db
-            requestPinned();
-        } else {
-            handled = false;
-        }
-        return handled;
+    public void onStart() {
+        super.onStart();
+
+        // local db variants don't need valid user info to access db
+        requestFollowing();
     }
 
 }
