@@ -7,6 +7,13 @@ apply plugin: 'com.android.application'
     storeFile=myStoreFileLocation
  */
 def keystorePropertiesFile = rootProject.file("keystore.properties")
+if( !keystorePropertiesFile.exists() ) {
+    keystorePropertiesFile.text = """
+        storePassword=myStorePassword
+        keyPassword=mykeyPassword
+        keyAlias=myKeyAlias
+        storeFile=myStoreFileLocation"""
+}
 def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
@@ -121,11 +128,11 @@ dependencies {
     implementation 'com.google.guava:guava:25.1-android'
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.github.tiagohm.MarkdownView:library:0.19.0'
-    implementation 'com.google.firebase:firebase-core:16.0.1'
     implementation 'com.google.code.gson:gson:2.8.5'
+    implementation "com.google.firebase:firebase-core:$rootProject.ext.firebaseVersion"
 
     // TODO migrate to guava version of eventbus or make local versions of guava functions used (may eliminate need for multidex)
-    fullImplementation 'com.google.firebase:firebase-database:16.0.1'
+    fullImplementation "com.google.firebase:firebase-database:$rootProject.ext.firebaseVersion"
 
     freeAnnotationProcessor "net.simonvt.schematic:schematic-compiler:$rootProject.ext.schematicVersion"
     freeImplementation "net.simonvt.schematic:schematic:$rootProject.ext.schematicVersion"
