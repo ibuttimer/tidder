@@ -20,20 +20,13 @@ import android.app.IntentService;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.ResultReceiver;
 import android.support.annotation.Nullable;
 
-import com.ianbuttimer.tidder.net.NetworkUtils;
-
-import java.net.URL;
 import java.util.Set;
 
-import okhttp3.MediaType;
 import timber.log.Timber;
-
-import static android.app.Activity.RESULT_CANCELED;
 
 /**
  * Base class for IntentService implementations
@@ -120,7 +113,8 @@ public abstract class AbstractIntentService extends IntentService {
         }
 
         @SuppressWarnings("ConstantConditions")
-        @Nullable protected String[] getStringArray(String name) {
+        @Nullable
+        protected String[] getStringArray(String name) {
             String[] array = null;
             if (hasExtra(name)) {
                 array = mIntent.getStringArrayExtra(name);
@@ -129,7 +123,8 @@ public abstract class AbstractIntentService extends IntentService {
         }
 
         @SuppressWarnings("ConstantConditions")
-        @Nullable public ContentValues getContentValues(String name) {
+        @Nullable
+        public ContentValues getContentValues(String name) {
             ContentValues cv = null;
             if (hasExtra(name)) {
                 cv = mIntent.getParcelableExtra(name);
@@ -156,14 +151,23 @@ public abstract class AbstractIntentService extends IntentService {
                 if (keys.isEmpty()) {
                     Timber.d("  Empty bundle");
                 } else {
-                    for (String key : mBundle.keySet()) {
+                    StringBuilder sb = new StringBuilder();
+                    for (String key : keys) {
                         Object obj = mBundle.get(key);
-                        Timber.d("  %s : %s", key,
-                                (obj != null ? obj.toString() : "null"));
+                        sb.append(String.format("  %s : %s%n",
+                                                    key, (obj != null ? obj.toString() : "null")));
                     }
+                    Timber.d(sb.toString());
                 }
             } else {
                 Timber.d("  No bundle");
+            }
+            return this;
+        }
+
+        public BundleBuilder dump(boolean dump) {
+            if (dump) {
+                dump();
             }
             return this;
         }
@@ -181,6 +185,7 @@ public abstract class AbstractIntentService extends IntentService {
             mBundle = bundle;
         }
 
+        @SuppressWarnings("ConstantConditions")
         protected int getInt(String key, int dfltValue) {
             int value = dfltValue;
             if (containsKey(key)) {
@@ -189,7 +194,9 @@ public abstract class AbstractIntentService extends IntentService {
             return value;
         }
 
-        @Nullable protected String getString(String key) {
+        @SuppressWarnings("ConstantConditions")
+        @Nullable
+        protected String getString(String key) {
             String value = null;
             if (containsKey(key)) {
                 value = mBundle.getString(key);

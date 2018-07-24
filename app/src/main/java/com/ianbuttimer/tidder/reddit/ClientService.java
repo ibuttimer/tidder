@@ -24,9 +24,11 @@ import android.os.ResultReceiver;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import com.ianbuttimer.tidder.TidderApplication;
 import com.ianbuttimer.tidder.data.AbstractIntentService;
 import com.ianbuttimer.tidder.exception.HttpException;
 import com.ianbuttimer.tidder.net.NetworkUtils;
+import com.ianbuttimer.tidder.utils.PreferenceControl;
 
 import java.io.IOException;
 import java.net.URL;
@@ -46,8 +48,6 @@ import static java.net.HttpURLConnection.HTTP_OK;
 
 public class ClientService extends AbstractIntentService {
 
-    public static final String RESULT_RECEIVER = "resultReceiver";
-
     public static final String RESULT_CODE = "resultCode";
     public static final String RESULT_HTTP_CODE = "resultHttpCode";
     public static final String RESULT_TEXT = "resultText";
@@ -55,6 +55,8 @@ public class ClientService extends AbstractIntentService {
 
     public static final String ACTION_POST = "action_post";
     public static final String ACTION_GET = "action_get";
+    public static final String ACTION_PUT = "action_put";
+    public static final String ACTION_DELETE = "action_delete";
 
     public static final String EXTRA_URI = "url";
     public static final String EXTRA_RESPONSE_CLASS = "response_class";
@@ -68,6 +70,8 @@ public class ClientService extends AbstractIntentService {
         ACTION_METHOD_MAP = new HashMap<>();
         ACTION_METHOD_MAP.put(ACTION_POST, NetworkUtils.Method.POST);
         ACTION_METHOD_MAP.put(ACTION_GET, NetworkUtils.Method.GET);
+        ACTION_METHOD_MAP.put(ACTION_PUT, NetworkUtils.Method.PUT);
+        ACTION_METHOD_MAP.put(ACTION_DELETE, NetworkUtils.Method.DELETE);
     }
 
     /**
@@ -93,6 +97,8 @@ public class ClientService extends AbstractIntentService {
             switch (action) {
                 case ACTION_POST:
                 case ACTION_GET:
+                case ACTION_PUT:
+                case ACTION_DELETE:
                     bundle = httpRequest(url, action, extractor);
                     break;
             }
@@ -102,8 +108,14 @@ public class ClientService extends AbstractIntentService {
         }
     }
 
-    private Bundle httpRequest(
-            URL url, String action, RequestExtractor extractor) {
+    /**
+     * Process a http request
+     * @param url       Request url
+     * @param action    Request action; one of ACTION_POST etc.
+     * @param extractor Request data extractor
+     * @return Bundle containing response
+     */
+    private Bundle httpRequest(URL url, String action, RequestExtractor extractor) {
 
         ResponseBuilder responseBuilder = getResponseBuilder()
                 .requestUrl(url)
@@ -136,9 +148,10 @@ public class ClientService extends AbstractIntentService {
                 Timber.e("HTTP: missing mMethod");
             }
         }
+
         return responseBuilder.resultCode(resultCode)
                 .additionalInfo(extractor.additionalInfo()) // echo back additional info
-                .dump()
+                .dump(PreferenceControl.getLogHttpPreference(getApplicationContext()))
                 .build();
     }
 
@@ -245,7 +258,9 @@ public class ClientService extends AbstractIntentService {
             return url;
         }
 
-        @Nullable public Class responseClass() {
+        @SuppressWarnings("ConstantConditions")
+        @Nullable
+        public Class responseClass() {
             Class responseClass = null;
             if (hasExtra(EXTRA_RESPONSE_CLASS)) {
                 responseClass = (Class)mIntent.getSerializableExtra(EXTRA_RESPONSE_CLASS);
@@ -254,7 +269,8 @@ public class ClientService extends AbstractIntentService {
         }
 
         @SuppressWarnings("ConstantConditions")
-        @Nullable public MediaType mediaType() {
+        @Nullable
+        public MediaType mediaType() {
             MediaType mediaType = null;
             if (hasExtra(EXTRA_MEDIA_TYPE)) {
                 mediaType = MediaType.parse(mIntent.getStringExtra(EXTRA_MEDIA_TYPE));
@@ -263,7 +279,8 @@ public class ClientService extends AbstractIntentService {
         }
 
         @SuppressWarnings("ConstantConditions")
-        @Nullable public String bodyData() {
+        @Nullable
+        public String bodyData() {
             String bodyData = null;
             if (hasExtra(EXTRA_BODY_DATA)) {
                 bodyData = mIntent.getStringExtra(EXTRA_BODY_DATA);
@@ -272,7 +289,8 @@ public class ClientService extends AbstractIntentService {
         }
 
         @SuppressWarnings("ConstantConditions")
-        @Nullable public Bundle additionalInfo() {
+        @Nullable
+        public Bundle additionalInfo() {
             Bundle additionalInfo = null;
             if (hasExtra(EXTRA_ADDITIONAL_INFO)) {
                 additionalInfo = mIntent.getParcelableExtra(EXTRA_ADDITIONAL_INFO);
@@ -338,11 +356,14 @@ public class ClientService extends AbstractIntentService {
             return getInt(RESULT_CODE, RESULT_CANCELED);
         }
 
-        @Nullable public String resultText() {
+        @Nullable
+        public String resultText() {
             return getString(RESULT_TEXT);
         }
 
-        @Nullable public URL requestUrl() {
+        @SuppressWarnings("ConstantConditions")
+        @Nullable
+        public URL requestUrl() {
             URL url = null;
             if (containsKey(REQUEST_URL)) {
                 url = (URL)mBundle.getSerializable(REQUEST_URL);
@@ -354,7 +375,9 @@ public class ClientService extends AbstractIntentService {
             return getInt(RESULT_HTTP_CODE, 0);
         }
 
-        @Nullable public Class responseClass() {
+        @SuppressWarnings("ConstantConditions")
+        @Nullable
+        public Class responseClass() {
             Class responseClass = null;
             if (containsKey(EXTRA_RESPONSE_CLASS)) {
                 responseClass = (Class) mBundle.getSerializable(EXTRA_RESPONSE_CLASS);
@@ -362,7 +385,9 @@ public class ClientService extends AbstractIntentService {
             return responseClass;
         }
 
-        @Nullable public Bundle additionalInfo() {
+        @SuppressWarnings("ConstantConditions")
+        @Nullable
+        public Bundle additionalInfo() {
             Bundle additionalInfo = null;
             if (containsKey(EXTRA_ADDITIONAL_INFO)) {
                 additionalInfo = mBundle.getParcelable(EXTRA_ADDITIONAL_INFO);

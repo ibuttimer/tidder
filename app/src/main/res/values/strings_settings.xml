@@ -98,4 +98,9 @@
     <string name="pref_event_handled_both_value" translatable="false">both</string>
     <string name="pref_event_handled_dflt_value" translatable="false">both</string>
 
+    <string name="pref_title_log_http">Log Http</string>
+    <string name="pref_description_log_http_on">Http messages will be logged</string>
+    <string name="pref_description_log_http_off">Http messages will not be logged</string>
+    <string name="pref_log_http_key" translatable="false">log_http</string>
+
 </resources>

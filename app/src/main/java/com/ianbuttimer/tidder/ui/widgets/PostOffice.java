@@ -36,6 +36,8 @@ public class PostOffice {
 
     private static final PostOffice ourInstance = new PostOffice();
 
+    private SharedPreferences.OnSharedPreferenceChangeListener mPrefListener;   // need a strong ref to avoid possible garbage collection
+
     private static boolean mLogPost;
 
     private static final int LOG_DELIVERY = 0x01;
@@ -64,17 +66,16 @@ public class PostOffice {
         setLogDelivery(context);
         setLogHandled(context);
 
-        SharedPreferences.OnSharedPreferenceChangeListener sPrefListener =
-                new SharedPreferences.OnSharedPreferenceChangeListener() {
-                    @Override
-                    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                        Context context = TidderApplication.getWeakApplicationContext().get();
-                        mLogPost = PreferenceControl.getLogEventPostPreference(context);
-                        setLogDelivery(context);
-                        setLogHandled(context);
-                    }
-                };
-        PreferenceControl.registerOnSharedPreferenceChangeListener(context, sPrefListener);
+        mPrefListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+                @Override
+                public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+                    Context context = TidderApplication.getWeakApplicationContext().get();
+                    mLogPost = PreferenceControl.getLogEventPostPreference(context);
+                    setLogDelivery(context);
+                    setLogHandled(context);
+                }
+            };
+        PreferenceControl.registerOnSharedPreferenceChangeListener(context, mPrefListener);
     }
 
     /**

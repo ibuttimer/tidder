@@ -22,7 +22,6 @@ import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.facebook.stetho.Stetho;
 import com.ianbuttimer.tidder.net.NetworkStatusReceiver;
 import com.ianbuttimer.tidder.reddit.Api;
 import com.ianbuttimer.tidder.utils.DebugTree;
@@ -51,10 +50,12 @@ public class TidderApplication extends MultiDexApplication {
 
         mAppContext = new WeakReference<>(context);
 
+        IAppInit appInit = new AppInit();
+        appInit.onCreate(this);
+
         String mode;
         int logLevel;
         if (BuildConfig.DEBUG) {
-            Stetho.initializeWithDefaults(this);
             mode = "debug";
             logLevel = Log.DEBUG;
         } else {
@@ -63,11 +64,10 @@ public class TidderApplication extends MultiDexApplication {
         }
 
         Timber.plant(new DebugTree(logLevel));
-        Timber.i("Application launched in " + mode + " mode");
+        Timber.i("Application launched in %s mode", mode);
 
         // register broadcast receivers
         context.registerReceiver(new NetworkStatusReceiver(), new IntentFilter(CONNECTIVITY_ACTION));
-
 
         // check the app has been configured correctly
         mConfigErrorMsg = Api.isConfigValid(context);

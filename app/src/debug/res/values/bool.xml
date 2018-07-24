@@ -19,4 +19,6 @@
 
     <bool name="pref_event_post_dflt_value">true</bool>
 
+    <bool name="pref_log_http_dflt_value">true</bool>
+
 </resources>

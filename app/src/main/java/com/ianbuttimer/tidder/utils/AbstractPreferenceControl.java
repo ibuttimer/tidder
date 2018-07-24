@@ -49,6 +49,16 @@ public abstract class AbstractPreferenceControl {
     }
 
     /**
+     * Convenience method to retrieve Log Http enabled setting
+     * @param context   The current context
+     * @return  <code>true</code> if SFW enabled, <code>false</code> otherwise
+     */
+    public static boolean getLogHttpPreference(Context context) {
+        return getSharedBooleanPreference(context,
+                R.string.pref_log_http_key, R.bool.pref_log_http_dflt_value);
+    }
+
+    /**
      * Convenience method to retrieve Refresh on Discard enabled setting
      * @param context   The current context
      * @return  <code>true</code> if Refresh is enabled, <code>false</code> otherwise

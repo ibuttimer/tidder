@@ -17,6 +17,7 @@
 package com.ianbuttimer.tidder.net;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,15 +25,16 @@ import android.support.annotation.StringRes;
 import android.text.TextUtils;
 import android.util.ArrayMap;
 
-import com.facebook.stetho.okhttp3.StethoInterceptor;
-import com.ianbuttimer.tidder.BuildConfig;
 import com.ianbuttimer.tidder.R;
+import com.ianbuttimer.tidder.TidderApplication;
 import com.ianbuttimer.tidder.exception.HttpException;
+import com.ianbuttimer.tidder.utils.PreferenceControl;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
@@ -48,6 +50,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import okio.BufferedSource;
 import timber.log.Timber;
 
 /**
@@ -64,17 +67,96 @@ public class NetworkUtils {
     public static final MediaType MEDIA_TEXT = MediaType.parse("text/plain; charset=utf-8");
     public static final MediaType MEDIA_FORM = MediaType.parse("application/x-www-form-urlencoded");    // form content type
 
-    private final static OkHttpClient client;
+    private static final String sHttpLogKey;
+    private static final boolean sHttpLogDfltValue;
 
     static {
+        Context context = TidderApplication.getWeakApplicationContext().get();
+        sHttpLogKey = context.getString(R.string.pref_log_http_key);
+        sHttpLogDfltValue = context.getResources().getBoolean(R.bool.pref_log_http_dflt_value);
+    }
+
+    private OkHttpClient mClient;
+    private LoggingInterceptor mLogger;
+    private SharedPreferences.OnSharedPreferenceChangeListener mPrefListener;   // need a strong ref to avoid possible garbage collection
+
+    private static NetworkUtils mInstance;
+
+    /**
+     * Constructor
+     */
+    private NetworkUtils() {
+        Context context = TidderApplication.getWeakApplicationContext().get();
+
+        mLogger = new LoggingInterceptor(PreferenceControl.getLogHttpPreference(context));
+
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
-            .connectTimeout(10, TimeUnit.SECONDS)
-            .writeTimeout(10, TimeUnit.SECONDS)
-            .readTimeout(20, TimeUnit.SECONDS);
-        if (BuildConfig.DEBUG) {
-            builder.addNetworkInterceptor(new StethoInterceptor());
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(20, TimeUnit.SECONDS)
+                .addNetworkInterceptor(mLogger);
+
+        INetInit netInit = new NetInit();
+        netInit.cfgBuilder(builder);
+
+        mClient = builder.build();
+
+        // add a preference change listener for http logging
+        mPrefListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+                @Override
+                public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+                    if (sHttpLogKey.equals(key)) {
+                        boolean value = sharedPreferences.getBoolean(key, sHttpLogDfltValue);
+                        mLogger.setLogging(value);
+                    }
+                }
+            };
+        PreferenceControl.registerOnSharedPreferenceChangeListener(context, mPrefListener);
+    }
+
+    /**
+     * Get singleton instance
+     * @return  NetworkUtils object
+     */
+    public static NetworkUtils getInstance() {
+        if (mInstance == null) {
+            mInstance = new NetworkUtils();
         }
-        client = builder.build();
+        return mInstance;
+    }
+
+    /**
+     * Get OkHttpClient
+     * @return  OkHttpClient object
+     */
+    private static OkHttpClient getClient() {
+        return getInstance().mClient;
+    }
+
+    /**
+     * This method synchronously returns a HTTP response.
+     * <b>Note:</b> It is the callee's responsibility to close the response to prevent memory leaks
+     * @param url       The URL to fetch the HTTP response from.
+     * @param headers   request headers
+     * @param type      content type of HTTP request
+     * @param data      content data
+     * @return The HTTP response
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity
+     * problem or timeout.
+     * @throws HttpException If the response was not successfully received, understood, and accepted.
+     * @see <a href="https://github.com/square/okhttp/wiki/Recipes">okhttp Recipes</a>
+     */
+    public static Response httpResponseSync(URL url, Method method, Headers headers,
+                                                @Nullable MediaType type, @Nullable String data) throws IOException {
+        Request request = httpRequest(url, method, headers, type, data);
+        Call call = getClient().newCall(request);
+        Response response = call.execute();
+
+        if (!response.isSuccessful()) {
+            throw new HttpException("HTTP error " + response, response);
+        }
+
+        return response;
     }
 
     /**
@@ -83,32 +165,22 @@ public class NetworkUtils {
      * @param headers request headers
      * @param type  content type of HTTP request
      * @param data  content data
-     * @return The contents of the HTTP response, or <code>null</code>
+     * @return The contents of the HTTP response as a string, or <code>null</code>
      * @throws IOException if the request could not be executed due to cancellation, a connectivity
      * problem or timeout.
      * @throws HttpException If the response was not successfully received, understood, and accepted.
      * @see <a href="https://github.com/square/okhttp/wiki/Recipes">okhttp Recipes</a>
      */
-    public static String httpResponseStringSync(URL url, Method method, Headers headers, MediaType type, String data) throws IOException {
-        Request request = httpRequest(url, method, headers, type, data);
-        Call call = client.newCall(request);
+    @Nullable
+    public static String httpResponseStringSync(URL url, Method method, Headers headers,
+                                                @Nullable MediaType type, @Nullable String data) throws IOException {
         Response response = null;
         String body;
 
         try {
-            response = call.execute();
+            response = httpResponseSync(url, method, headers, type, data);
 
-            if (!response.isSuccessful()) {
-                throw new HttpException("HTTP error " + response, response);
-            }
-
-            logHeaders(response);
-
-            // response body can only be consumed once, and not on another thread
             body = getResponseBodyString(response);
-            if (body != null) {
-                body = new String(body);
-            }
         }
         finally {
             //  must close the response body to prevent resource leaks
@@ -129,6 +201,7 @@ public class NetworkUtils {
      * @throws HttpException If the response was not successfully received, understood, and accepted.
      * @see <a href="https://github.com/square/okhttp/wiki/Recipes">okhttp Recipes</a>
      */
+    @Nullable
     public static String httpResponseStringSync(URL url, Method method, Headers headers) throws IOException {
         return httpResponseStringSync(url, method, headers, null, null);
     }
@@ -138,7 +211,8 @@ public class NetworkUtils {
      * @param e     Error exception
      * @return  Resource id of error message
      */
-    public static @StringRes int getErrorId(IOException e) {
+    @StringRes
+    public static int getErrorId(IOException e) {
         int msgId = R.string.invalid_response;
         if (e instanceof UnknownHostException) {
             msgId = R.string.cant_contact_server;
@@ -151,8 +225,9 @@ public class NetworkUtils {
     }
 
     /**
-     * Get the response body from a SubredditsSearchResponse
-     * @param response  SubredditsSearchResponse to get body from
+     * Get the response body from a Response<br>
+     * <b>Note:</b> response body can only be consumed once, and not on another thread
+     * @param response  Response to get body from
      * @return  Body as a string
      */
     public static String getResponseBodyString(@NonNull Response response) {
@@ -166,6 +241,34 @@ public class NetworkUtils {
             e.printStackTrace();
         }
         return bodyString;
+    }
+
+    /**
+     * Get the response body from a Response
+     * @param response  Response to get body from
+     * @return  Body as an InputStream
+     */
+    public static InputStream getResponseBodyStream(@NonNull Response response) {
+        InputStream bodyStream = null;
+        ResponseBody body = response.body();
+        if (body != null) {
+            bodyStream = body.byteStream();
+        }
+        return bodyStream;
+    }
+
+    /**
+     * Get the response body from a Response
+     * @param response  Response to get body from
+     * @return  Body as an BufferedSource
+     */
+    public static BufferedSource getResponseBodySource(@NonNull Response response) {
+        BufferedSource bodySource = null;
+        ResponseBody body = response.body();
+        if (body != null) {
+            bodySource = body.source();
+        }
+        return bodySource;
     }
 
     /**
@@ -188,15 +291,13 @@ public class NetworkUtils {
      * @param data      content data
      * @return Http request
      */
-    private static Request httpRequest(URL url, Method method, Headers headers, MediaType type, String data) {
+    private static Request httpRequest(URL url, Method method, Headers headers,
+                                        @Nullable MediaType type, @Nullable String data) {
         Request.Builder builder = new Request.Builder()
                                         .url(url.toString());
-        String headersDbg = "";
         if (headers != null) {
             builder.headers(headers);
-            headersDbg = headers.toString();
         }
-        String typeDataDbg = "";
         if ((type != null) && (data != null)){
             RequestBody body = RequestBody.create(type, data);
             switch (method) {
@@ -210,7 +311,6 @@ public class NetworkUtils {
                     builder.delete(body);
                     break;
             }
-            typeDataDbg = type.toString() + "\n" + data;
         } else {
             switch (method) {
                 case GET:
@@ -221,7 +321,6 @@ public class NetworkUtils {
                     break;
             }
         }
-        Timber.d("HttpRequest: %s\n%s\n%s", url.toString(), headersDbg, typeDataDbg);
         return builder.build();
     }
 
@@ -250,7 +349,9 @@ public class NetworkUtils {
      * @throws HttpException If the response was unauthorised
      * @see <a href="https://github.com/square/okhttp/wiki/Recipes">okhttp Recipes</a>
      */
-    public static JSONObject httpResponseJsonSync(URL url, Method method, Headers headers, MediaType type, String data) throws IOException {
+    @Nullable
+    public static JSONObject httpResponseJsonSync(URL url, Method method, Headers headers,
+                                                    @Nullable MediaType type, @Nullable String data) throws IOException {
         String body = httpResponseStringSync(url, method, headers, type, data);
         JSONObject json = null;
         try {
@@ -274,6 +375,7 @@ public class NetworkUtils {
      * @throws HttpException If the response was unauthorised
      * @see <a href="https://github.com/square/okhttp/wiki/Recipes">okhttp Recipes</a>
      */
+    @Nullable
     public static JSONObject httpResponseJsonSync(URL url, Method method, Headers headers) throws IOException {
         return httpResponseJsonSync(url, method, headers, null, null);
     }
@@ -287,19 +389,9 @@ public class NetworkUtils {
      * @throws HttpException If the response was unauthorised
      * @see <a href="https://github.com/square/okhttp/wiki/Recipes">okhttp Recipes</a>
      */
+    @Nullable
     public static JSONObject httpResponseJsonSync(URL url, Method method) throws IOException {
         return httpResponseJsonSync(url, method, null);
-    }
-
-    /**
-     * Log http response headers
-     * @param response  Http response
-     */
-    private static void logHeaders(Response response) {
-        Headers responseHeaders = response.headers();
-        for (int i = 0; i < responseHeaders.size(); i++) {
-            Timber.d("header - %s: %s", responseHeaders.name(i), responseHeaders.value(i));
-        }
     }
 
     /**
@@ -311,7 +403,7 @@ public class NetworkUtils {
      */
     public static void httpResponseStringAsync(URL url, Method method, Headers headers, Callback callback) {
         Request request = httpRequest(url, method, headers);
-        client.newCall(request).enqueue(callback);
+        getClient().newCall(request).enqueue(callback);
     }
 
     /**

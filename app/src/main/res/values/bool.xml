@@ -20,4 +20,6 @@
     <bool name="pref_refresh_on_discard_dflt_value">true</bool>
     <bool name="pref_autoexpand_dflt_value">false</bool>
 
+    <bool name="pref_log_http_dflt_value">false</bool>
+
 </resources>

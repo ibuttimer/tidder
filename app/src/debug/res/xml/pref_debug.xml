@@ -44,5 +44,11 @@
         android:positiveButtonText="@null"
         android:title="@string/pref_title_event_handled" />
 
+    <SwitchPreferenceCompat
+        android:defaultValue="@bool/pref_log_http_dflt_value"
+        android:key="@string/pref_log_http_key"
+        android:summaryOn="@string/pref_description_log_http_on"
+        android:summaryOff="@string/pref_description_log_http_off"
+        android:title="@string/pref_title_log_http" />
 
 </PreferenceScreen>
