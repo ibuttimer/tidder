@@ -26,7 +26,7 @@ import java.io.IOException;
  * Class for a Reddit user object
  */
 
-public class User extends BaseObject {
+public class User extends BaseObject<User> {
 
     /* There is a lot of detail returned from the /api/v1/me endpoint, only extracting
         what is currently needed
@@ -34,12 +34,12 @@ public class User extends BaseObject {
     private static final String NAME = "name";
     private static final String ID = "id";
     private static final String ICON = "icon_img";
-    private static final String HAS_SUSCRIBED = "has_subscribed";
+    private static final String HAS_SUBSCRIBED = "has_subscribed";
 
     private String mName;
     private String mId;
     private Uri mIcon;
-    private boolean mHasSuscribed;
+    private boolean mHasSubscribed;
 
     /**
      * Default constructor
@@ -61,7 +61,7 @@ public class User extends BaseObject {
         mName = "";
         mId = "";
         mIcon = null;
-        mHasSuscribed = false;
+        mHasSubscribed = false;
     }
 
     @Override
@@ -70,20 +70,19 @@ public class User extends BaseObject {
     }
 
     @Override
-    protected boolean parseToken(JsonReader jsonReader, String name, BaseObject obj)
+    protected boolean parseToken(JsonReader jsonReader, String name, User obj)
             throws IOException, IllegalArgumentException {
         checkObject(obj, getClass());
 
-        User object = ((User) obj);
         boolean consumed = true;
         if (NAME.equals(name)) {
-            object.mName = nextString(jsonReader, "");
+            ((User) obj).mName = nextString(jsonReader, "");
         } else if (ID.equals(name)) {
-            object.mId = nextString(jsonReader, "");
+            ((User) obj).mId = nextString(jsonReader, "");
         } else if (ICON.equals(name)) {
-            object.mIcon = nextUri(jsonReader);
-        } else if (HAS_SUSCRIBED.equals(name)) {
-            object.mHasSuscribed = nextBoolean(jsonReader, false);
+            ((User) obj).mIcon = nextUri(jsonReader);
+        } else if (HAS_SUBSCRIBED.equals(name)) {
+            ((User) obj).mHasSubscribed = nextBoolean(jsonReader, false);
         } else {
             consumed = false;
         }
@@ -118,12 +117,12 @@ public class User extends BaseObject {
         this.mIcon = icon;
     }
 
-    public boolean hasSuscribed() {
-        return mHasSuscribed;
+    public boolean hasSubscribed() {
+        return mHasSubscribed;
     }
 
-    public void setHasSuscribed(boolean hasSuscribed) {
-        this.mHasSuscribed = hasSuscribed;
+    public void setHasSubscribed(boolean hasSubscribed) {
+        this.mHasSubscribed = hasSubscribed;
     }
 
 }

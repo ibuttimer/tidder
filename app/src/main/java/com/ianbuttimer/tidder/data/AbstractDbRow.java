@@ -45,7 +45,7 @@ public abstract class AbstractDbRow {
     }
 
     /**
-     * Get an integer valuse from the current row
+     * Get an integer value from the current row
      * @param cursor    Cursor to read
      * @param colName   Name of column to read
      * @param dfltValue Default value
@@ -61,7 +61,7 @@ public abstract class AbstractDbRow {
     }
 
     /**
-     * Get a string valuse from the current row
+     * Get a string value from the current row
      * @param cursor    Cursor to read
      * @param colName   Name of column to read
      * @param dfltValue Default value
@@ -77,14 +77,14 @@ public abstract class AbstractDbRow {
     }
 
     /**
-     * Get a boolean valuse from the current row
+     * Get a boolean value from the current row
      * @param cursor    Cursor to read
      * @param colName   Name of column to read
      * @param dfltValue Default value
      * @return  Column value
      */
     protected boolean getBoolean(Cursor cursor, String colName, boolean dfltValue) {
-        return Boolean.valueOf(getString(cursor, colName, Boolean.toString(dfltValue)));
+        return Boolean.parseBoolean(getString(cursor, colName, Boolean.toString(dfltValue)));
     }
 
     public int getId() {

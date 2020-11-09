@@ -23,10 +23,10 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
-import android.support.annotation.PluralsRes;
-import android.support.annotation.StringRes;
-import android.support.v4.app.NavUtils;
+import androidx.annotation.Nullable;
+import androidx.annotation.PluralsRes;
+import androidx.annotation.StringRes;
+import androidx.core.app.NavUtils;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.Pair;
@@ -52,6 +52,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Objects;
 
 import timber.log.Timber;
 
@@ -617,7 +618,6 @@ public class Utils {
      * @param count     Count to get indication of
      * @param item      Singular item
      * @param items     Multiple items
-     * @return  Pair with first item being the indication string, and second content description
      */
     public static void setCountIndication(TextView textView, int count, @StringRes int item, @StringRes int items) {
         if (textView != null) {
@@ -640,7 +640,7 @@ public class Utils {
             Class<?> destClass = dest.getClass();
             List<Field> fields = getFields(srcClass, destClass);
             if (fields == null) {
-                fields = getFields(srcClass.getSuperclass(), destClass.getSuperclass());
+                fields = getFields(Objects.requireNonNull(srcClass.getSuperclass()), destClass.getSuperclass());
             }
             if (fields != null) {
                 copied = true;
@@ -709,7 +709,7 @@ public class Utils {
 
     /**
      * Get the fields of the argument class
-     * @param clazz    Class t olass fields
+     * @param clazz    Class to list fields
      * @return  Field list or <code>null</code> if no class argument
      */
     @Nullable
@@ -718,7 +718,7 @@ public class Utils {
         if (clazz != null) {
             fields = new ArrayList<>(Arrays.asList(clazz.getDeclaredFields()));
             // get super class fields
-            for (Class superCls = clazz.getSuperclass();
+            for (Class<?> superCls = clazz.getSuperclass();
                     (superCls != Object.class) && (superCls != null);
                         superCls = superCls.getSuperclass()) {
                 fields.addAll(Arrays.asList(superCls.getDeclaredFields()));
@@ -827,7 +827,7 @@ public class Utils {
      * Check if the item at the index of an array is null
      * @param array Array to check
      * @param index Index if item to check
-     * @param <U>
+     * @param <U>   the type of the array
      * @return  <code>true</code> if item is null or index out of range
      */
     public static <U> boolean arrayItemIsNull(U[] array, int index) {

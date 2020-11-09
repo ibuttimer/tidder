@@ -17,27 +17,26 @@
 package com.ianbuttimer.tidder.ui;
 
 import android.appwidget.AppWidgetManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
+import androidx.annotation.Nullable;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.ianbuttimer.tidder.R;
-import com.ianbuttimer.tidder.TidderApplication;
 import com.ianbuttimer.tidder.data.ApiResponseCallback;
 import com.ianbuttimer.tidder.data.ICallback;
 import com.ianbuttimer.tidder.data.QueryCallback;
@@ -47,6 +46,7 @@ import com.ianbuttimer.tidder.event.RedditClientEvent;
 import com.ianbuttimer.tidder.event.StandardEvent;
 import com.ianbuttimer.tidder.event.StandardEventProcessor;
 import com.ianbuttimer.tidder.event.StandardEventProcessor.IStandardEventProcessorExt;
+import com.ianbuttimer.tidder.reddit.BaseObject;
 import com.ianbuttimer.tidder.reddit.RedditClient;
 import com.ianbuttimer.tidder.reddit.Response;
 import com.ianbuttimer.tidder.reddit.get.SubredditLinkRequest;
@@ -105,16 +105,16 @@ public abstract class AbstractPostListActivity extends AppCompatActivity
     }
 
     /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
+     * The {@link androidx.viewpager.widget.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
      * {@link FragmentPagerAdapter} derivative, which will keep every
      * loaded fragment in memory. If this becomes too memory intensive, it
      * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     * {@link androidx.fragment.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    private ICallback<Response> mApiResponseHandler;
+    private ICallback<Response<? extends BaseObject<?>>> mApiResponseHandler;
     private StandardEventProcessor mStdEventProcessor;
 
     @BindView(R.id.fab_refresh_postListA) FloatingActionButton fabRefresh;
@@ -165,7 +165,7 @@ public abstract class AbstractPostListActivity extends AppCompatActivity
                 } else {
                     visibility = View.INVISIBLE;
                 }
-                fabRefresh.setVisibility(visibility);
+                ((ImageButton)fabRefresh).setVisibility(visibility);
             }
         });
 
@@ -195,7 +195,7 @@ public abstract class AbstractPostListActivity extends AppCompatActivity
         if (extensions != null) {
             for (IStandardEventProcessorExt ext :
                     extensions) {
-                mStdEventProcessor.addExtnesion(ext);
+                mStdEventProcessor.addExtension(ext);
             }
         }
 
@@ -315,7 +315,7 @@ public abstract class AbstractPostListActivity extends AppCompatActivity
             );
         } else if (event.isClearPostsCommand()) {
             if (fabPin != null) {
-                fabPin.setVisibility(View.INVISIBLE);
+                ((ImageButton)fabPin).setVisibility(View.INVISIBLE);
             }
         } else {
             handled = false;

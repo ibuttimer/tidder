@@ -16,7 +16,6 @@
 
 package com.ianbuttimer.tidder.reddit;
 
-import android.net.Uri;
 import android.util.JsonReader;
 
 import com.ianbuttimer.tidder.utils.Utils;
@@ -25,7 +24,6 @@ import org.parceler.Parcel;
 
 import java.io.IOException;
 
-import javax.annotation.Nullable;
 
 
 /**
@@ -33,7 +31,7 @@ import javax.annotation.Nullable;
  * @see <a href="https://oembed.com/">oEmbed</a>
  */
 @Parcel
-public class SecureMedia extends BaseObject {
+public class SecureMedia extends BaseObject<SecureMedia> {
 
     protected static final String TYPE = "type";
     protected static final String OEMBED = "oembed";
@@ -72,18 +70,17 @@ public class SecureMedia extends BaseObject {
     }
 
     @Override
-    protected boolean parseToken(JsonReader jsonReader, String name, BaseObject obj)
+    protected boolean parseToken(JsonReader jsonReader, String name, SecureMedia obj)
             throws IOException, IllegalArgumentException {
         checkObject(obj, getClass());
 
         boolean consumed = true;
-        SecureMedia object = ((SecureMedia) obj);
         if (TYPE.equals(name)) {
-            object.setType(nextString(jsonReader, ""));
+            obj.setType(nextString(jsonReader, ""));
         } else if (OEMBED.equals(name)) {
             OEmbed oembed = new OEmbed();
             oembed.parseJson(jsonReader);
-            object.setOembed(oembed);
+            obj.setOembed(oembed);
         } else {
             consumed = false;
         }

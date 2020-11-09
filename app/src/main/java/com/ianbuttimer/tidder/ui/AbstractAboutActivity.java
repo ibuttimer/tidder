@@ -17,9 +17,9 @@
 package com.ianbuttimer.tidder.ui;
 
 import android.os.Bundle;
-import android.support.annotation.IdRes;
-import android.support.annotation.StringRes;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.IdRes;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -78,15 +78,15 @@ public abstract class AbstractAboutActivity extends AppCompatActivity {
 
         @IdRes int aboveId = R.id.tv_acknowledgements_aboutA;
 
-        for (int i = 0; i < ids.length; ++i) {
+        for (int id : ids) {
             UnorderedListItem item = new UnorderedListItem(this);
-            item.setText(ids[i]);
+            item.setText(id);
 
             int viewId = View.generateViewId();
             item.setId(viewId);
 
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                        RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                    RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             params.addRule(RelativeLayout.BELOW, aboveId);
 
             item.setLayoutParams(params);

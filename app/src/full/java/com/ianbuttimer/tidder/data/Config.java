@@ -20,6 +20,8 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
 
+import androidx.annotation.NonNull;
+
 import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.TidderApplication;
 import com.ianbuttimer.tidder.data.db.ConfigColumns;
@@ -39,11 +41,11 @@ public class Config extends AbstractDbRow implements Cloneable {
     protected int mThreadExpand;
     protected String mPostSrc;
 
-    private static boolean sDfltSafeForWork;
-    private static boolean sDfltRefreshOnDiscard;
-    private static boolean sDfltThreadExpand;
-    private static int sDfltExpandLevel;
-    private static String sDfltPostSrc;
+    private static final boolean sDfltSafeForWork;
+    private static final boolean sDfltRefreshOnDiscard;
+    private static final boolean sDfltThreadExpand;
+    private static final int sDfltExpandLevel;
+    private static final String sDfltPostSrc;
 
     static {
         Context context = TidderApplication.getWeakApplicationContext().get();
@@ -52,7 +54,7 @@ public class Config extends AbstractDbRow implements Cloneable {
         sDfltSafeForWork = resources.getBoolean(R.bool.pref_sfw_dflt_value);
         sDfltRefreshOnDiscard = resources.getBoolean(R.bool.pref_refresh_on_discard_dflt_value);
         sDfltThreadExpand = resources.getBoolean(R.bool.pref_autoexpand_dflt_value);
-        sDfltExpandLevel = Integer.valueOf(
+        sDfltExpandLevel = Integer.parseInt(
                                 resources.getString(R.string.pref_autoexpand_level_dflt_value));
         sDfltPostSrc = resources.getString(R.string.pref_post_source_dflt_value);
     }
@@ -170,8 +172,9 @@ public class Config extends AbstractDbRow implements Cloneable {
         return Objects.hash(super.hashCode(), mSfw, mRefreshOnDiscard, mThreadExpand, mPostSrc);
     }
 
+    @NonNull
     @Override
-    protected Config clone() throws CloneNotSupportedException {
+    protected Config clone() {
         Config clone = new Config();
         clone.setSfw(mSfw);
         clone.setRefreshOnDiscard(mRefreshOnDiscard);

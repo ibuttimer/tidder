@@ -16,7 +16,7 @@
 
 package com.ianbuttimer.tidder.reddit;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.LruCache;
 import android.util.Pair;
 
@@ -36,14 +36,14 @@ public abstract class RedditCache<T extends RedditObject> extends LruCache<Strin
         object.tagIfNotTagged();
         object.setCacheInstantiated();
 
-        Pair<String, String> split = RedditObject.splitFullname(key);
+        Pair<String, String> split = BaseObject.splitFullname(key);
         if (split != null) {
             String objType = object.getRedditType();
             object.setName(key);
             object.setId(split.second);
             if (!split.first.equals(objType)) {
                 throw new IllegalStateException("Cache key type [" + split.first
-                                                    + "] does not match object type [" + objType + "]");
+                        + "] does not match object type [" + objType + "]");
             }
         } else {
             throw new IllegalStateException("Unexpected cache key: " + key);

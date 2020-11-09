@@ -34,7 +34,7 @@ import java.io.IOException;
  * @see <a href="https://www.reddit.com/dev/api#GET_subreddits_search">/subreddits/search</a>
  */
 
-public class SubredditLinkResponse extends ListingResponse<Link>
+public class SubredditLinkResponse extends ListingResponse<SubredditLinkResponse, Link>
                                     implements ListingList<Link> {
 
     /**
@@ -54,12 +54,12 @@ public class SubredditLinkResponse extends ListingResponse<Link>
     }
 
     @Override
-    protected BaseObject getInstance() {
+    protected SubredditLinkResponse getInstance() {
         return new SubredditLinkResponse();
     }
 
     @Override
-    protected boolean parseToken(JsonReader jsonReader, String name, BaseObject obj)
+    protected boolean parseToken(JsonReader jsonReader, String name, SubredditLinkResponse obj)
             throws IOException, IllegalArgumentException {
         checkObject(obj, getClass());
 

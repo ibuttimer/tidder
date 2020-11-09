@@ -18,11 +18,11 @@ package com.ianbuttimer.tidder.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.StringRes;
-import android.support.v7.preference.ListPreference;
-import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceFragmentCompat;
-import android.support.v7.preference.PreferenceManager;
+import androidx.annotation.StringRes;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 import android.view.MenuItem;
 
 import com.ianbuttimer.tidder.R;
@@ -84,31 +84,28 @@ public abstract class AbstractSettingsFragment extends PreferenceFragmentCompat 
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
      */
-    private Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object value) {
-            String stringValue = value.toString();
+    private final Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = (preference, value) -> {
+        String stringValue = value.toString();
 
-            if (preference instanceof ListPreference) {
-                // For list preferences, look up the correct display value in
-                // the preference's 'entries' list.
-                ListPreference listPreference = (ListPreference) preference;
-                int index = listPreference.findIndexOfValue(stringValue);
+        if (preference instanceof ListPreference) {
+            // For list preferences, look up the correct display value in
+            // the preference's 'entries' list.
+            ListPreference listPreference = (ListPreference) preference;
+            int index = listPreference.findIndexOfValue(stringValue);
 
-                // Set the summary to reflect the new value.
-                setSummary(preference, (index >= 0
-                                ? listPreference.getEntries()[index]
-                                : null));
-            } else {
-                // For all other preferences, set the summary to the value's
-                // simple string representation.
-                setSummary(preference, stringValue);
-            }
-
-            onSettingChange(preference, value);
-
-            return true;
+            // Set the summary to reflect the new value.
+            setSummary(preference, (index >= 0
+                            ? listPreference.getEntries()[index]
+                            : null));
+        } else {
+            // For all other preferences, set the summary to the value's
+            // simple string representation.
+            setSummary(preference, stringValue);
         }
+
+        onSettingChange(preference, value);
+
+        return true;
     };
 
 
@@ -121,31 +118,28 @@ public abstract class AbstractSettingsFragment extends PreferenceFragmentCompat 
     /**
      * A preference value change listener that handles on/off type preference changes
      */
-    private Preference.OnPreferenceChangeListener sOnOffPreferenceListener = new Preference.OnPreferenceChangeListener() {
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object value) {
-            Context context = preference.getContext();
-            boolean boolValue = Boolean.valueOf(value.toString());
-            int keyId = getPreferenceKeyId(preference);
+    private final Preference.OnPreferenceChangeListener sOnOffPreferenceListener = (preference, value) -> {
+        Context context = preference.getContext();
+        boolean boolValue = Boolean.parseBoolean(value.toString());
+        int keyId = getPreferenceKeyId(preference);
 
-            switch (keyId) {
-                case R.string.pref_autoexpand_key:
-                    // enable/disable autoexpand-related preferences
-                    for (int prefKey : new int[] {
-                            R.string.pref_autoexpand_level_key
-                    }) {
-                        Preference cachePref = findPreference(context.getString(prefKey));
-                        cachePref.setEnabled(boolValue);
-                    }
-                    break;
-                default:
-                    break;
-            }
-
-            onSettingChange(preference, value);
-
-            return true;
+        switch (keyId) {
+            case R.string.pref_autoexpand_key:
+                // enable/disable autoexpand-related preferences
+                for (int prefKey : new int[] {
+                        R.string.pref_autoexpand_level_key
+                }) {
+                    Preference cachePref = findPreference(context.getString(prefKey));
+                    cachePref.setEnabled(boolValue);
+                }
+                break;
+            default:
+                break;
         }
+
+        onSettingChange(preference, value);
+
+        return true;
     };
 
     /**
@@ -154,7 +148,6 @@ public abstract class AbstractSettingsFragment extends PreferenceFragmentCompat 
      * @param value         Value string
      */
     protected void setSummary(Preference preference, CharSequence value) {
-        Context context = preference.getContext();
         CharSequence summary;
         switch (getPreferenceKeyId(preference)) {
             default:
@@ -217,9 +210,9 @@ public abstract class AbstractSettingsFragment extends PreferenceFragmentCompat 
             System.arraycopy(keys, 0, mPreferenceKeys, PREFERENCE_KEYS.length, keys.length);
         }
 
-        for (int i = 0; i < mPreferenceKeys.length; i++) {
-            if (key.equals(context.getString(mPreferenceKeys[i]))) {
-                id = mPreferenceKeys[i];
+        for (int mPreferenceKey : mPreferenceKeys) {
+            if (key.equals(context.getString(mPreferenceKey))) {
+                id = mPreferenceKey;
                 break;
             }
         }

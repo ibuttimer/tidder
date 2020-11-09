@@ -19,9 +19,11 @@ package com.ianbuttimer.tidder.net;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.ArrayMap;
 
@@ -76,9 +78,8 @@ public class NetworkUtils {
         sHttpLogDfltValue = context.getResources().getBoolean(R.bool.pref_log_http_dflt_value);
     }
 
-    private OkHttpClient mClient;
-    private LoggingInterceptor mLogger;
-    private SharedPreferences.OnSharedPreferenceChangeListener mPrefListener;   // need a strong ref to avoid possible garbage collection
+    private final OkHttpClient mClient;
+    private final LoggingInterceptor mLogger;
 
     private static NetworkUtils mInstance;
 
@@ -102,15 +103,16 @@ public class NetworkUtils {
         mClient = builder.build();
 
         // add a preference change listener for http logging
-        mPrefListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-                @Override
-                public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                    if (sHttpLogKey.equals(key)) {
-                        boolean value = sharedPreferences.getBoolean(key, sHttpLogDfltValue);
-                        mLogger.setLogging(value);
-                    }
+        SharedPreferences.OnSharedPreferenceChangeListener mPrefListener =
+                new SharedPreferences.OnSharedPreferenceChangeListener() {
+            @Override
+            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+                if (sHttpLogKey.equals(key)) {
+                    boolean value = sharedPreferences.getBoolean(key, sHttpLogDfltValue);
+                    mLogger.setLogging(value);
                 }
-            };
+            }
+        };
         PreferenceControl.registerOnSharedPreferenceChangeListener(context, mPrefListener);
     }
 
@@ -586,4 +588,21 @@ public class NetworkUtils {
         return joined;
     }
 
+    /**
+     * Unescape a uri
+     * @param uri Uri to unescape
+     * @return converted uri
+     */
+    public static Uri unescapeUri(@NonNull Uri uri) {
+        return Uri.parse(Html.fromHtml(uri.toString()).toString());
+    }
+
+    /**
+     * Unescape a url
+     * @param url Url to unescape
+     * @return converted url
+     */
+    public static URL unescapeUrl(@NonNull URL url) {
+        return UriUtils.uriToUrl(unescapeUri(UriUtils.urlToUri(url)));
+    }
 }

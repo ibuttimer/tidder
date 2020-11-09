@@ -19,8 +19,8 @@ package com.ianbuttimer.tidder.data;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.util.Pair;
 
 import com.ianbuttimer.tidder.net.UriURLPair;
@@ -57,7 +57,7 @@ public abstract class AbstractResultWrapper {
 
     private ICallback.ResponseHandler mHandler;  // type of mHandler required to process this object
     protected UriURLPair mRequest;           // uri/url used to make request
-    protected Class mResponseClass;          // class representing response
+    protected Class<?> mResponseClass;       // class representing response
 
     protected String mStringResult;          // returned from url & uri call
     protected String[] mStringArrayResult;   // returned from uri call
@@ -70,7 +70,7 @@ public abstract class AbstractResultWrapper {
     protected int mErrorCode;                // error resultText code
     protected String mErrorString;           // error resultText string
 
-    private ResultType mResultType;
+    private final ResultType mResultType;
 
     protected Bundle mAdditionalInfo;        // additional info
 
@@ -84,7 +84,7 @@ public abstract class AbstractResultWrapper {
      */
     public AbstractResultWrapper(@NonNull ICallback.ResponseHandler handler,
                                  @NonNull URL urlRequest, String stringResult,
-                                 @Nullable Class responseClass) {
+                                 @Nullable Class<?> responseClass) {
         initUrl(handler, urlRequest, responseClass);
         this.mStringResult = stringResult;
         this.mResultType = ResultType.STRING;
@@ -160,7 +160,7 @@ public abstract class AbstractResultWrapper {
      * @param responseClass Class to representing response
      */
     protected void initUri(@NonNull ICallback.ResponseHandler handler, @NonNull Uri uriRequest,
-                           @Nullable Class responseClass) {
+                           @Nullable Class<?> responseClass) {
         this.mHandler = handler;
         this.mRequest = new UriURLPair(uriRequest);
         this.mResponseClass = responseClass;
@@ -182,7 +182,7 @@ public abstract class AbstractResultWrapper {
      * @param responseClass Class to represent response
      */
     protected void initUrl(@NonNull ICallback.ResponseHandler handler, @NonNull URL urlRequest,
-                           @Nullable Class responseClass) {
+                           @Nullable Class<?> responseClass) {
         this.mHandler = handler;
         this.mRequest = new UriURLPair(urlRequest);
         this.mResponseClass = responseClass;
@@ -306,7 +306,7 @@ public abstract class AbstractResultWrapper {
         return mRequest.getUrl();
     }
 
-    @Nullable public Class getResponseClass() {
+    @Nullable public Class<?> getResponseClass() {
         return mResponseClass;
     }
 

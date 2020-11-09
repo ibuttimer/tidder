@@ -17,10 +17,11 @@
 package com.ianbuttimer.tidder.event;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.ianbuttimer.tidder.data.ContentProviderResponse;
+import com.ianbuttimer.tidder.reddit.BaseObject;
 import com.ianbuttimer.tidder.reddit.Link;
 import com.ianbuttimer.tidder.reddit.ListingTracker;
 import com.ianbuttimer.tidder.reddit.Response;
@@ -33,7 +34,7 @@ import com.ianbuttimer.tidder.ui.ICommonEvents;
  */
 
 public class PostsEvent extends AbstractEvent<PostsEvent>
-                            implements ICommonEvents<PostsEvent, Response> {
+                            implements ICommonEvents<PostsEvent, Response<? extends BaseObject<?>>> {
 
     private static PostsEvent mFactoryInstance;
 
@@ -52,7 +53,7 @@ public class PostsEvent extends AbstractEvent<PostsEvent>
         super(event, mode);
     }
 
-    public static ICommonEvents<PostsEvent, Response> getFactory() {
+    public static ICommonEvents<PostsEvent, Response<? extends BaseObject<?>>> getFactory() {
         if (mFactoryInstance == null) {
             mFactoryInstance = new PostsEvent(EventType.FACTORY_INSTANCE);
         }
@@ -60,7 +61,7 @@ public class PostsEvent extends AbstractEvent<PostsEvent>
     }
 
     @Override
-    public ICommonEvents<PostsEvent, Response> getFactoryInstance() {
+    public ICommonEvents<PostsEvent, Response<? extends BaseObject<?>>> getFactoryInstance() {
         return getFactory();
     }
 
@@ -156,11 +157,11 @@ public class PostsEvent extends AbstractEvent<PostsEvent>
 
     /**
      * Create a new Response result event
-     * @param response
+     * @param response  Response
      * @return  event object
      */
     @Override
-    public PostsEvent newResponseResult(Response response) {
+    public PostsEvent newResponseResult(Response<? extends BaseObject<?>> response) {
         PostsEvent event = null;
         if (response != null) {
             @EventType int type = response.getEventType();

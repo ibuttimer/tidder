@@ -20,6 +20,8 @@ package com.ianbuttimer.tidder.reddit;
 import android.util.JsonReader;
 import android.util.JsonToken;
 
+import androidx.annotation.NonNull;
+
 import com.ianbuttimer.tidder.ui.widgets.BasicStatsView;
 import com.ianbuttimer.tidder.utils.Utils;
 
@@ -83,7 +85,7 @@ public class CommentMore extends Comment implements BasicStatsView.IBasicStats {
                         list.add(nextString(jsonReader, ""));
                     }
                     jsonReader.endArray();
-                    object.mChildren = list.toArray(new String[list.size()]);
+                    object.mChildren = list.toArray(new String[0]);
                 } else {
                     // should be an empty string so skip
                     object.mChildren = new String[0];
@@ -152,6 +154,7 @@ public class CommentMore extends Comment implements BasicStatsView.IBasicStats {
         return result;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "CommentMore{" +

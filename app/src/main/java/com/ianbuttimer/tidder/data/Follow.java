@@ -18,7 +18,7 @@ package com.ianbuttimer.tidder.data;
 
 import android.database.Cursor;
 import android.net.Uri;
-import android.support.annotation.ColorInt;
+import androidx.annotation.ColorInt;
 
 import com.ianbuttimer.tidder.data.db.FollowColumns;
 import com.ianbuttimer.tidder.net.UriUtils;

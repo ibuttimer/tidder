@@ -23,7 +23,7 @@ import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
+import androidx.annotation.LayoutRes;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.RemoteViews;
@@ -153,9 +153,7 @@ public class PostsWidgetViewsService extends RemoteViewsService {
             }
             row[index++] = thumbnail;
         } else {
-            for (int i = 0; i < row.length; i++) {
-                row[i] = "";
-            }
+            Arrays.fill(row, "");
         }
         return row;
     }
@@ -173,11 +171,11 @@ public class PostsWidgetViewsService extends RemoteViewsService {
     /**
      * Class to generate ingredient views for the app widget
      */
-    private class PostsWidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory {
+    private static class PostsWidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
-        private WeakReference<Context> mContext;
+        private final WeakReference<Context> mContext;
         private Cursor mCursor;
-        @LayoutRes private int mLayoutId;   // layout id of list item
+        @LayoutRes private final int mLayoutId;   // layout id of list item
         private int mWidgetId;
 
         /**

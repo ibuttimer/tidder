@@ -17,7 +17,7 @@
 package com.ianbuttimer.tidder.data;
 
 import android.database.Cursor;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 
 /**

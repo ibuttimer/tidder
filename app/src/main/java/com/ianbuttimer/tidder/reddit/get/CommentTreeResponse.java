@@ -16,7 +16,7 @@
 
 package com.ianbuttimer.tidder.reddit.get;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.JsonReader;
 
 import com.ianbuttimer.tidder.event.EventType;
@@ -34,7 +34,7 @@ import java.io.IOException;
  * @see <a href="https://www.reddit.com/dev/api#GET_comments_{article}">[/r/subreddit]/comments/article</a>
  */
 
-public class CommentTreeResponse extends ListingResponse<Comment>
+public class CommentTreeResponse extends ListingResponse<CommentTreeResponse, Comment>
                                     implements ListingList<Comment> {
 
     private Link mLink = null;
@@ -56,7 +56,7 @@ public class CommentTreeResponse extends ListingResponse<Comment>
     }
 
     @Override
-    protected BaseObject getInstance() {
+    protected CommentTreeResponse getInstance() {
         return new CommentTreeResponse();
     }
 
@@ -87,7 +87,7 @@ public class CommentTreeResponse extends ListingResponse<Comment>
 
 
     @Override
-    protected boolean parseToken(JsonReader jsonReader, String name, BaseObject obj)
+    protected boolean parseToken(JsonReader jsonReader, String name, CommentTreeResponse obj)
             throws IOException, IllegalArgumentException {
         checkObject(obj, getClass());
 

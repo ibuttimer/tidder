@@ -16,7 +16,7 @@
 
 package com.ianbuttimer.tidder.event;
 
-import android.support.annotation.StringRes;
+import androidx.annotation.StringRes;
 
 import com.ianbuttimer.tidder.reddit.RedditClient;
 import com.ianbuttimer.tidder.utils.AppError;

@@ -32,7 +32,7 @@ import java.util.Objects;
  * See sub classes for class specific details.
  */
 @Parcel
-public class MediaEmbed extends DimensionedObject {
+public class MediaEmbed extends DimensionedObject<MediaEmbed> {
 
     public static final MediaEmbed EMPTY = new MediaEmbed();
 
@@ -82,21 +82,20 @@ public class MediaEmbed extends DimensionedObject {
     }
 
     @Override
-    protected boolean parseToken(JsonReader jsonReader, String name, BaseObject obj)
+    protected boolean parseToken(JsonReader jsonReader, String name, MediaEmbed obj)
             throws IOException, IllegalArgumentException {
         checkObject(obj, getClass());
 
         boolean consumed = super.parseToken(jsonReader, name, obj);
         if (!consumed) {
-            MediaEmbed object = ((MediaEmbed) obj);
             consumed = true;
             // process required fields
             if (MEDIA_DOMAIN_URL.equals(name)) {
-                object.mMediaDomainUrl = nextUri(jsonReader);
+                obj.mMediaDomainUrl = nextUri(jsonReader);
             } else if (SCROLLING.equals(name)) {
-                object.mScrolling = nextBoolean(jsonReader, false);
+                obj.mScrolling = nextBoolean(jsonReader, false);
             } else if (CONTENT.equals(name)) {
-                object.mContent = nextString(jsonReader, "");
+                obj.mContent = nextString(jsonReader, "");
             } else {
                 consumed = false;
             }

@@ -17,8 +17,8 @@
 package com.ianbuttimer.tidder.ui.util;
 
 import android.content.Context;
-import android.support.annotation.StringRes;
-import android.support.v7.preference.Preference;
+import androidx.annotation.StringRes;
+import androidx.preference.Preference;
 
 import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.TidderApplication;

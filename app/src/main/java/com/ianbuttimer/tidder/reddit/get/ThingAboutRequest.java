@@ -19,6 +19,7 @@ package com.ianbuttimer.tidder.reddit.get;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import com.ianbuttimer.tidder.reddit.BaseObject;
 import com.ianbuttimer.tidder.reddit.Request;
 import com.ianbuttimer.tidder.reddit.Response;
 
@@ -38,7 +39,7 @@ public class ThingAboutRequest extends Request {
         super(uri);
     }
 
-    public ThingAboutRequest(Uri uri, Class<? extends Response> responseClass) {
+    public ThingAboutRequest(Uri uri, Class<? extends Response<? extends BaseObject<?>>> responseClass) {
         super(uri, responseClass);
     }
 

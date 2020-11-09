@@ -17,9 +17,10 @@
 package com.ianbuttimer.tidder.reddit.get;
 
 import android.net.Uri;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.text.TextUtils;
 
+import com.ianbuttimer.tidder.reddit.BaseObject;
 import com.ianbuttimer.tidder.reddit.ListingRequest;
 import com.ianbuttimer.tidder.reddit.Response;
 
@@ -42,7 +43,7 @@ public class SubredditLinkRequest extends ListingRequest {
         this(uri, null);
     }
 
-    public SubredditLinkRequest(Uri uri, @Nullable Class<? extends Response> responseClass) {
+    public SubredditLinkRequest(Uri uri, @Nullable Class<? extends Response<? extends BaseObject<?>>> responseClass) {
         super(uri, responseClass);
     }
 

@@ -16,16 +16,17 @@
 
 package com.ianbuttimer.tidder.event;
 
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
 
 import com.ianbuttimer.tidder.data.ICallback;
 import com.ianbuttimer.tidder.data.QueryCallback;
+import com.ianbuttimer.tidder.reddit.BaseObject;
 import com.ianbuttimer.tidder.reddit.Response;
 
 interface IStandardEventProcessor {
     @Nullable
-    ICallback<Response> getApiResponseHandler();
+    ICallback<Response<? extends BaseObject<?>>> getApiResponseHandler();
 
     @Nullable
     QueryCallback<StandardEvent> getCpStdEventHandler();

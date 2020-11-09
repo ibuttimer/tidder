@@ -114,23 +114,23 @@ public class KeyInterceptor {
         return consumed;
     }
 
-    private static int DOWN_EVT = 0;
-    private static int UP_EVT = 1;
+    private static final int DOWN_EVT = 0;
+    private static final int UP_EVT = 1;
 
     private static int MASK_2_DU_EVT = DOWN_EVT | (UP_EVT << 1);    // single key press pattern
 
     /**
      * Class to track key events
      */
-    class DelayedKeyAccumulator implements Runnable {
+    static class DelayedKeyAccumulator implements Runnable {
 
-        private ArrayList<KeyEvent> mEvents;
-        private ReentrantLock mLock;
+        private final ArrayList<KeyEvent> mEvents;
+        private final ReentrantLock mLock;
         private Handler mHandler;
-        private View mView;
+        private final View mView;
 
-        private int mEventThreshold; // event count to trigger execution
-        private int mKeyThreshold;  // key count to trigger execution
+        private final int mEventThreshold; // event count to trigger execution
+        private final int mKeyThreshold;  // key count to trigger execution
         private int mPattern;   // pattern of events in list; bit value 0 - down, 1 = up
         private int mKeyCode;   // keycode of current key event
         private boolean mPostponed;

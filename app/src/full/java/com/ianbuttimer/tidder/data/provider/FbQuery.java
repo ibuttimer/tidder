@@ -54,7 +54,7 @@ public class FbQuery {
      *     <li>Number of arguments required by condition</li>
      * </ul>
      */
-    private ArrayList<Quartet<Type, String, String[], Integer>> mWhere;
+    private final ArrayList<Quartet<Type, String, String[], Integer>> mWhere;
 
     private boolean mMade;
     private Query mQuery;
@@ -226,10 +226,10 @@ public class FbQuery {
         if (obj instanceof Map) {
             Map<?, ?> map = ((Map<?, ?>) obj);
             Object[] keys = map.keySet().toArray();
-            for (int i = 0; i < keys.length; ++i) {
-                if (selection.equals(keys[i])) {
-                    final Object value = map.get(keys[i]);
-                    if ((value != null) && (value instanceof String)) {
+            for (Object key : keys) {
+                if (selection.equals(key)) {
+                    final Object value = map.get(key);
+                    if ((value instanceof String)) {
                         int index = arrayTester.findItemIndex(new ITester<String>() {
                             @Override
                             public boolean test(String obj) {

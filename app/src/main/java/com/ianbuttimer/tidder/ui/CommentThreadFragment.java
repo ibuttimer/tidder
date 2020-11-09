@@ -18,13 +18,17 @@ package com.ianbuttimer.tidder.ui;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.event.PostEvent;
@@ -69,7 +73,7 @@ public class CommentThreadFragment extends Fragment
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return mProcessor.onCreateView(inflater, container, savedInstanceState);
     }
@@ -95,7 +99,7 @@ public class CommentThreadFragment extends Fragment
         FloatingActionButton fabPin = mProcessor.getFabPin();
         if (fabPin != null) {
             // no pinned functionality for comment thread
-            fabPin.setVisibility(View.GONE);
+            ((ImageButton)fabPin).setVisibility(View.GONE);
         }
     }
 
@@ -117,7 +121,7 @@ public class CommentThreadFragment extends Fragment
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
         mProcessor.onSaveInstanceState(outState);

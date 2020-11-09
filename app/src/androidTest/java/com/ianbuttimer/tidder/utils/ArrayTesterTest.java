@@ -33,7 +33,7 @@ public class ArrayTesterTest {
 
     Pair<String, Integer> notFound = Pair.create(null, -1);
 
-    class StringTester implements ITester<String> {
+    static class StringTester implements ITester<String> {
         String str;
 
         public StringTester() {

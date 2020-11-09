@@ -8,3 +8,7 @@
 .externalNativeBuild
 /keystore.properties
 /app/google-services.json
+/app/freeMax/
+/app/free/
+/app/full/
+

@@ -16,7 +16,7 @@
 
 package com.ianbuttimer.tidder.data;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.ianbuttimer.tidder.event.EventType;
 

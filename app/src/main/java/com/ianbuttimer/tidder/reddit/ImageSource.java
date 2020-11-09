@@ -27,7 +27,7 @@ import java.io.IOException;
 
 
 /**
- * Base class for a subreddit object.
+ * Base class for an image source object.
  * See sub classes for class specific details.
  */
 @Parcel
@@ -71,20 +71,13 @@ public class ImageSource extends DimensionedObject<ImageSource> {
 
     @Override
     protected boolean parseToken(JsonReader jsonReader, String name, ImageSource obj) throws IOException, IllegalArgumentException {
-//        return false;
-//    }
-//
-//    @Override
-//    protected boolean parseToken(JsonReader jsonReader, String name, BaseObject obj)
-//            throws IOException, IllegalArgumentException {
         checkObject(obj, getClass());
 
         boolean consumed = super.parseToken(jsonReader, name, obj);
         if (!consumed) {
-            ImageSource object = ((ImageSource) obj);
             consumed = true;
             if (URL.equals(name)) {
-                object.mUrl = nextUri(jsonReader);
+                obj.mUrl = nextUri(jsonReader);
             } else {
                 consumed = false;
             }

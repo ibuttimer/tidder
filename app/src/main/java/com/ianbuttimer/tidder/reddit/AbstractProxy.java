@@ -17,11 +17,13 @@
 package com.ianbuttimer.tidder.reddit;
 
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 
 /**
- * Class representing a Reddit object
+ * Class for a proxy object representing a Reddit object
+ * @param <T> type of object
+ * @param <P> type of proxy object
  */
 public abstract class AbstractProxy<T extends RedditObject, P extends AbstractProxy>
                             implements RedditCache.ICacheable {

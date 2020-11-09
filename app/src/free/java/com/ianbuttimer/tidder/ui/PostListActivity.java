@@ -20,11 +20,15 @@ import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.AdapterStatus;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.event.StandardEventProcessor.IStandardEventProcessorExt;
 import com.ianbuttimer.tidder.ui.widgets.PostOffice;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import timber.log.Timber;
 
@@ -44,12 +48,11 @@ public class PostListActivity extends AbstractPostListActivity implements PostOf
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String adMobId = getString(R.string.admob_id);
-        if (!TextUtils.isEmpty(adMobId)) {
-            MobileAds.initialize(this, adMobId);
-        } else {
-            Timber.i("AdMob ID not configured");
-        }
+        MobileAds.initialize(this, initializationStatus -> {
+            for (Map.Entry<String, AdapterStatus> key : initializationStatus.getAdapterStatusMap().entrySet()) {
+                Timber.i(key.getKey() + ": " + key.getValue().toString());
+            }
+        });
     }
 
     @Override

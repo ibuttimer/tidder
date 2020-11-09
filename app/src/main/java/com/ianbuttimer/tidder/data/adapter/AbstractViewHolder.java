@@ -16,8 +16,8 @@
 package com.ianbuttimer.tidder.data.adapter;
 
 import android.content.Context;
-import android.support.annotation.ColorInt;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.ColorInt;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -39,9 +39,9 @@ import com.ianbuttimer.tidder.utils.ColourUtils;
 import github.nisrulz.recyclerviewhelper.RVHViewHolder;
 import timber.log.Timber;
 
-import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_DRAG;
-import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_IDLE;
-import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_SWIPE;
+import static androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_DRAG;
+import static androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_IDLE;
+import static androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_SWIPE;
 import static com.ianbuttimer.tidder.net.RedditUriBuilder.BASE_URL;
 import static com.ianbuttimer.tidder.net.RedditUriBuilder.SUBREDDIT_RELATIVE_START_URL;
 

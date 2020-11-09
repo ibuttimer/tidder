@@ -16,6 +16,8 @@
 
 package com.ianbuttimer.tidder.data.provider;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 
@@ -32,7 +34,7 @@ public class DeleteValueEventListener extends AbstractValueEventListener<Integer
     }
 
     @Override
-    public void onDataChange(DataSnapshot dataSnapshot) {
+    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
         mCount = 0;
 
         ArrayList<DataSnapshot> filtered = mFbQuery.filterChildren(dataSnapshot);
@@ -47,7 +49,7 @@ public class DeleteValueEventListener extends AbstractValueEventListener<Integer
     }
 
     @Override
-    public void onCancelled(DatabaseError databaseError) {
+    public void onCancelled(@NonNull DatabaseError databaseError) {
 
         super.onCancelled(databaseError);
     }

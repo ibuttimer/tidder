@@ -21,12 +21,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
 import android.text.TextUtils;
 
 import com.ianbuttimer.tidder.data.provider.ProviderUri;
+import com.ianbuttimer.tidder.reddit.BaseObject;
 import com.ianbuttimer.tidder.reddit.Response;
 import com.ianbuttimer.tidder.event.AbstractEvent;
 import com.ianbuttimer.tidder.ui.ICommonEvents;
@@ -40,19 +41,19 @@ import java.lang.ref.WeakReference;
  */
 
 public class QueryCallback<T extends AbstractEvent> extends
-        AbstractContentProviderCallback<QueryResponse> {
+        AbstractContentProviderCallback<QueryResponse<? extends AbstractDbRow>> {
 
-    private WeakReference<Activity> mActivity;
-    private ICommonEvents<T, Response> mEventFactory;
+    private final WeakReference<Activity> mActivity;
+    private final ICommonEvents<T, Response<? extends BaseObject<?>>> mEventFactory;
 
-    public QueryCallback(Activity activity, ICommonEvents<T, Response> eventFactory) {
+    public QueryCallback(Activity activity, ICommonEvents<T, Response<? extends BaseObject<?>>> eventFactory) {
         super();
         mActivity = new WeakReference<>(activity);
         mEventFactory = eventFactory;
     }
 
     @Override
-    public void onResponse(QueryResponse result) {
+    public void onResponse(QueryResponse<? extends AbstractDbRow> result) {
         int msgId = 0;
         onQueryResponse(result, msgId);
     }
@@ -99,7 +100,7 @@ public class QueryCallback<T extends AbstractEvent> extends
      * @return Response object or <code>null</code>
      */
     @Override
-    public QueryResponse processUriResponse(@Nullable AbstractResultWrapper response) {
+    public QueryResponse<? extends AbstractDbRow> processUriResponse(@Nullable AbstractResultWrapper response) {
         // no op
         return null;
     }
@@ -113,10 +114,10 @@ public class QueryCallback<T extends AbstractEvent> extends
     /**
      * Class to update the ui with response list details
      */
-    private class QueryResponseHandler extends
-            com.ianbuttimer.tidder.data.ResponseHandler<QueryResponse> implements Runnable {
+    private static class QueryResponseHandler extends
+            com.ianbuttimer.tidder.data.ResponseHandler<QueryResponse<? extends AbstractDbRow>> implements Runnable {
 
-        QueryResponseHandler(Activity activity, QueryResponse response, int errorId) {
+        QueryResponseHandler(Activity activity, QueryResponse<? extends AbstractDbRow> response, int errorId) {
             super(activity, response, errorId, null);
         }
 
@@ -130,7 +131,7 @@ public class QueryCallback<T extends AbstractEvent> extends
      * Handle a list response
      * @param response  Response object
      */
-    protected void onQueryResponse(QueryResponse response, int msgId) {
+    protected void onQueryResponse(QueryResponse<? extends AbstractDbRow> response, int msgId) {
         // ui updates need to be on ui thread
         Activity activity = mActivity.get();
         activity.runOnUiThread(new QueryResponseHandler(activity, response, msgId));

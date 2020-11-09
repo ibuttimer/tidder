@@ -197,5 +197,16 @@
     <string name="markdownview_ol_property" translatable="false">ol</string>
     <string name="markdownview_dir_setting" translatable="false">direction: {0}</string>
 
+    <!-- possible default values for thumbnails -->
+    <string-array name="thumbnail_markers" translatable="false">
+        <item>self</item>
+        <item>default</item>
+        <item>nsfw</item>
+    </string-array>
+    <string-array name="thumbnail_urls" translatable="false">
+        <item>https://www.reddit.com/static/self_default2.png</item>
+        <item>https://www.reddit.com/static/noimage.png</item>
+        <item>https://www.reddit.com/static/nsfw2.png</item>
+    </string-array>
 
 </resources>

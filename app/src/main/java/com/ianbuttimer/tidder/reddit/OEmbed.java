@@ -34,7 +34,7 @@ import javax.annotation.Nullable;
  * @see <a href="https://oembed.com/">oEmbed</a>
  */
 @Parcel
-public class OEmbed extends BaseObject {
+public class OEmbed extends BaseObject<OEmbed> {
 
     public static final OEmbed EMPTY = new OEmbed();
 
@@ -175,7 +175,7 @@ public class OEmbed extends BaseObject {
     }
 
     @Override
-    protected boolean parseToken(JsonReader jsonReader, String name, BaseObject obj)
+    protected boolean parseToken(JsonReader jsonReader, String name, OEmbed obj)
             throws IOException, IllegalArgumentException {
         checkObject(obj, getClass());
 

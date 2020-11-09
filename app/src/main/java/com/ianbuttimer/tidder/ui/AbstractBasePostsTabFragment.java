@@ -22,11 +22,12 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.UiThread;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Pair;
 import android.view.KeyEvent;
@@ -51,7 +52,6 @@ import com.ianbuttimer.tidder.reddit.get.SubredditAboutResponse;
 import com.ianbuttimer.tidder.reddit.util.LinkFindByName;
 import com.ianbuttimer.tidder.reddit.util.LinkFindBySubredditName;
 import com.ianbuttimer.tidder.ui.widgets.PostOffice;
-import com.ianbuttimer.tidder.utils.Utils;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.parceler.Parcels;
@@ -60,7 +60,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import butterknife.ButterKnife;
-import timber.log.Timber;
 
 
 /**
@@ -92,7 +91,7 @@ public abstract class AbstractBasePostsTabFragment
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
     }
 
@@ -118,7 +117,7 @@ public abstract class AbstractBasePostsTabFragment
             // only change background when in 2 pane mode
             Activity activity = getActivity();
             if ((activity != null) && (rvList != null)) {
-                Drawable background = activity.getResources().getDrawable(R.drawable.post_selected_background);
+                Drawable background = ResourcesCompat.getDrawable(getResources(), R.drawable.post_selected_background, null);
                 view.setBackground(background);
 
                 setViewsBackground(null, position);

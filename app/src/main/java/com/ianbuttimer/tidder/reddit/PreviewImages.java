@@ -31,7 +31,7 @@ import java.util.ArrayList;
  * See sub classes for class specific details.
  */
 @Parcel
-public class PreviewImages extends RedditObject {
+public class PreviewImages extends RedditObject<PreviewImages, EmptyProxy<PreviewImages>> {
 
     public static final PreviewImages INSTANCE = new PreviewImages();
 
@@ -79,29 +79,28 @@ public class PreviewImages extends RedditObject {
     }
 
     @Override
-    public AbstractProxy getProxy() {
+    public EmptyProxy<PreviewImages> getProxy() {
         return null;
     }
 
     @Override
-    public AbstractProxy addToCache() {
+    public EmptyProxy<PreviewImages> addToCache() {
         return null;
     }
 
     @Override
-    protected boolean parseToken(JsonReader jsonReader, String name, BaseObject obj)
+    protected boolean parseToken(JsonReader jsonReader, String name, PreviewImages obj)
             throws IOException, IllegalArgumentException {
         checkObject(obj, getClass());
 
         boolean consumed = super.parseToken(jsonReader, name, obj);
         if (!consumed) {
-            PreviewImages object = ((PreviewImages) obj);
             consumed = true;
             // process required fields
             if (SOURCE.equals(name)) {
                 ImageSource source = new ImageSource();
                 source.parseJson(jsonReader);
-                object.setSource(source);
+                obj.setSource(source);
             } else if (RESOLUTIONS.equals(name)) {
                 ArrayList<ImageSource> list = new ArrayList<>();
 
@@ -109,9 +108,9 @@ public class PreviewImages extends RedditObject {
 
                 ImageSource[] resolutions = null;
                 if (list.size() > 0) {
-                    resolutions = list.toArray(new ImageSource[list.size()]);
+                    resolutions = list.toArray(new ImageSource[0]);
                 }
-                object.setResolutions(resolutions);
+                obj.setResolutions(resolutions);
             } else {
                 consumed = false;
             }

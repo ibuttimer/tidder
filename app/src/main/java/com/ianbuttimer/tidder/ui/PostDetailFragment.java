@@ -20,13 +20,15 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.StringRes;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentActivity;
+import androidx.annotation.IdRes;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.StringRes;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.fragment.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebView;
@@ -39,6 +41,7 @@ import com.ianbuttimer.tidder.data.provider.PinnedBuilder;
 import com.ianbuttimer.tidder.event.PostEvent;
 import com.ianbuttimer.tidder.event.StandardEvent;
 import com.ianbuttimer.tidder.net.GlideApp;
+import com.ianbuttimer.tidder.net.NetworkUtils;
 import com.ianbuttimer.tidder.net.UriUtils;
 import com.ianbuttimer.tidder.reddit.Comment;
 import com.ianbuttimer.tidder.reddit.ImageSource;
@@ -49,11 +52,14 @@ import com.ianbuttimer.tidder.reddit.Preview;
 import com.ianbuttimer.tidder.reddit.PreviewImages;
 import com.ianbuttimer.tidder.reddit.RedditClient;
 import com.ianbuttimer.tidder.reddit.SecureMedia;
+import com.ianbuttimer.tidder.reddit.util.RedditMisc;
 import com.ianbuttimer.tidder.ui.widgets.PostOffice;
 import com.ianbuttimer.tidder.ui.widgets.ToastReceiver;
+import com.ianbuttimer.tidder.utils.ScreenUtils;
 import com.ianbuttimer.tidder.utils.Utils;
 
 import java.text.MessageFormat;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -219,23 +225,38 @@ public class PostDetailFragment extends CommentThreadFragment implements PostOff
             Preview preview = link.getPreview();
             if (preview != null) {
                 if (preview.isEnabled()) {
+                    int scrnWidth = ScreenUtils.getScreenWidth(getActivity());
                     PreviewImages[] previewImages = preview.getPreview();
-                    if (!Utils.arrayItemIsNull(previewImages, 0)) {
-                        //noinspection ConstantConditions
-                        ImageSource source = previewImages[0].getSource();
-                        if (source != null) {
-                            uri = source.getUrl();
+                    for (int i = 0; i < Objects.requireNonNull(previewImages).length && (uri == null); i++) {
+                        if (!Utils.arrayItemIsNull(previewImages, i)) {
+                            ImageSource[] resolutions = previewImages[i].getResolutions();
+                            int selectedWidth = 0;
+                            int bestIdx = -1;
+                            for (int j = 0; (j < resolutions.length) && (selectedWidth < scrnWidth); j++) {
+                                if (!Utils.arrayItemIsNull(resolutions, j)) {
+                                    int thisWidth = resolutions[j].getWidth();
+                                    if ((selectedWidth < thisWidth) && (thisWidth < scrnWidth)) {
+                                        bestIdx = j;
+                                        selectedWidth = thisWidth;
+                                    }
+                                }
+                            }
+                            if (bestIdx >= 0) {
+                                uri = resolutions[bestIdx].getUrl();
+                            }
                         }
                     }
                 }
             }
             if (uri == null) {
                 if (link.isLoadableThumbnail()) {
-                    uri = link.getThumbnail();
+                    uri = RedditMisc.convertDefaultThumbnailUri(getResources(), link.getThumbnail());
                 }
             }
         }
         if (uri != null) {
+            uri = NetworkUtils.unescapeUri(uri);
+
             GlideApp.with(this)
                     .load(uri)
                     .placeholder(R.drawable.ic_picture)

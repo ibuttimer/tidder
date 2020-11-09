@@ -16,7 +16,7 @@
 
 package com.ianbuttimer.tidder.reddit;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.JsonReader;
 
 import com.ianbuttimer.tidder.utils.Utils;
@@ -28,10 +28,12 @@ import java.util.Date;
 
 
 /**
- * Base class for a subreddit object.
+ * Base class for a reddit object.
  * See sub classes for class specific details.
+ * @param <T> type of reddit object
+ * @param <P> type of proxy object
  */
-public abstract class RedditObject<T extends BaseObject, P extends AbstractProxy> extends BaseObject<T>
+public abstract class RedditObject<T, P> extends BaseObject<T>
                             implements RedditCache.ICacheable {
 
     protected static final String ID = "id";
@@ -68,7 +70,7 @@ public abstract class RedditObject<T extends BaseObject, P extends AbstractProxy
         mTag = null;
     }
 
-    public boolean copy(RedditObject object) {
+    public boolean copy(RedditObject<T, P> object) {
         return Utils.copyFields(object, this);
     }
 
@@ -96,7 +98,8 @@ public abstract class RedditObject<T extends BaseObject, P extends AbstractProxy
                                             throws IOException, IllegalArgumentException {
         checkObject(obj, getClass());
 
-        RedditObject object = ((RedditObject) obj);
+
+        RedditObject<T, P> object = ((RedditObject<T, P>) obj);
         boolean consumed = true;
         if (ID.equals(name)) {
             object.mId = nextString(jsonReader, "");
@@ -215,7 +218,7 @@ public abstract class RedditObject<T extends BaseObject, P extends AbstractProxy
     protected static final int CACHE_INSTANTIATED = 0x01;
     /** Object is currently being requested */
     protected static final int REQUEST_IN_PROGRESS = 0x02;
-    /** First flag for concrete objects, they should not used falgs below this */
+    /** First flag for concrete objects, they should not used flags below this */
     protected static final int FIRST_OBJECT_SPECIFIC_FLAG = 0x010000;
 
     public boolean isCacheInstantiated() {

@@ -16,7 +16,7 @@
 
 package com.ianbuttimer.tidder.reddit.post;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.JsonReader;
 
 import com.ianbuttimer.tidder.event.EventType;
@@ -34,7 +34,8 @@ import java.util.ArrayList;
  * @see <a href="https://www.reddit.com/dev/api#POST_api_search_subreddits">/api/search_subreddits</a>
  */
 
-public class ApiSearchSubredditsResponse extends Response implements ListingList<Subreddit> {
+public class ApiSearchSubredditsResponse extends Response<ApiSearchSubredditsResponse>
+        implements ListingList<Subreddit> {
 
     private static final String SUBREDDITS = "subreddits";
 
@@ -64,12 +65,12 @@ public class ApiSearchSubredditsResponse extends Response implements ListingList
     }
 
     @Override
-    protected BaseObject getInstance() {
+    protected ApiSearchSubredditsResponse getInstance() {
         return new ApiSearchSubredditsResponse();
     }
 
     @Override
-    protected boolean parseToken(JsonReader jsonReader, String name, BaseObject obj)
+    protected boolean parseToken(JsonReader jsonReader, String name, ApiSearchSubredditsResponse obj)
             throws IOException, IllegalArgumentException {
         checkObject(obj, getClass());
 

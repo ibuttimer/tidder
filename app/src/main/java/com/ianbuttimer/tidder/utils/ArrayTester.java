@@ -16,7 +16,7 @@
 
 package com.ianbuttimer.tidder.utils;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.Pair;
 
 import com.ianbuttimer.tidder.data.ITester;

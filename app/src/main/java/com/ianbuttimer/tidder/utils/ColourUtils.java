@@ -19,10 +19,10 @@ package com.ianbuttimer.tidder.utils;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
-import android.support.v4.graphics.ColorUtils;
-import android.support.v7.graphics.Palette;
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
+import androidx.core.graphics.ColorUtils;
+import androidx.palette.graphics.Palette;
 
 import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.TidderApplication;

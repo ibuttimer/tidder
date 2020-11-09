@@ -18,7 +18,9 @@ package com.ianbuttimer.tidder;
 
 import android.content.Context;
 import android.content.IntentFilter;
-import android.support.multidex.MultiDexApplication;
+
+import androidx.multidex.BuildConfig;
+import androidx.multidex.MultiDexApplication;
 import android.text.TextUtils;
 import android.util.Log;
 

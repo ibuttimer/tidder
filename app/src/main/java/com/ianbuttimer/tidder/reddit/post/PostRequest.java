@@ -18,9 +18,10 @@ package com.ianbuttimer.tidder.reddit.post;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.ArrayMap;
 
+import com.ianbuttimer.tidder.reddit.BaseObject;
 import com.ianbuttimer.tidder.reddit.Response;
 import com.ianbuttimer.tidder.reddit.Request;
 
@@ -36,7 +37,7 @@ public abstract class PostRequest extends Request {
         super(uri);
     }
 
-    public PostRequest(Uri uri, Class<? extends Response> responseClass) {
+    public PostRequest(Uri uri, Class<? extends Response<? extends BaseObject<?>>> responseClass) {
         super(uri, responseClass);
     }
 

@@ -17,14 +17,15 @@
 package com.ianbuttimer.tidder.event;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.util.Pair;
 
 import com.ianbuttimer.tidder.data.ConfigQueryResponse;
 import com.ianbuttimer.tidder.data.ContentProviderResponse;
 import com.ianbuttimer.tidder.data.FollowQueryResponse;
 import com.ianbuttimer.tidder.data.PinnedQueryResponse;
+import com.ianbuttimer.tidder.reddit.BaseObject;
 import com.ianbuttimer.tidder.reddit.Response;
 import com.ianbuttimer.tidder.reddit.Subreddit;
 import com.ianbuttimer.tidder.reddit.get.SubredditAboutResponse;
@@ -38,7 +39,7 @@ import java.util.ArrayList;
  */
 
 public class StandardEvent extends AbstractEvent<StandardEvent>
-                            implements ICommonEvents<StandardEvent, Response> {
+                            implements ICommonEvents<StandardEvent, Response<? extends BaseObject<?>>> {
 
     private static StandardEvent mFactoryInstance;
 
@@ -59,7 +60,7 @@ public class StandardEvent extends AbstractEvent<StandardEvent>
         super(event, mode);
     }
 
-    public static ICommonEvents<StandardEvent, Response> getFactory() {
+    public static ICommonEvents<StandardEvent, Response<? extends BaseObject<?>>> getFactory() {
         if (mFactoryInstance == null) {
             mFactoryInstance = new StandardEvent(EventType.FACTORY_INSTANCE);
         }
@@ -67,7 +68,7 @@ public class StandardEvent extends AbstractEvent<StandardEvent>
     }
 
     @Override
-    public ICommonEvents<StandardEvent, Response> getFactoryInstance() {
+    public ICommonEvents<StandardEvent, Response<? extends BaseObject<?>>> getFactoryInstance() {
         return getFactory();
     }
 
@@ -193,11 +194,11 @@ public class StandardEvent extends AbstractEvent<StandardEvent>
 
     /**
      * Create a new Response result event
-     * @param response
+     * @param response  Response
      * @return  event object
      */
     @Override
-    @Nullable public StandardEvent newResponseResult(Response response) {
+    @Nullable public StandardEvent newResponseResult(Response<? extends BaseObject<?>> response) {
         StandardEvent event = null;
         if (response != null) {
             @EventType int type = response.getEventType();

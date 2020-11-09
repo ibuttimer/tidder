@@ -21,5 +21,8 @@
 
     <string name="ack_schematic">Schematic (<a href="https://github.com/SimonVT/schematic">Simon Vig Therkildsen</a>) licensed under the (<a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>).</string>
 
+    <!-- sample ad units from https://developers.google.com/admob/android/test-ads -->
+    <!-- TODO replace values with AdMob app & ad unit IDs -->
+    <string name="admob_id" translatable="false">ca-app-pub-3940256099942544~3347511713</string> <!-- AdMob test id -->
 
 </resources>

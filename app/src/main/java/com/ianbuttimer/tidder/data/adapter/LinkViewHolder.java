@@ -24,7 +24,9 @@ import android.widget.TextView;
 import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.data.IAdapterHandler;
 import com.ianbuttimer.tidder.net.GlideApp;
+import com.ianbuttimer.tidder.net.NetworkUtils;
 import com.ianbuttimer.tidder.reddit.Link;
+import com.ianbuttimer.tidder.reddit.util.RedditMisc;
 import com.ianbuttimer.tidder.ui.UiUtils;
 import com.ianbuttimer.tidder.ui.widgets.BasicStatsView;
 
@@ -70,14 +72,18 @@ public class LinkViewHolder extends AbstractViewHolder<Link> {
         bsvView.setViewInfo(mLink);
 
         if (mLink.isLoadableThumbnail()) {
-            Uri thumbnail = mLink.getThumbnail();
+            Uri thumbnail = RedditMisc.convertDefaultThumbnailUri(getContext().getResources(), mLink.getThumbnail());
 
-            GlideApp.with(getContext())
-                    .load(thumbnail)
-                    .placeholder(R.drawable.ic_picture)
-                    .centerInside()
-//                    .fitCenter()
-                    .into(imgThumbnail);
+            if (thumbnail != null) {
+                thumbnail = NetworkUtils.unescapeUri(thumbnail);
+
+                GlideApp.with(getContext())
+                        .load(thumbnail)
+                        .placeholder(R.drawable.ic_picture)
+                        .centerInside()
+                        //                    .fitCenter()
+                        .into(imgThumbnail);
+            }
         }
     }
 

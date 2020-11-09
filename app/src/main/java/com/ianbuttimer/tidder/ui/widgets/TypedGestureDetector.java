@@ -17,7 +17,7 @@
 package com.ianbuttimer.tidder.ui.widgets;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.Pair;
 import android.view.GestureDetector;
 import android.view.MotionEvent;

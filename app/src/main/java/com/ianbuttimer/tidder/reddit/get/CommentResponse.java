@@ -33,7 +33,7 @@ import java.io.IOException;
  * @see <a href="https://www.reddit.com/dev/api#GET_comments_{article}">[/r/subreddit]/comments/article</a>
  */
 
-public class CommentResponse extends ListingResponse<Comment>
+public class CommentResponse extends ListingResponse<CommentResponse, Comment>
                                     implements ListingList<Comment> {
 
     /**
@@ -61,7 +61,7 @@ public class CommentResponse extends ListingResponse<Comment>
     }
 
     @Override
-    protected BaseObject getInstance() {
+    protected CommentResponse getInstance() {
         return new CommentResponse();
     }
 
@@ -80,7 +80,7 @@ public class CommentResponse extends ListingResponse<Comment>
 
 
     @Override
-    protected boolean parseToken(JsonReader jsonReader, String name, BaseObject obj)
+    protected boolean parseToken(JsonReader jsonReader, String name, CommentResponse obj)
             throws IOException, IllegalArgumentException {
         checkObject(obj, getClass());
 

@@ -19,8 +19,8 @@ package com.ianbuttimer.tidder.ui;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.StringRes;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
 
 import com.ianbuttimer.tidder.R;

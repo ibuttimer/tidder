@@ -22,16 +22,17 @@ import android.widget.RemoteViews;
 
 import com.bumptech.glide.request.target.AppWidgetTarget;
 import com.ianbuttimer.tidder.net.GlideApp;
+import com.ianbuttimer.tidder.net.NetworkUtils;
 
 /**
  * Loader to load images into app widgets
  */
 public class WidgetImageLoader implements Runnable {
 
-    private Context mContext;
-    private AppWidgetTarget mAppWidgetTarget;
-    private RemoteViews mRemoteViews;
-    private Uri mUri;
+    private final Context mContext;
+    private final AppWidgetTarget mAppWidgetTarget;
+    private final RemoteViews mRemoteViews;
+    private final Uri mUri;
 
     /**
      * Constructor
@@ -44,7 +45,7 @@ public class WidgetImageLoader implements Runnable {
         this.mContext = context;
         this.mAppWidgetTarget = appWidgetTarget;
         this.mRemoteViews = remoteViews;
-        this.mUri = uri;
+        this.mUri = NetworkUtils.unescapeUri(uri);
     }
 
     @Override

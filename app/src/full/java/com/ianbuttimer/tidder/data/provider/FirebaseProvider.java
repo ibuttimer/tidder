@@ -277,7 +277,7 @@ public class FirebaseProvider extends ContentProvider {
      * @param sortOrder     Sort order
      * @return
      */
-    private Cursor fbQuery(String node, AbstractValueEventListener listener, Uri uri,
+    private Cursor fbQuery(String node, AbstractValueEventListener<?> listener, Uri uri,
                                String[] projection, ArrayList<Pair<String, String[]>> whereList,
                                String sortOrder) {
         FbQuery query = makeFbQuery(node, whereList, sortOrder);

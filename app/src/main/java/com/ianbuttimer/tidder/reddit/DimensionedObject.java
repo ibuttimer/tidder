@@ -26,7 +26,7 @@ import java.io.IOException;
 
 
 /**
- * Base class for a subreddit object.
+ * Base class for a dimensioned object.
  * See sub classes for class specific details.
  */
 
@@ -59,22 +59,16 @@ public abstract class DimensionedObject<T extends BaseObject> extends BaseObject
         mHeight = 0;
     }
 
-    public boolean copy(DimensionedObject object) {
+    public boolean copy(DimensionedObject<T> object) {
         return Utils.copyFields(object, this);
     }
-
-//    @Override
-//    protected T getInstance() {
-//        return new DimensionedObject();
-//    }
-
 
     @Override
     protected boolean parseToken(JsonReader jsonReader, String name, T obj)
             throws IOException, IllegalArgumentException {
         checkObject(obj, getClass());
 
-        DimensionedObject object = ((DimensionedObject) obj);
+        DimensionedObject<T> object = ((DimensionedObject<T>) obj);
         boolean consumed = true;
         if (WIDTH.equals(name)) {
             object.setWidth(nextInt(jsonReader, 0));

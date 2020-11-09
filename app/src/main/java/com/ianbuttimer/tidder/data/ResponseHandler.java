@@ -17,7 +17,7 @@
 package com.ianbuttimer.tidder.data;
 
 import android.app.Activity;
-import android.support.annotation.StringRes;
+import androidx.annotation.StringRes;
 import android.text.TextUtils;
 
 import com.ianbuttimer.tidder.R;
@@ -42,7 +42,7 @@ public abstract class ResponseHandler<T> implements Runnable {
     @StringRes private int mErrorId;
     private String mErrorMsg;
     private Date cacheDate;
-    private WeakReference<Activity> activity;   // weak ref so won't prevent activity being garbage collected
+    private final WeakReference<Activity> activity;   // weak ref so won't prevent activity being garbage collected
 
     /**
      * Constructor

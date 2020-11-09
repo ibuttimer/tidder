@@ -19,7 +19,7 @@ package com.ianbuttimer.tidder.reddit;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.ianbuttimer.tidder.net.NetworkUtils;
@@ -37,7 +37,7 @@ public abstract class Request {
 
     protected Uri mUri; // request uri
 
-    @Nullable protected Class<? extends Response> mResponseClass;
+    @Nullable protected Class<? extends Response<? extends BaseObject<?>>> mResponseClass;
 
     protected Bundle mAdditionalInfo;
 
@@ -46,7 +46,7 @@ public abstract class Request {
         this(uri, null);
     }
 
-    public Request(Uri uri, @Nullable Class<? extends Response> responseClass) {
+    public Request(Uri uri, @Nullable Class<? extends Response<? extends BaseObject<?>>> responseClass) {
         this.mUri = uri;
         this.mResponseClass = responseClass;
     }
@@ -59,7 +59,7 @@ public abstract class Request {
         return NetworkUtils.convertUriToURL(mUri);
     }
 
-    @Nullable public Class<? extends Response> getResponseClass() {
+    @Nullable public Class<? extends Response<? extends BaseObject<?>>> getResponseClass() {
         return mResponseClass;
     }
 

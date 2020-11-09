@@ -108,7 +108,7 @@ public class NetworkStatusReceiver extends BroadcastReceiver {
             NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
             available = ((activeNetwork != null) && (activeNetwork.isConnectedOrConnecting()));
         }
-        Timber.d("Internet available: " + (available ? "yes" : " no"));
+        Timber.d("Internet available: %s", (available ? "yes" : " no"));
         return available;
     }
 

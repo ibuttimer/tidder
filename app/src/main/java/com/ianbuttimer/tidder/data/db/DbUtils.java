@@ -17,7 +17,7 @@
 package com.ianbuttimer.tidder.data.db;
 
 import android.database.Cursor;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

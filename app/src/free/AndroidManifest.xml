@@ -22,6 +22,10 @@
     <application
         tools:node="merge">
 
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="@string/admob_id"/>
+
         <provider
             android:name=".data.db.gen.TidderProvider"
             android:authorities="@string/authority_provider"

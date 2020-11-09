@@ -22,7 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.ResultReceiver;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import java.util.Set;
 
@@ -48,7 +48,7 @@ public abstract class AbstractIntentService extends IntentService {
 
         protected Intent mIntent;
 
-        public Builder(Context context, Class serviceClass, @Nullable String action) {
+        public Builder(Context context, Class<?> serviceClass, @Nullable String action) {
             mIntent = new Intent(context, serviceClass);
             action(action);
         }

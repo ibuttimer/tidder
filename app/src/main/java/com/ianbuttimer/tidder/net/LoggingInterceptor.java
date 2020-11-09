@@ -40,7 +40,7 @@ public class LoggingInterceptor implements Interceptor {
             Timber.i("Received response for %s in %.1fms%n%s",
                     response.request().url(), ((t2 - t1) / NANOSEC_PER_MSEC), response.headers());
 
-            // TODO look at logging response body, remember its a one-shot stream!
+            // response body is logged in ClientService as body is a one-shot stream!
         }
         return response;
     }

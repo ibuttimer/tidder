@@ -17,7 +17,6 @@
 package com.ianbuttimer.tidder.reddit.get;
 
 import com.ianbuttimer.tidder.event.EventType;
-import com.ianbuttimer.tidder.reddit.BaseObject;
 import com.ianbuttimer.tidder.reddit.ListingList;
 import com.ianbuttimer.tidder.reddit.Subreddit;
 
@@ -48,7 +47,7 @@ public class AllSubredditsResponse extends SubredditsSearchResponse
     }
 
     @Override
-    protected BaseObject getInstance() {
+    protected AllSubredditsResponse getInstance() {
         return new AllSubredditsResponse();
     }
 

@@ -16,7 +16,7 @@
 
 package com.ianbuttimer.tidder.reddit;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.JsonReader;
 
 import com.ianbuttimer.tidder.event.EventType;
@@ -31,9 +31,9 @@ import static com.ianbuttimer.tidder.reddit.ListingRequest.QUERY_BEFORE;
  * Base class for a reddit listing response
  */
 
-public abstract class ListingResponse<T extends BaseObject>
-                            extends KindDataResponse
-                            implements ListingList<T> {
+public abstract class ListingResponse<T, C>
+                            extends KindDataResponse<T>
+                            implements ListingList<C> {
 
     static final String RESPONSE_DIST = "dist";
     static final String RESPONSE_CHILDREN = "children";
@@ -44,7 +44,7 @@ public abstract class ListingResponse<T extends BaseObject>
     protected String mBefore;
     protected int mDist;
 
-    protected ArrayList<T> mList;
+    protected ArrayList<C> mList;
 
 
     public ListingResponse() {
@@ -151,14 +151,14 @@ public abstract class ListingResponse<T extends BaseObject>
     }
 
     @Override
-    public ArrayList<T> getList() {
+    public ArrayList<C> getList() {
         return mList;
     }
 
     @Override
     @Nullable
-    public T getItem(int index) {
-        T item = null;
+    public C getItem(int index) {
+        C item = null;
         if ((mList != null) && !mList.isEmpty()) {
             if ((index >= 0) && (index < mList.size())) {
                 item = mList.get(index);

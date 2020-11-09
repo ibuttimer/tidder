@@ -21,7 +21,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.ResultReceiver;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.ianbuttimer.tidder.TidderApplication;
@@ -29,6 +29,9 @@ import com.ianbuttimer.tidder.data.AbstractIntentService;
 import com.ianbuttimer.tidder.exception.HttpException;
 import com.ianbuttimer.tidder.net.NetworkUtils;
 import com.ianbuttimer.tidder.utils.PreferenceControl;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
@@ -140,6 +143,18 @@ public class ClientService extends AbstractIntentService {
             }
             responseBuilder.httpCode(code)
                             .resultText(result);
+
+            if (PreferenceControl.getLogHttpPreference(getApplicationContext())) {
+                // log response body
+                String bodyText = result;
+//                // prettify for log but results in a lot of lines
+//                try {
+//                    bodyText = new JSONObject(result).toString(2);
+//                } catch (JSONException e) {
+//                    bodyText = result;
+//                }
+                Timber.i("Response body: %s", bodyText);
+            }
         } else {
             if (url == null) {
                 Timber.e("HTTP: missing URL");
@@ -198,7 +213,7 @@ public class ClientService extends AbstractIntentService {
             return uri(NetworkUtils.convertURLToUri(url));
         }
 
-        public RequestBuilder responseClass(Class responseClass) {
+        public RequestBuilder responseClass(Class<?> responseClass) {
             mIntent.putExtra(EXTRA_RESPONSE_CLASS, responseClass);
             return this;
         }
@@ -330,7 +345,7 @@ public class ClientService extends AbstractIntentService {
             return this;
         }
 
-        public ResponseBuilder responseClass(Class responseClass) {
+        public ResponseBuilder responseClass(Class<?> responseClass) {
             mBundle.putSerializable(EXTRA_RESPONSE_CLASS, responseClass);
             return this;
         }

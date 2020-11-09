@@ -17,12 +17,15 @@
 package com.ianbuttimer.tidder.event;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.SparseArray;
 
 import com.google.common.base.Joiner;
 import com.ianbuttimer.tidder.data.ContentProviderResponse;
+import com.ianbuttimer.tidder.reddit.BaseObject;
 import com.ianbuttimer.tidder.reddit.ListingList;
 import com.ianbuttimer.tidder.reddit.Response;
 import com.ianbuttimer.tidder.utils.Utils;
@@ -82,7 +85,7 @@ public abstract class AbstractEvent<E extends AbstractEvent> {
 
     protected ContentProviderResponse mCpResponse;
 
-    protected Response mSrvResponse;
+    protected Response<? extends BaseObject<?>> mSrvResponse;
 
 
     public AbstractEvent(@EventType int event) {
@@ -158,7 +161,7 @@ public abstract class AbstractEvent<E extends AbstractEvent> {
         return getStringParam(DESTINATION_PARAM, "");
     }
 
-    public String[] getAddresss() {
+    public String[] getAddresses() {
         String[] tags;
         String destination = getAddress();
         if (!TextUtils.isEmpty(destination)) {
@@ -253,7 +256,7 @@ public abstract class AbstractEvent<E extends AbstractEvent> {
     }
 
     @Nullable
-    protected <T extends Response> T getResponse(boolean valid, Class<T> tClass) {
+    protected <T extends Response<? extends BaseObject<?>>> T getResponse(boolean valid, Class<T> tClass) {
         T response = null;
         if (valid) {
             response = tClass.cast(mSrvResponse);
@@ -314,6 +317,7 @@ public abstract class AbstractEvent<E extends AbstractEvent> {
         return getThis();
     }
 
+    @NonNull
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder(getClass().getSimpleName()).append('{');
@@ -397,7 +401,7 @@ public abstract class AbstractEvent<E extends AbstractEvent> {
         @Nullable protected Bundle mBundle;
         @Nullable protected T mEvent;
 
-        public AdditionalInfoExtractor(T event, Bundle bundle) {
+        public AdditionalInfoExtractor(@Nullable T event, @Nullable Bundle bundle) {
             mBundle = bundle;
             mEvent = event;
         }
@@ -442,7 +446,7 @@ public abstract class AbstractEvent<E extends AbstractEvent> {
     private static SparseArray<String> getIntNames(List<Field> fields) {
         SparseArray<String> list = new SparseArray<>();
         for (Field field : fields) {
-            Class fieldClass = field.getType();
+            Class<?> fieldClass = field.getType();
             int modifiers = field.getModifiers();
             if ((fieldClass.equals(Integer.class) || fieldClass.equals(int.class))
                     && Modifier.isFinal(modifiers)

@@ -15,7 +15,7 @@
   ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<android.support.constraint.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cl_search_fragF"
@@ -32,7 +32,8 @@
         android:hint="@string/what_interests"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toStartOf="@+id/btn_search_fragF"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/cl_search_fragF" />
 
     <EditText
         android:id="@+id/et_name_fragF"
@@ -46,7 +47,7 @@
         app:layout_constraintStart_toStartOf="@+id/et_interest_fragF"
         app:layout_constraintTop_toBottomOf="@+id/et_interest_fragF" />
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_search_fragF"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -59,7 +60,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_clear_fragF"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -74,4 +75,4 @@
         app:layout_constraintTop_toBottomOf="@id/btn_search_fragF" />
 
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,7 +16,7 @@
 
 package com.ianbuttimer.tidder.data;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.ianbuttimer.tidder.reddit.Link;
 import com.ianbuttimer.tidder.reddit.Subreddit;
@@ -96,7 +96,7 @@ public class InfoCache {
     }
 
 
-    class InfoCacheConverter implements ParcelConverter<InfoCache> {
+    static class InfoCacheConverter implements ParcelConverter<InfoCache> {
         @Override
         public void toParcel(InfoCache input, android.os.Parcel parcel) {
             Utils.writeBooleanToParcel(parcel, (input != null));

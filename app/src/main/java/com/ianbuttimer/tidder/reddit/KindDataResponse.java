@@ -26,7 +26,7 @@ import java.io.IOException;
  * Base class for a reddit kind/data response which may be part of a listing or object response
  */
 
-public abstract class KindDataResponse extends Response {
+public abstract class KindDataResponse<T> extends Response<T> {
 
     static final String RESPONSE_KIND = "kind";
     static final String RESPONSE_DATA = "data";
@@ -49,7 +49,7 @@ public abstract class KindDataResponse extends Response {
     }
 
     @Override
-    protected boolean parseToken(JsonReader jsonReader, String name, BaseObject obj) throws IOException, IllegalArgumentException {
+    protected boolean parseToken(JsonReader jsonReader, String name, T obj) throws IOException, IllegalArgumentException {
         checkObject(obj, getClass());
 
         setEmpty(false);

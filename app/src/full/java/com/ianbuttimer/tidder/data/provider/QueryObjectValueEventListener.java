@@ -19,6 +19,8 @@ package com.ianbuttimer.tidder.data.provider;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.ianbuttimer.tidder.data.db.IFbCursorable;
@@ -28,7 +30,7 @@ import com.ianbuttimer.tidder.data.db.IFbCursorable;
  */
 public class QueryObjectValueEventListener extends AbstractValueEventListener<Cursor> {
 
-    private IFbCursorable mFbCursorable;
+    private final IFbCursorable mFbCursorable;
 
     private MatrixCursor mCursor;
 
@@ -43,7 +45,7 @@ public class QueryObjectValueEventListener extends AbstractValueEventListener<Cu
     }
 
     @Override
-    public void onDataChange(DataSnapshot dataSnapshot) {
+    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
         mCursor = mFbCursorable.getCursor(1);
 
@@ -56,7 +58,7 @@ public class QueryObjectValueEventListener extends AbstractValueEventListener<Cu
     }
 
     @Override
-    public void onCancelled(DatabaseError databaseError) {
+    public void onCancelled(@NonNull DatabaseError databaseError) {
 
         super.onCancelled(databaseError);
     }

@@ -70,4 +70,8 @@
     <dimen name="listview_padding">1dp</dimen>
     <dimen name="listview_corner">2dp</dimen>
 
+    <!-- fix lint error for w900dp/dimens
+        need to match width of standard banner used in free version 'admob_banner_width' -->
+    <dimen name="post_list_tablet_width">320dp</dimen>
+
 </resources>

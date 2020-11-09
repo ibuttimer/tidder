@@ -16,10 +16,10 @@
 package com.ianbuttimer.tidder.data.adapter;
 
 import android.content.Context;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Pair;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
@@ -129,6 +129,7 @@ public abstract class AbstractRecycleViewAdapter<T extends BaseObject, K extends
      *                  for more details.
      * @return A new AbstractViewHolder that holds the View for each list item
      */
+    @NonNull
     @Override
     public K onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         Context context = viewGroup.getContext();

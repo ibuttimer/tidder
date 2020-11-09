@@ -108,8 +108,7 @@ public class UiUtils {
     }
 
     /**
-     * Get NotoSans italic
-     * @return Typeface
+     * Set typeface
      */
     public static void setTypeface(TextView textView, AppTypeface typeface) {
         if (textView != null) {

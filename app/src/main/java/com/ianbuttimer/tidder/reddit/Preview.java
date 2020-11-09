@@ -16,7 +16,7 @@
 
 package com.ianbuttimer.tidder.reddit;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.JsonReader;
 
 import com.ianbuttimer.tidder.utils.Utils;
@@ -32,7 +32,7 @@ import java.util.ArrayList;
  * See sub classes for class specific details.
  */
 @Parcel
-public class Preview extends RedditObject {
+public class Preview extends RedditObject<Preview, EmptyProxy<Preview>> {
 
     protected static final String IMAGES = "images";
     protected static final String ENABLED = "enabled";
@@ -77,29 +77,28 @@ public class Preview extends RedditObject {
     }
 
     @Override
-    public AbstractProxy getProxy() {
+    public EmptyProxy<Preview> getProxy() {
         return null;
     }
 
     @Override
-    public AbstractProxy addToCache() {
+    public EmptyProxy<Preview> addToCache() {
         return null;
     }
 
     @Override
-    protected boolean parseToken(JsonReader jsonReader, String name, BaseObject obj)
+    protected boolean parseToken(JsonReader jsonReader, String name, Preview obj)
                                         throws IOException, IllegalArgumentException {
         checkObject(obj, getClass());
 
         boolean consumed = super.parseToken(jsonReader, name, obj);
         if (!consumed) {
-            Preview object = ((Preview) obj);
             consumed = true;
             // process required fields
             if (IMAGES.equals(name)) {
-                object.setPreview(readPreviewImages(jsonReader));
+                obj.setPreview(readPreviewImages(jsonReader));
             } else if (ENABLED.equals(name)) {
-                object.setEnabled(nextBoolean(jsonReader, false));
+                obj.setEnabled(nextBoolean(jsonReader, false));
             } else {
                 consumed = false;
             }
@@ -117,7 +116,7 @@ public class Preview extends RedditObject {
             PreviewImages.INSTANCE.parseJsonArray(jsonReader, list);
 
             if (list.size() > 0) {
-                previewImages = list.toArray(new PreviewImages[list.size()]);
+                previewImages = list.toArray(new PreviewImages[0]);
             }
         }
         return previewImages;

@@ -20,16 +20,16 @@ import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
-import android.support.annotation.UiThread;
-import android.support.constraint.ConstraintLayout;
-import android.support.constraint.ConstraintSet;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.annotation.UiThread;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -151,7 +151,7 @@ public abstract class FollowTabFragment
                 int count = pagerAdapter.getCount();
                 for (int i = 0; i < count; i++) {
                     Fragment fragment = pagerAdapter.getFragment(i);
-                    if ((fragment != null) && (fragment instanceof FollowTabFragment)) {
+                    if ((fragment instanceof FollowTabFragment)) {
                         String tag = ((FollowTabFragment)fragment).getAddress();
                         if (PostOffice.isRegistered(fragment)) {
                             atHome.add(tag);    // add address to active list
@@ -164,12 +164,12 @@ public abstract class FollowTabFragment
                     // posting a sticky event means its also posted immediately, so both atHome & out can get it
                     atHome.addAll(out);
                     postStickyForActivity(StandardEvent.newUpdateFollowingListRequest(),
-                            atHome.toArray(new String[atHome.size()]));
+                            atHome.toArray(new String[0]));
                 }
                 if (!atHome.isEmpty() && out.isEmpty()) {
-                    // just post normal event as there are only active suscribers
+                    // just post normal event as there are only active subscribers
                     postEventForActivity(StandardEvent.newUpdateFollowingListRequest(),
-                            atHome.toArray(new String[atHome.size()]));
+                            atHome.toArray(new String[0]));
                 }
             }
         }
@@ -567,8 +567,7 @@ public abstract class FollowTabFragment
                                 subreddit.setFollowing(false);
                             }
                         }
-                        for (int i = 0; i < length; i++) {
-                            Follow follow = following[i];
+                        for (Follow follow : following) {
                             String name = follow.getSubreddit();
                             Subreddit subreddit = null;
 

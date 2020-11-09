@@ -19,7 +19,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Point;
-import android.support.annotation.Dimension;
+import androidx.annotation.Dimension;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.Window;
@@ -66,7 +66,7 @@ public class ScreenUtils {
     /**
      * Get the available screen size in pixels.
      * @param activity  The current activity
-     * @return  screen size
+     * @return  screen size (w, h)
      */
     public static Point getScreenSize(Activity activity) {
         DisplayMetrics metrics = getScreenMetrics(activity);

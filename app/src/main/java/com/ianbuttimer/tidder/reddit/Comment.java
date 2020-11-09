@@ -17,7 +17,8 @@
 package com.ianbuttimer.tidder.reddit;
 
 
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.util.JsonReader;
 import android.util.JsonToken;
 
@@ -130,46 +131,45 @@ public class Comment extends RedditObject<Comment, CommentProxy> implements Basi
                                         throws IOException, IllegalArgumentException {
         checkObject(obj, getClass());
 
-        Comment object = ((Comment) obj);
-        boolean consumed = super.parseToken(jsonReader, name, object);
+        boolean consumed = super.parseToken(jsonReader, name, obj);
         if (!consumed) {
             consumed = true;
             if (SUBREDDIT_ID.equals(name)) {
-                object.setSubredditId(nextString(jsonReader, ""));
+                obj.setSubredditId(nextString(jsonReader, ""));
             } else if (LINK_ID.equals(name)) {
-                object.setLinkId(nextString(jsonReader, ""));
+                obj.setLinkId(nextString(jsonReader, ""));
             } else if (AUTHOR.equals(name)) {
-                object.setAuthor(nextString(jsonReader, ""));
+                obj.setAuthor(nextString(jsonReader, ""));
             } else if (PARENT_ID.equals(name)) {
-                object.setParentId(nextString(jsonReader, ""));
+                obj.setParentId(nextString(jsonReader, ""));
             } else if (BODY.equals(name)) {
-                object.setBody(nextString(jsonReader, ""));
+                obj.setBody(nextString(jsonReader, ""));
             } else if (BODY_HTML.equals(name)) {
-                object.setBodyHtml(nextStringFromHtml(jsonReader, ""));
+                obj.setBodyHtml(nextStringFromHtml(jsonReader, ""));
             } else if (SUBREDDIT.equals(name)) {
-                object.setSubreddit(nextString(jsonReader, ""));
+                obj.setSubreddit(nextString(jsonReader, ""));
             } else if (PERMALINK.equals(name)) {
-                object.setPermalink(nextString(jsonReader, ""));
+                obj.setPermalink(nextString(jsonReader, ""));
             } else if (SUBREDDIT_NAME_PREFIXED.equals(name)) {
-                object.setSubredditNamePrefixed(nextString(jsonReader, ""));
+                obj.setSubredditNamePrefixed(nextString(jsonReader, ""));
             } else if (SCORE.equals(name)) {
-                object.setScore(nextInt(jsonReader, 0));
+                obj.setScore(nextInt(jsonReader, 0));
             } else if (DEPTH.equals(name)) {
-                object.setDepth(nextInt(jsonReader, 0));
+                obj.setDepth(nextInt(jsonReader, 0));
             } else if (STICKIED.equals(name)) {
-                object.setStickied(nextBoolean(jsonReader, false));
+                obj.setStickied(nextBoolean(jsonReader, false));
             } else if (SCORE_HIDDEN.equals(name)) {
-                object.setScoreHidden(nextBoolean(jsonReader, false));
+                obj.setScoreHidden(nextBoolean(jsonReader, false));
             } else if (REPLIES.equals(name)) {
                 if (jsonReader.peek() == JsonToken.BEGIN_OBJECT) {
                     // have replies to process
                     CommentResponse commentResponse = new CommentResponse();
                     commentResponse.parseJson(jsonReader);
                     ArrayList<Comment> mList = commentResponse.getList();
-                    object.setReplies(mList.toArray(new Comment[mList.size()]));
+                    obj.setReplies(mList.toArray(new Comment[0]));
                 } else {
                     // should be an empty string so skip
-                    object.setReplies(new Comment[0]);
+                    obj.setReplies(new Comment[0]);
                     jsonReader.skipValue();
                 }
             } else {
@@ -422,6 +422,7 @@ public class Comment extends RedditObject<Comment, CommentProxy> implements Basi
         return result;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Comment{" +

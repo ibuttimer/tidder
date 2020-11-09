@@ -17,7 +17,7 @@
 package com.ianbuttimer.tidder.reddit;
 
 import android.net.Uri;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.ianbuttimer.tidder.event.AbstractEvent;
 
@@ -46,7 +46,7 @@ public abstract class ListingRequest extends Request {
         this(uri, null);
     }
 
-    public ListingRequest(Uri uri, @Nullable Class<? extends Response> responseClass) {
+    public ListingRequest(Uri uri, @Nullable Class<? extends Response<? extends BaseObject<?>>> responseClass) {
         super(uri, responseClass);
     }
 

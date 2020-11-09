@@ -20,11 +20,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
 
 import com.ianbuttimer.tidder.net.NetworkUtils;
+import com.ianbuttimer.tidder.reddit.BaseObject;
 import com.ianbuttimer.tidder.reddit.Response;
 import com.ianbuttimer.tidder.event.AbstractEvent;
 import com.ianbuttimer.tidder.ui.ICommonEvents;
@@ -39,19 +40,19 @@ import timber.log.Timber;
  * Asynchronous request and response handler for Follow queries
  */
 
-public class ApiResponseCallback<E extends AbstractEvent> extends AsyncCallback<Response> {
+public class ApiResponseCallback<E extends AbstractEvent> extends AsyncCallback<Response<? extends BaseObject<?>>> {
 
-    private WeakReference<Activity> mActivity;
-    private ICommonEvents<E, Response> mEventFactory;
+    private final WeakReference<Activity> mActivity;
+    private final ICommonEvents<E, Response<? extends BaseObject<?>>> mEventFactory;
 
-    public ApiResponseCallback(Activity activity, ICommonEvents<E, Response> eventFactory) {
+    public ApiResponseCallback(Activity activity, ICommonEvents<E, Response<? extends BaseObject<?>>> eventFactory) {
         super();
         mActivity = new WeakReference<>(activity);
         mEventFactory = eventFactory;
     }
 
     @Override
-    public void onResponse(Response result) {
+    public void onResponse(Response<? extends BaseObject<?>> result) {
         int msgId = 0;
         onApiResponse(result, msgId);
     }
@@ -67,7 +68,7 @@ public class ApiResponseCallback<E extends AbstractEvent> extends AsyncCallback<
      * @return Response object or <code>null</code>
      */
     @Override
-    public Response processUrlResponse(@NonNull URL request, @NonNull okhttp3.Response response) {
+    public Response<? extends BaseObject<?>> processUrlResponse(@NonNull URL request, @NonNull okhttp3.Response response) {
         String jsonResponse = NetworkUtils.getResponseBodyString(response);
         return processUriResponse(new ICallback.UrlProviderResultWrapper(request, jsonResponse));
     }
@@ -78,16 +79,16 @@ public class ApiResponseCallback<E extends AbstractEvent> extends AsyncCallback<
      * @return Response object or <code>null</code>
      */
     @Override
-    @Nullable public Response processUriResponse(@Nullable AbstractResultWrapper response) {
-        Response newResponse = null;
+    @Nullable public Response<? extends BaseObject<?>> processUriResponse(@Nullable AbstractResultWrapper response) {
+        Response<? extends BaseObject<?>> newResponse = null;
         if ((response != null) && response.isString()) {
-            Class responseClass = response.getResponseClass();
+            Class<?> responseClass = response.getResponseClass();
             if (responseClass != null) {
                 String stringResult = response.getStringResult();
                 E event = null;
 
                 try {
-                    newResponse = (Response)responseClass.newInstance();
+                    newResponse = (Response<? extends BaseObject<?>>)responseClass.newInstance();
                     newResponse.parseJson(stringResult);
 
                     // SEARCH FLOW 3a. post subreddit interests search result
@@ -123,10 +124,10 @@ public class ApiResponseCallback<E extends AbstractEvent> extends AsyncCallback<
     /**
      * Class to update the ui with response list details
      */
-    private class ApiResponseHandler extends
-            com.ianbuttimer.tidder.data.ResponseHandler<Response> implements Runnable {
+    private static class ApiResponseHandler extends
+            com.ianbuttimer.tidder.data.ResponseHandler<Response<? extends BaseObject<?>>> implements Runnable {
 
-        ApiResponseHandler(Activity activity, Response response, int errorId) {
+        ApiResponseHandler(Activity activity, Response<? extends BaseObject<?>> response, int errorId) {
             super(activity, response, errorId, null);
         }
 
@@ -140,7 +141,7 @@ public class ApiResponseCallback<E extends AbstractEvent> extends AsyncCallback<
      * Handle a list response
      * @param response  Response object
      */
-    protected void onApiResponse(Response response, int msgId) {
+    protected void onApiResponse(Response<? extends BaseObject<?>> response, int msgId) {
         // ui updates need to be on ui thread
         Activity activity = mActivity.get();
         activity.runOnUiThread(new ApiResponseHandler(activity, response, msgId));

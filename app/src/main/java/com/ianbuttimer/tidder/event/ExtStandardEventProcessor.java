@@ -40,7 +40,7 @@ public class ExtStandardEventProcessor implements StandardEventProcessor.IStanda
             QueryCallback<StandardEvent> cpStdEventHandler = mHhost.getCpStdEventHandler();
             if (Uri.EMPTY.equals(ProviderUri.CONFIG_CONTENT_URI)) {
                 // nothing to do
-                PostOffice.postEvent(StandardEvent.newSettingsResult(), event.getAddresss());
+                PostOffice.postEvent(StandardEvent.newSettingsResult(), event.getAddresses());
             } else if (cpStdEventHandler != null) {
                 cpStdEventHandler.queryList(mHhost.getActivity(),
                         mHhost.getLoaderId(event),

@@ -19,25 +19,26 @@ package com.ianbuttimer.tidder.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.IdRes;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
-import android.support.annotation.UiThread;
-import android.support.constraint.ConstraintLayout;
-import android.support.constraint.ConstraintSet;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.IdRes;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.annotation.UiThread;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import android.text.TextUtils;
 import android.util.Pair;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -57,6 +58,7 @@ import com.ianbuttimer.tidder.event.PostEvent;
 import com.ianbuttimer.tidder.event.RedditClientEvent;
 import com.ianbuttimer.tidder.event.StandardEvent;
 import com.ianbuttimer.tidder.event.StandardEventProcessor;
+import com.ianbuttimer.tidder.reddit.BaseObject;
 import com.ianbuttimer.tidder.reddit.Comment;
 import com.ianbuttimer.tidder.reddit.CommentCache;
 import com.ianbuttimer.tidder.reddit.CommentMore;
@@ -148,8 +150,8 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
     protected ArrayList<Comment> mList;
     protected EndlessRecyclerViewScrollListener mScrollListener;
 
-    protected ICallback<Response> mApiResponseHandler;
-    protected ICallback<Response> mApiStdEventResponseHandler;
+    protected ICallback<Response<? extends BaseObject<?>>> mApiResponseHandler;
+    protected ICallback<Response<? extends BaseObject<?>>> mApiStdEventResponseHandler;
     protected QueryCallback<StandardEvent> mCpStdEventHandler;
     protected StandardEventProcessor mStdEventProcessor;
 
@@ -251,7 +253,7 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         mFabPin = (FloatingActionButton) findActivityView(R.id.fab_pin_postDetailA);
         if (!mIsPinnable && (mFabPin != null)) {
-            mFabPin.setVisibility(View.GONE);
+            ((ImageButton)mFabPin).setVisibility(View.GONE);
         }
         mHost.onActivityCreated();
     }
@@ -737,7 +739,7 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
 
 
     private int insertComments(ArrayList<Comment> replies, int startPos, int depth) {
-        return insertComments(replies.toArray(new Comment[replies.size()]), startPos, depth);
+        return insertComments(replies.toArray(new Comment[0]), startPos, depth);
     }
 
     private int insertComments(Comment[] replies, int startPos, int depth) {
@@ -833,7 +835,7 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
     }
 
 
-    private RedditCache.ICacheListener<Comment> mCacheListener = new RedditCache.ICacheListener<Comment>() {
+    private final RedditCache.ICacheListener<Comment> mCacheListener = new RedditCache.ICacheListener<Comment>() {
         @Override
         public void onCreate(String key, Comment object) {
             object.setRequestInProgress();
@@ -843,18 +845,15 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
     };
 
     /** Tester to find marked comments */
-    private ITester<Comment> mMarkedTester = new ITester<Comment>() {
-        @Override
-        public boolean test(Comment obj) {
-            boolean isMarked;
-            Comment.Tag status = obj.getTag();
-            if (status != null) {
-                isMarked = status.isMarked();
-            } else {
-                throw new IllegalStateException("Untagged comment");
-            }
-            return isMarked;
+    private final ITester<Comment> mMarkedTester = obj -> {
+        boolean isMarked;
+        Comment.Tag status = obj.getTag();
+        if (status != null) {
+            isMarked = status.isMarked();
+        } else {
+            throw new IllegalStateException("Untagged comment");
         }
+        return isMarked;
     };
 
     private void markRepliesForRemoval(Comment comment) {
@@ -947,7 +946,7 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
             mFabPin.setContentDescription(
                     MessageFormat.format(
                             mFabPin.getContext().getString(contentDec), getTitle()));
-            mFabPin.setVisibility(View.VISIBLE);
+            ((ImageButton)mFabPin).setVisibility(View.VISIBLE);
         }
     }
 

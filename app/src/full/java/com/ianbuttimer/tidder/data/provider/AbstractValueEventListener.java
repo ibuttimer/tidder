@@ -16,22 +16,20 @@
 
 package com.ianbuttimer.tidder.data.provider;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.ianbuttimer.tidder.data.ITester;
-import com.ianbuttimer.tidder.utils.ArrayTester;
 
-import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
 import timber.log.Timber;
 
 public abstract class AbstractValueEventListener<R> implements ValueEventListener {
 
-    private CountDownLatch mLatch;
+    private final CountDownLatch mLatch;
 
     protected Query mQuery;
     protected FbQuery mFbQuery;
@@ -93,12 +91,12 @@ public abstract class AbstractValueEventListener<R> implements ValueEventListene
     }
 
     @Override
-    public void onDataChange(DataSnapshot dataSnapshot) {
+    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
         mLatch.countDown();
     }
 
     @Override
-    public void onCancelled(DatabaseError databaseError) {
+    public void onCancelled(@NonNull DatabaseError databaseError) {
         mLatch.countDown();
     }
 

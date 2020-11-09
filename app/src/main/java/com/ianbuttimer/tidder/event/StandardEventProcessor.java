@@ -17,14 +17,15 @@
 package com.ianbuttimer.tidder.event;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
 import android.text.TextUtils;
 
 import com.ianbuttimer.tidder.data.ICallback;
 import com.ianbuttimer.tidder.data.QueryCallback;
 import com.ianbuttimer.tidder.data.provider.BaseProvider;
 import com.ianbuttimer.tidder.data.provider.ProviderUri;
+import com.ianbuttimer.tidder.reddit.BaseObject;
 import com.ianbuttimer.tidder.reddit.Response;
 import com.ianbuttimer.tidder.reddit.Subreddit;
 import com.ianbuttimer.tidder.reddit.get.SubredditAboutRequest;
@@ -47,16 +48,16 @@ public class StandardEventProcessor implements IStandardEventProcessor {
 
     private static final String TAG = StandardEventProcessor.class.getSimpleName();
 
-    private WeakReference<FragmentActivity> mActivity;
-    @Nullable private ICallback<Response> mApiResponseHandler;
-    @Nullable private QueryCallback<StandardEvent> mCpStdEventHandler;
+    private final WeakReference<FragmentActivity> mActivity;
+    @Nullable private final ICallback<Response<? extends BaseObject<?>>> mApiResponseHandler;
+    @Nullable private final QueryCallback<StandardEvent> mCpStdEventHandler;
 
-    private HashMap<String, Integer> mLoaderIds;
+    private final HashMap<String, Integer> mLoaderIds;
 
-    private ArrayList<IStandardEventProcessorExt> mExtensions;
+    private final ArrayList<IStandardEventProcessorExt> mExtensions;
 
-    private String mAddress;    // post office address
-    private String mTag;        // tag for log messages
+    private final String mAddress;    // post office address
+    private final String mTag;        // tag for log messages
 
     /**
      * Constructor
@@ -65,7 +66,7 @@ public class StandardEventProcessor implements IStandardEventProcessor {
      * @param cpResponseHandler     Content provider response handler
      */
     public StandardEventProcessor(FragmentActivity activity,
-                                  @Nullable ICallback<Response> apiResponseHandler,
+                                  @Nullable ICallback<Response<? extends BaseObject<?>>> apiResponseHandler,
                                   @Nullable QueryCallback<StandardEvent> cpResponseHandler) {
         this(activity, activity.getClass().getSimpleName(), apiResponseHandler, cpResponseHandler);
     }
@@ -79,7 +80,7 @@ public class StandardEventProcessor implements IStandardEventProcessor {
      */
     public StandardEventProcessor(FragmentActivity activity,
                                   String address,
-                                  @Nullable ICallback<Response> apiResponseHandler,
+                                  @Nullable ICallback<Response<? extends BaseObject<?>>> apiResponseHandler,
                                   @Nullable QueryCallback<StandardEvent> cpResponseHandler) {
         this.mActivity = new WeakReference<>(activity);
         this.mAddress = address;
@@ -235,7 +236,7 @@ public class StandardEventProcessor implements IStandardEventProcessor {
         boolean onStandardEvent(StandardEvent event);
     }
 
-    public boolean addExtnesion(IStandardEventProcessorExt extension) {
+    public boolean addExtension(IStandardEventProcessorExt extension) {
         boolean modified = false;
         if (extension != null) {
             modified = mExtensions.add(extension);
@@ -244,7 +245,7 @@ public class StandardEventProcessor implements IStandardEventProcessor {
         return modified;
     }
 
-    public boolean removeExtnesion(IStandardEventProcessorExt extension) {
+    public boolean removeExtension(IStandardEventProcessorExt extension) {
         boolean modified = false;
         if (extension != null) {
             modified = mExtensions.remove(extension);
@@ -255,7 +256,7 @@ public class StandardEventProcessor implements IStandardEventProcessor {
 
     @Nullable
     @Override
-    public ICallback<Response> getApiResponseHandler() {
+    public ICallback<Response<? extends BaseObject<?>>> getApiResponseHandler() {
         return mApiResponseHandler;
     }
 

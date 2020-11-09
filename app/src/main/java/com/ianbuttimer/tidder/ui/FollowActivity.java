@@ -19,20 +19,22 @@ package com.ianbuttimer.tidder.ui;
 import android.content.ContentValues;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.ImageButton;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.data.ApiResponseCallback;
 import com.ianbuttimer.tidder.data.DatabaseIntentService;
@@ -43,6 +45,7 @@ import com.ianbuttimer.tidder.data.provider.FollowBuilder;
 import com.ianbuttimer.tidder.event.FollowEvent;
 import com.ianbuttimer.tidder.event.StandardEvent;
 import com.ianbuttimer.tidder.event.StandardEventProcessor;
+import com.ianbuttimer.tidder.reddit.BaseObject;
 import com.ianbuttimer.tidder.reddit.RedditClient;
 import com.ianbuttimer.tidder.reddit.Response;
 import com.ianbuttimer.tidder.reddit.get.AllSubredditsRequest;
@@ -82,12 +85,12 @@ public class FollowActivity extends AppCompatActivity implements ISectionsPagerA
     @BindView(R.id.fab_delete_followA) FloatingActionButton fabDelete;
 
     /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
+     * The {@link androidx.viewpager.widget.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
      * {@link FragmentPagerAdapter} derivative, which will keep every
      * loaded fragment in memory. If this becomes too memory intensive, it
      * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     * {@link androidx.fragment.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
@@ -135,23 +138,20 @@ public class FollowActivity extends AppCompatActivity implements ISectionsPagerA
                 } else {
                     visibility = View.INVISIBLE;
                 }
-                fabDelete.setVisibility(visibility);
+                ((ImageButton)fabDelete).setVisibility(visibility);
             }
         });
 
-        fabDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Context context = view.getContext();
-                DatabaseIntentService.Builder builder =
-                        DatabaseIntentService.Builder.builder(
-                                context,
-                                DatabaseIntentService.Actions.DELETE_ALL_FOLLOW);
-                context.startService(builder
-                        .resultReceiver(new ToastReceiver(context,
-                                context.getResources().getString(R.string.unfollowing_all_toast)))
-                        .build());
-            }
+        fabDelete.setOnClickListener(view -> {
+            Context context = view.getContext();
+            DatabaseIntentService.Builder builder =
+                    DatabaseIntentService.Builder.builder(
+                            context,
+                            DatabaseIntentService.Actions.DELETE_ALL_FOLLOW);
+            context.startService(builder
+                    .resultReceiver(new ToastReceiver(context,
+                            context.getResources().getString(R.string.unfollowing_all_toast)))
+                    .build());
         });
     }
 
@@ -276,28 +276,29 @@ public class FollowActivity extends AppCompatActivity implements ISectionsPagerA
     }
 
 
-    private ICallback<Response> mApiResponseHandler =
+    private final ICallback<Response<? extends BaseObject<?>>> mApiResponseHandler =
             new ApiResponseCallback<>(this, FollowEvent.getFactory());
 
-    private ICallback<Response> mApiStdEventResponseHandler =
+    private final ICallback<Response<? extends BaseObject<?>>> mApiStdEventResponseHandler =
             new ApiResponseCallback<>(this, StandardEvent.getFactory());
 
-    private QueryCallback<StandardEvent> mCpStdEventHandler =
+    private final QueryCallback<StandardEvent> mCpStdEventHandler =
             new QueryCallback<>(this, StandardEvent.getFactory());
 
-    private StandardEventProcessor mStdEventProcessor =
+    private final StandardEventProcessor mStdEventProcessor =
             new StandardEventProcessor(this, mApiStdEventResponseHandler, mCpStdEventHandler);
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    public class SectionsPagerAdapter extends AbstractSectionPagerAdapter {
+    public static class SectionsPagerAdapter extends AbstractSectionPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
+        @NonNull
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.

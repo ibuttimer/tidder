@@ -18,6 +18,7 @@ package com.ianbuttimer.tidder.reddit.post;
 
 import android.net.Uri;
 
+import com.ianbuttimer.tidder.reddit.BaseObject;
 import com.ianbuttimer.tidder.reddit.Response;
 
 import static com.ianbuttimer.tidder.net.RedditUriBuilder.SEARCH_SUBREDDITS_URL;
@@ -41,7 +42,7 @@ public class ApiSearchSubredditsRequest extends PostRequest {
         super(uri);
     }
 
-    public ApiSearchSubredditsRequest(Uri uri, Class<? extends Response> responseClass) {
+    public ApiSearchSubredditsRequest(Uri uri, Class<? extends Response<? extends BaseObject<?>>> responseClass) {
         super(uri, responseClass);
     }
 

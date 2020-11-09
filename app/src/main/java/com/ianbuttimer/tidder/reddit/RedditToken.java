@@ -37,7 +37,7 @@ import static com.ianbuttimer.tidder.reddit.Api.*;
  * A Reddit access token
  */
 @SuppressWarnings("unused")
-public class RedditToken extends BaseObject {
+public class RedditToken extends BaseObject<RedditToken> {
     
     public enum AuthorisationStatus {
         // corresponding to reddit errors
@@ -109,7 +109,7 @@ public class RedditToken extends BaseObject {
     }
 
     @Override
-    protected BaseObject getInstance() {
+    protected RedditToken getInstance() {
         return new RedditToken();
     }
 
@@ -226,27 +226,26 @@ public class RedditToken extends BaseObject {
     }
 
     @Override
-    protected boolean parseToken(JsonReader jsonReader, String name, BaseObject obj)
+    protected boolean parseToken(JsonReader jsonReader, String name, RedditToken obj)
             throws IOException, IllegalArgumentException {
         checkObject(obj, getClass());
 
         boolean consumed = true;
-        RedditToken object = ((RedditToken) obj);
         if (ACCESS_TOKEN.equals(name)) {
-            object.mToken = nextString(jsonReader, "");
-            object.mTokenTypeHint = ACCESS_TOKEN;
+            obj.mToken = nextString(jsonReader, "");
+            obj.mTokenTypeHint = ACCESS_TOKEN;
         } else if (TOKEN_TYPE.equals(name)) {
-            object.mTokenType = nextString(jsonReader, "");
+            obj.mTokenType = nextString(jsonReader, "");
         } else if (TOKEN_EXPIRY.equals(name)) {
-            setExpiry(nextString(jsonReader, ""), object);
+            setExpiry(nextString(jsonReader, ""), obj);
         } else if (TOKEN_SCOPE.equals(name)) {
-            object.mScope = nextString(jsonReader, "");
+            obj.mScope = nextString(jsonReader, "");
         } else if (REFRESH_TOKEN.equals(name)) {
-            object.mRefresh = nextString(jsonReader, "");
+            obj.mRefresh = nextString(jsonReader, "");
         } else if (ACCESS_ERROR.equals(name)) {
-            setError(nextString(jsonReader, ""), object);
+            setError(nextString(jsonReader, ""), obj);
         } else if (DEVICE_TOKEN.equals(name)) {
-            object.mDeviceId = nextString(jsonReader, "");
+            obj.mDeviceId = nextString(jsonReader, "");
         } else {
             consumed = false;
         }
@@ -255,7 +254,7 @@ public class RedditToken extends BaseObject {
 
     private void setExpiry(String secFromNow, RedditToken token) {
         try {
-            int seconds = Integer.valueOf(secFromNow);
+            int seconds = Integer.parseInt(secFromNow);
             token.mExpires = new Date(System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(seconds, TimeUnit.SECONDS));
         } catch (NumberFormatException e) {
             token.mStatus = AuthorisationStatus.INVALID_EXPIRY;

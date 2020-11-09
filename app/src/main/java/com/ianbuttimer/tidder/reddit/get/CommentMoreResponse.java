@@ -56,12 +56,12 @@ public class CommentMoreResponse extends CommentResponse
     }
 
     @Override
-    protected BaseObject getInstance() {
+    protected CommentMoreResponse getInstance() {
         return new CommentMoreResponse();
     }
 
     @Override
-    protected boolean parseToken(JsonReader jsonReader, String name, BaseObject obj)
+    protected boolean parseToken(JsonReader jsonReader, String name, CommentResponse obj)
             throws IOException, IllegalArgumentException {
         checkObject(obj, getClass());
 

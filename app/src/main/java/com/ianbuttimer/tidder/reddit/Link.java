@@ -17,7 +17,7 @@
 package com.ianbuttimer.tidder.reddit;
 
 import android.net.Uri;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.JsonReader;
 
 import com.ianbuttimer.tidder.ui.widgets.BasicStatsView;

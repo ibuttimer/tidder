@@ -23,7 +23,7 @@ import com.ianbuttimer.tidder.event.EventType;
  * Base class for reddit responses
  */
 
-public abstract class Response extends BaseObject implements IEmpty {
+public abstract class Response<T> extends BaseObject<T> implements IEmpty {
 
     protected boolean mEmpty;
     @EventType protected int mEventType;

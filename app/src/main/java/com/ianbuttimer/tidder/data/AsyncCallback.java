@@ -20,11 +20,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
-import android.support.v4.app.FragmentActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
+import androidx.fragment.app.FragmentActivity;
 import android.util.Pair;
 
 import com.ianbuttimer.tidder.R;
@@ -165,7 +165,7 @@ public abstract class AsyncCallback<T> implements ICallback<T>, LoaderManager.Lo
     /**
      * ResponseReceiver to convert response from IntentService to a UrlResultWrapper
      */
-    private ResponseReceiver mResultReceiverToResultWrapper =
+    private final ResponseReceiver mResultReceiverToResultWrapper =
         new ResponseReceiver() {
             @Override
             protected void onReceiveResult(int resultCode, Bundle resultData) {
@@ -314,8 +314,8 @@ public abstract class AsyncCallback<T> implements ICallback<T>, LoaderManager.Lo
      * @param loaderId  Id of loader to start
      */
     private void startLoader(@NonNull FragmentActivity activity, @NonNull Bundle args, int loaderId) {
-        LoaderManager manager = activity.getSupportLoaderManager();
-        Loader loader = manager.getLoader(loaderId);
+        LoaderManager manager = LoaderManager.getInstance(activity);
+        Loader<?> loader = manager.getLoader(loaderId);
         if (loader == null) {
             // Initialize the loader
             manager.initLoader(loaderId, args, this);
@@ -326,6 +326,7 @@ public abstract class AsyncCallback<T> implements ICallback<T>, LoaderManager.Lo
 
     //vvvvvvv LoaderManager.LoaderCallbacks implementation vvvvvvv//
 
+    @NonNull
     @Override
     public Loader<AbstractResultWrapper> onCreateLoader(int id, final Bundle args) {
         ContentProviderLoader loader;
@@ -348,7 +349,7 @@ public abstract class AsyncCallback<T> implements ICallback<T>, LoaderManager.Lo
     }
 
     @Override
-    public void onLoadFinished(Loader<AbstractResultWrapper> loader, AbstractResultWrapper data) {
+    public void onLoadFinished(@NonNull Loader<AbstractResultWrapper> loader, AbstractResultWrapper data) {
 
         if (data != null) {
             ResponseHandler handler = data.getHandler();
@@ -382,7 +383,7 @@ public abstract class AsyncCallback<T> implements ICallback<T>, LoaderManager.Lo
     }
 
     @Override
-    public void onLoaderReset(Loader loader) {
+    public void onLoaderReset(@NonNull Loader loader) {
         // no op
     }
 

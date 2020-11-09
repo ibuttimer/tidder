@@ -17,10 +17,11 @@
 package com.ianbuttimer.tidder.event;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.ianbuttimer.tidder.data.ContentProviderResponse;
+import com.ianbuttimer.tidder.reddit.BaseObject;
 import com.ianbuttimer.tidder.reddit.Response;
 import com.ianbuttimer.tidder.reddit.get.CommentMoreResponse;
 import com.ianbuttimer.tidder.reddit.get.CommentTreeResponse;
@@ -32,7 +33,7 @@ import com.ianbuttimer.tidder.ui.ICommonEvents;
  */
 
 public class PostEvent extends AbstractEvent<PostEvent>
-                            implements ICommonEvents<PostEvent, Response> {
+                            implements ICommonEvents<PostEvent, Response<? extends BaseObject<?>>> {
 
     private static PostEvent mFactoryInstance;
 
@@ -57,7 +58,7 @@ public class PostEvent extends AbstractEvent<PostEvent>
         super(event, mode);
     }
 
-    public static ICommonEvents<PostEvent, Response> getFactory() {
+    public static ICommonEvents<PostEvent, Response<? extends BaseObject<?>>> getFactory() {
         if (mFactoryInstance == null) {
             mFactoryInstance = new PostEvent(EventType.FACTORY_INSTANCE);
         }
@@ -65,7 +66,7 @@ public class PostEvent extends AbstractEvent<PostEvent>
     }
 
     @Override
-    public ICommonEvents<PostEvent, Response> getFactoryInstance() {
+    public ICommonEvents<PostEvent, Response<? extends BaseObject<?>>> getFactoryInstance() {
         return getFactory();
     }
 
@@ -127,17 +128,16 @@ public class PostEvent extends AbstractEvent<PostEvent>
      * @return  event object
      */
     public static PostEvent newPinnedStatusChange() {
-        PostEvent event = new PostEvent(EventType.PINNED_STATUS_CHANGE);
-        return event;
+        return new PostEvent(EventType.PINNED_STATUS_CHANGE);
     }
 
     /**
      * Create a new Response result event
-     * @param response
+     * @param response  Response
      * @return  event object
      */
     @Override
-    public PostEvent newResponseResult(Response response) {
+    public PostEvent newResponseResult(Response<? extends BaseObject<?>> response) {
         PostEvent event = null;
         if (response != null) {
             @EventType int type = response.getEventType();

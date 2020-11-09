@@ -16,7 +16,7 @@
 
 package com.ianbuttimer.tidder.reddit;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
@@ -24,7 +24,7 @@ import java.util.ArrayList;
  * Interface providing access to a listing
  */
 
-public interface ListingList<T extends BaseObject> {
+public interface ListingList<T> {
 
     ArrayList<T> getList();
     @Nullable T getItem(int index);

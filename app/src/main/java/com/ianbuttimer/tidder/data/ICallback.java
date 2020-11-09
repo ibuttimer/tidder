@@ -20,9 +20,9 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
 
 import com.ianbuttimer.tidder.reddit.Request;
 import com.ianbuttimer.tidder.reddit.post.PostRequest;
@@ -268,8 +268,8 @@ public interface ICallback<T> extends Callback {
 
     /**
      * Handle a failure response from a request
-     * @param code
-     * @param message
+     * @param code  Failure code
+     * @param message   Failure message
      */
     void onFailure(int code, String message);
 
@@ -292,7 +292,7 @@ public interface ICallback<T> extends Callback {
          * @param responseClass Class representing response
          */
         public UrlResultWrapper(@NonNull URL urlRequest, String stringResult,
-                                @Nullable Class responseClass) {
+                                @Nullable Class<?> responseClass) {
             super(ResponseHandler.URL_HANDLER, urlRequest, stringResult, responseClass);
         }
     }

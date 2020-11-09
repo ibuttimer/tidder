@@ -99,7 +99,7 @@ public class PostsCollector {
     /**
      * ResponseReceiver to convert response from IntentService to a UrlResultWrapper
      */
-    private ResponseReceiver mResultReceiverToLinkResponse =
+    private final ResponseReceiver mResultReceiverToLinkResponse =
             new ResponseReceiver() {
                 @Override
                 protected void onReceiveResult(int resultCode, Bundle resultData) {

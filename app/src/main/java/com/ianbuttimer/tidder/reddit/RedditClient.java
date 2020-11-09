@@ -22,7 +22,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.ArrayMap;
 import android.util.Base64;
 
@@ -124,7 +124,7 @@ public class RedditClient {
 
     private static final HashMap<AuthorisationStatus, Codes> AUTH_TO_APP_ERROR_MAP;
 
-    private static ArrayDeque<Intent> sMethodQueue= new ArrayDeque<>();
+    private static final ArrayDeque<Intent> sMethodQueue= new ArrayDeque<>();
 
     static {
         AUTH_TO_APP_ERROR_MAP = new HashMap<>();
@@ -325,7 +325,7 @@ public class RedditClient {
         startServiceForPost(context, uri, null, map, receiver);
     }
 
-    public void startServiceForPost(Context context, Uri uri, Class responseClass, ArrayMap<String, String> map, ResultReceiver receiver) {
+    public void startServiceForPost(Context context, Uri uri, Class<?> responseClass, ArrayMap<String, String> map, ResultReceiver receiver) {
         Intent intent = getLaunchBuilder(context, ACTION_POST, uri, receiver)
                 .mediaType(MEDIA_FORM)
                 .bodyData(NetworkUtils.makeKeyValuePairString(map, "&", "="))

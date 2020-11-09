@@ -17,9 +17,10 @@
 package com.ianbuttimer.tidder.reddit.get;
 
 import android.net.Uri;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.text.TextUtils;
 
+import com.ianbuttimer.tidder.reddit.BaseObject;
 import com.ianbuttimer.tidder.reddit.ListingRequest;
 import com.ianbuttimer.tidder.reddit.Response;
 
@@ -52,7 +53,7 @@ public class CommentMoreRequest extends CommentTreeRequest {
         this(uri, null);
     }
 
-    public CommentMoreRequest(Uri uri, @Nullable Class<? extends Response> responseClass) {
+    public CommentMoreRequest(Uri uri, @Nullable Class<? extends Response<? extends BaseObject<?>>> responseClass) {
         super(uri, responseClass);
     }
 

@@ -17,7 +17,7 @@
 package com.ianbuttimer.tidder.data;
 
 import android.database.Cursor;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import java.lang.reflect.Array;
 
@@ -29,7 +29,7 @@ import java.lang.reflect.Array;
 public abstract class AbstractCursorProcessor<T extends AbstractDbRow> {
 
     private Cursor mCursor;
-    private Class<? extends AbstractDbRow> mClazz;
+    private final Class<? extends AbstractDbRow> mClazz;
 
     public AbstractCursorProcessor(Cursor cursor, Class<? extends AbstractDbRow> clazz) {
         this.mCursor = cursor;

@@ -17,10 +17,11 @@
 package com.ianbuttimer.tidder.event;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.ianbuttimer.tidder.data.ContentProviderResponse;
+import com.ianbuttimer.tidder.reddit.BaseObject;
 import com.ianbuttimer.tidder.reddit.Response;
 import com.ianbuttimer.tidder.reddit.get.AllSubredditsResponse;
 import com.ianbuttimer.tidder.reddit.get.SubredditsSearchResponse;
@@ -33,7 +34,7 @@ import com.ianbuttimer.tidder.ui.ICommonEvents;
  */
 
 public class FollowEvent extends AbstractEvent<FollowEvent>
-                            implements ICommonEvents<FollowEvent, Response> {
+                            implements ICommonEvents<FollowEvent, Response<? extends BaseObject<?>>> {
 
     private static FollowEvent mFactoryInstance;
 
@@ -52,7 +53,7 @@ public class FollowEvent extends AbstractEvent<FollowEvent>
         super(event, mode);
     }
 
-    public static ICommonEvents<FollowEvent, Response> getFactory() {
+    public static ICommonEvents<FollowEvent, Response<? extends BaseObject<?>>> getFactory() {
         if (mFactoryInstance == null) {
             mFactoryInstance = new FollowEvent(EventType.FACTORY_INSTANCE);
         }
@@ -60,7 +61,7 @@ public class FollowEvent extends AbstractEvent<FollowEvent>
     }
 
     @Override
-    public ICommonEvents<FollowEvent, Response> getFactoryInstance() {
+    public ICommonEvents<FollowEvent, Response<? extends BaseObject<?>>> getFactoryInstance() {
         return getFactory();
     }
 

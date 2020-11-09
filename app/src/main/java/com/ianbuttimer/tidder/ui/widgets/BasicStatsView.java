@@ -18,9 +18,9 @@ package com.ianbuttimer.tidder.ui.widgets;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import android.text.Html;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;

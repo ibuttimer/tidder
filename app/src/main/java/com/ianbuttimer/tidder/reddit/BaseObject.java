@@ -17,7 +17,7 @@
 package com.ianbuttimer.tidder.reddit;
 
 import android.net.Uri;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.JsonReader;
@@ -36,7 +36,7 @@ import timber.log.Timber;
  * Base class for reddit objects
  */
 
-public abstract class BaseObject<T extends BaseObject> {
+public abstract class BaseObject<T> {
 
     /** Comment type */
     public static final String TYPE_COMMENT = "t1";
@@ -318,11 +318,16 @@ public abstract class BaseObject<T extends BaseObject> {
      * Parse a json array string
      * @param jsonReader  reader to parse
      */
+    @SuppressWarnings("unchecked")
     public ArrayList<T> parseJsonArray(JsonReader jsonReader, ArrayList<T> list) throws IOException {
         jsonReader.beginArray();
         while (jsonReader.hasNext()) {
             T obj = getInstance();
-            obj.parseJson(jsonReader);
+            if (obj instanceof BaseObject) {
+                ((BaseObject<T>)obj).parseJson(jsonReader);
+            } else {
+                throw new IllegalStateException("");
+            }
             list.add(obj);
         }
         jsonReader.endArray();
@@ -336,7 +341,7 @@ public abstract class BaseObject<T extends BaseObject> {
      * @param clazz Expected class
      * @throws IllegalArgumentException     if object is null or incorrect class
      */
-    protected void checkObject(Object obj, Class clazz) {
+    protected void checkObject(Object obj, Class<?> clazz) {
         if (obj == null) {
             throw new IllegalArgumentException("Invalid null object");
         }

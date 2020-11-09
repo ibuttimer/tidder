@@ -17,24 +17,25 @@
 package com.ianbuttimer.tidder.ui;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.ianbuttimer.tidder.data.ContentProviderResponse;
 import com.ianbuttimer.tidder.event.AbstractEvent;
+import com.ianbuttimer.tidder.reddit.BaseObject;
 import com.ianbuttimer.tidder.reddit.Response;
 
 /**
  * Interface for processing common events
  */
 
-public interface ICommonEvents<E extends AbstractEvent, R extends Response> {
+public interface ICommonEvents<E extends AbstractEvent, R extends Response<? extends BaseObject<?>>> {
 
     ICommonEvents<E, R> getFactoryInstance();
 
     /**
      * Create a new Response result event
-     * @param response
+     * @param response  Response
      * @return  event object
      */
     @Nullable E newResponseResult(R response);

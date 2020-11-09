@@ -21,6 +21,7 @@
 
     <string name="paid_app_feature">This feature is only available in the full version.</string>
 
+    <!-- sample ad units from https://developers.google.com/admob/android/test-ads -->
     <!-- TODO replace values with AdMob app & ad unit IDs -->
     <string name="admob_id" translatable="false">ca-app-pub-3940256099942544~3347511713</string> <!-- AdMob test id -->
     <string name="admob_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string> <!-- AdMob banner test unit id -->
