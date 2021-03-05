@@ -42,7 +42,12 @@ public final class TidderDatabase extends AbstractDatabase {
 
     public static final int VERSION = 1;
 
-    private static final String RECREATE_MIGRATION = "recreate";
+    private static final String RECREATE_MIGRATION;
+
+    static {
+        RECREATE_MIGRATION = "recreate";
+    }
+
     private static final String[] MIGRATIONS = {
         // Put DDL/DML commands here, one string per VERSION increment
         /* ver 1 - 2 */ RECREATE_MIGRATION,

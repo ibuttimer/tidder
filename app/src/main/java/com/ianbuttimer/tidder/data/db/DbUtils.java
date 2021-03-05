@@ -46,7 +46,7 @@ public class DbUtils {
         INVALID_DATE = cal.getTime();
     }
 
-    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 
     /**
      * Get a SQLite timestamp

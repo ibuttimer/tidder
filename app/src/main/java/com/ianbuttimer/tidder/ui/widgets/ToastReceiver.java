@@ -17,17 +17,8 @@
 package com.ianbuttimer.tidder.ui.widgets;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.os.Handler;
-import android.os.ResultReceiver;
-import androidx.annotation.Nullable;
-import android.text.TextUtils;
 import android.widget.Toast;
-
-import java.lang.ref.WeakReference;
-
-import static android.app.Activity.RESULT_CANCELED;
-import static android.app.Activity.RESULT_OK;
 
 /**
  * A class to display the a result in a Toast

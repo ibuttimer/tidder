@@ -20,16 +20,7 @@ import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.annotation.UiThread;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.recyclerview.widget.RecyclerView;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -39,7 +30,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.annotation.UiThread;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewbinding.ViewBinding;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.data.Follow;
 import com.ianbuttimer.tidder.data.FollowQueryResponse;
@@ -49,6 +54,7 @@ import com.ianbuttimer.tidder.data.adapter.AbstractRecycleViewAdapter;
 import com.ianbuttimer.tidder.data.adapter.SubredditAdapter;
 import com.ianbuttimer.tidder.data.adapter.SubredditViewHolder;
 import com.ianbuttimer.tidder.data.provider.ProviderUri;
+import com.ianbuttimer.tidder.databinding.FragmentFollowBinding;
 import com.ianbuttimer.tidder.event.AbstractEvent;
 import com.ianbuttimer.tidder.event.FollowEvent;
 import com.ianbuttimer.tidder.event.StandardEvent;
@@ -67,10 +73,6 @@ import com.ianbuttimer.tidder.utils.ArrayTester;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.OnLongClick;
 import timber.log.Timber;
 
 
@@ -78,23 +80,48 @@ import timber.log.Timber;
  * Base class for Follow activity tab fragments
  */
 
-public abstract class FollowTabFragment
-            extends AbstractListingTabFragment<Subreddit, SubredditViewHolder>
+public abstract class AbstractFollowTabFragment
+            extends AbstractListingTabFragment<Subreddit, FragmentFollowBinding, SubredditViewHolder<FragmentFollowBinding>>
             implements IAdapterHandler {
 
-    @BindView(R.id.cl_search_fragF) ConstraintLayout layoutSearch;
+    FragmentFollowBinding binding;
 
-    public FollowTabFragment() {
+    public AbstractFollowTabFragment() {
         super(R.layout.fragment_follow);
         mObserver = null;
+    }
+
+    @Override
+    protected ViewBinding getViewBinding() {
+        binding = FragmentFollowBinding.inflate(getLayoutInflater());
+        return binding;
+    }
+
+    @Override
+    protected RecyclerView getRecyclerView() {
+        return binding.incListingLayout.rvListListingL;
+    }
+
+    @Override
+    protected ProgressBar getProgressBar() {
+        return binding.incListingLayout.pbProgressListingL;
+    }
+
+    @Override
+    protected TextView getTextView() {
+        return binding.incListingLayout.tvMessageListingL;
+    }
+
+    protected ConstraintLayout getLayoutSearch() {
+        return binding.clSearchFragF.clSearchFragF;
     }
 
     /**
      * Returns a new instance of this fragment for the given section number.
      * @param sectionNumber Section number
      */
-    public static FollowTabFragment newInstance(int sectionNumber) {
-        FollowTabFragment fragment = null;
+    public static AbstractFollowTabFragment newInstance(int sectionNumber) {
+        AbstractFollowTabFragment fragment = null;
         FollowActivity.Tabs tab = FollowActivity.Tabs.valueOf(sectionNumber);
 
         if (FollowActivity.Tabs.SEARCH.equals(tab)) {
@@ -120,6 +147,7 @@ public abstract class FollowTabFragment
         super.onActivityCreated(savedInstanceState);
 
         // Set On Click Listener for description
+        RecyclerView rvList = getRecyclerView();
         if (rvList != null) {
             rvList.addOnItemTouchListener(new NoUrlTextViewListItemClickListener(
                     getActivity(),
@@ -134,11 +162,11 @@ public abstract class FollowTabFragment
     }
 
     @Override
-    protected AbstractRecycleViewAdapter<Subreddit, SubredditViewHolder> getAdapter() {
-        return new SubredditAdapter(mList, this);
+    protected AbstractRecycleViewAdapter<Subreddit, FragmentFollowBinding, SubredditViewHolder<FragmentFollowBinding>> getAdapter() {
+        return new SubredditAdapter<>(mList, this);
     }
 
-    protected ContentObserver mDbObserver = new ContentObserver(new Handler()) {
+    protected ContentObserver mDbObserver = new ContentObserver(new Handler(Looper.myLooper())) {
         @Override
         public void onChange(boolean selfChange, Uri uri) {
             // LIST FLOW 1b. request update following subreddit list
@@ -151,8 +179,8 @@ public abstract class FollowTabFragment
                 int count = pagerAdapter.getCount();
                 for (int i = 0; i < count; i++) {
                     Fragment fragment = pagerAdapter.getFragment(i);
-                    if ((fragment instanceof FollowTabFragment)) {
-                        String tag = ((FollowTabFragment)fragment).getAddress();
+                    if ((fragment instanceof AbstractFollowTabFragment)) {
+                        String tag = ((AbstractFollowTabFragment)fragment).getAddress();
                         if (PostOffice.isRegistered(fragment)) {
                             atHome.add(tag);    // add address to active list
                         } else {
@@ -184,7 +212,7 @@ public abstract class FollowTabFragment
 
     @UiThread
     @Override
-    protected void processMessageEvent(AbstractEvent event) {
+    protected void processMessageEvent(AbstractEvent<?> event) {
 
         if (PostOffice.deliverEvent(event, getAddress())) {
             if (event instanceof FollowEvent) {
@@ -234,7 +262,6 @@ public abstract class FollowTabFragment
         return mSelectCtrl.onItemMove(fromPosition, toPosition);
     }
 
-
     @Override
     protected ListItemClickListener getListItemClickListener() {
         // click listener for FloatingActionButton
@@ -249,20 +276,25 @@ public abstract class FollowTabFragment
                 mAdapter.getAdapterHandler(), false);   // never intercept so the FloatingActionButton can handle it
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
 
     /**
      * Tab fragment implementation for subreddit follow search tab
      */
-    public static class SearchTabFragment extends FollowTabFragment {
+    public static class SearchTabFragment extends AbstractFollowTabFragment {
 
         private static final String TAG = "FollowSearchTab";
 
         protected static final String QUERY = "query";
 
-        @BindView(R.id.et_interest_fragF) EditText etInterests;
-        @BindView(R.id.et_name_fragF) EditText etName;
-        @BindView(R.id.btn_search_fragF) FloatingActionButton btnSearch;
-        @BindView(R.id.btn_clear_fragF) FloatingActionButton btnClear;
+        private EditText etInterests;
+        private EditText etName;
+        private FloatingActionButton btnSearch;
+        private FloatingActionButton btnClear;
 
         protected String mQuery;
 
@@ -272,7 +304,18 @@ public abstract class FollowTabFragment
 
             View rootView = super.onCreateView(inflater, container, savedInstanceState);
 
+            etInterests = binding.clSearchFragF.etInterestFragF;
+            etName = binding.clSearchFragF.etNameFragF;
+            btnSearch = binding.clSearchFragF.btnSearchFragF;
+            btnClear = binding.clSearchFragF.btnClearFragF;
+
             btnSearch.setEnabled(false);
+            btnSearch.setOnClickListener(onSearchClick);
+            btnSearch.setOnLongClickListener(onSearchLongClick);
+
+            binding.clSearchFragF.btnClearFragF.setOnClickListener(onClearClick);
+            binding.clSearchFragF.btnClearFragF.setOnLongClickListener(onClearLongClick);
+
             etInterests.addTextChangedListener(mSearchWatcher);
             etName.addTextChangedListener(mSearchWatcher);
 
@@ -283,6 +326,7 @@ public abstract class FollowTabFragment
         public void onActivityCreated(@Nullable Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
 
+            RecyclerView rvList = getRecyclerView();
             if (rvList != null) {
                 mScrollListener = new EndlessRecyclerViewScrollListener(mLayoutManager) {
                     @Override
@@ -304,11 +348,6 @@ public abstract class FollowTabFragment
         }
 
         @Override
-        protected void bind(View rootView) {
-            ButterKnife.bind(this, rootView);
-        }
-
-        @Override
         public void onSaveInstanceState(@NonNull Bundle outState) {
             super.onSaveInstanceState(outState);
 
@@ -326,8 +365,7 @@ public abstract class FollowTabFragment
             }
         }
 
-        @OnClick(R.id.btn_search_fragF)
-        public void onSearchClick() {
+        private final View.OnClickListener onSearchClick = view -> {
             String interests = etInterests.getText().toString();
             String name = etName.getText().toString();
             FollowEvent event;
@@ -351,29 +389,26 @@ public abstract class FollowTabFragment
             }
 
             showInProgress();
-        }
+        };
 
-        @OnLongClick(R.id.btn_search_fragF)
-        public boolean onSearchLongClick(View view) {
+        private final View.OnLongClickListener onSearchLongClick = view -> {
             UiUtils.processContentDescription(view);
             return true;
-        }
+        };
 
-        @OnClick(R.id.btn_clear_fragF)
-        public void onClearClick() {
+        private final View.OnClickListener onClearClick = view -> {
             etInterests.setText("");
             etName.setText("");
             mAdapter.clear();
             mAdapter.notifyDataSetChanged();
-        }
+        };
 
-        @OnLongClick(R.id.btn_clear_fragF)
-        public boolean onClearLongClick(View view) {
+        private final View.OnLongClickListener onClearLongClick = view -> {
             UiUtils.processContentDescription(view);
             return true;
-        }
+        };
 
-        private TextWatcher mSearchWatcher = new TextWatcher() {
+        private final TextWatcher mSearchWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
                 // no op
@@ -488,19 +523,22 @@ public abstract class FollowTabFragment
     /**
      * Base tab fragment implementation for subreddit follow list & all tabs
      */
-    public static abstract class NonSearchTabFragment extends FollowTabFragment {
+    public static abstract class NonSearchTabFragment extends AbstractFollowTabFragment {
 
         @Override
-        protected void bind(View rootView) {
-            ButterKnife.bind(this, rootView);
+        protected ViewBinding getViewBinding() {
+            ViewBinding binding = super.getViewBinding();
+            ConstraintLayout rootView = (ConstraintLayout) binding.getRoot();
 
-            layoutSearch.setVisibility(View.GONE);
+            getLayoutSearch().setVisibility(View.GONE);
 
             // adjust constraints to constrain recycler view to parent
             ConstraintSet constraint = new ConstraintSet();
-            constraint.clone((ConstraintLayout)rootView);
+            constraint.clone(rootView);
             constraint.connect(R.id.rv_list_listingL, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
-            constraint.applyTo((ConstraintLayout)rootView);
+            constraint.applyTo(rootView);
+
+            return binding;
         }
     }
 
@@ -511,12 +549,7 @@ public abstract class FollowTabFragment
 
         private static final String TAG = "FollowListTab";
 
-        private static ITester<Subreddit> sFollowingTester = new ITester<Subreddit>() {
-            @Override
-            public boolean test(Subreddit obj) {
-                return obj.isFollowing();
-            }
-        };
+        private static final ITester<Subreddit> sFollowingTester = Subreddit::isFollowing;
 
         @Override
         public void onStart() {
@@ -637,6 +670,7 @@ public abstract class FollowTabFragment
         public void onActivityCreated(@Nullable Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
 
+            RecyclerView rvList = getRecyclerView();
             if (rvList != null) {
                 mScrollListener = new EndlessRecyclerViewScrollListener(mLayoutManager) {
                     @Override
@@ -765,8 +799,8 @@ public abstract class FollowTabFragment
                             boolean isFollowing = subreddit.isFollowing();
                             boolean inList = false;
 
-                            for (int followIdx = 0; followIdx < length; followIdx++) {
-                                if (displayName.equals(following[followIdx].getSubreddit())) {
+                            for (Follow follow : following) {
+                                if (displayName.equals(follow.getSubreddit())) {
                                     inList = true;
                                     if (!isFollowing) {
                                         subreddit.setFollowing(true);

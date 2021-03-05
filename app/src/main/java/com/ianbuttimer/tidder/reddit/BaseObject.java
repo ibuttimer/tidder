@@ -34,6 +34,7 @@ import timber.log.Timber;
 
 /**
  * Base class for reddit objects
+ * @param <T> class of reddit object
  */
 
 public abstract class BaseObject<T> {

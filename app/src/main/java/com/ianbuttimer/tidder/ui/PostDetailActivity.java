@@ -26,14 +26,19 @@ import androidx.fragment.app.Fragment;
 
 import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ianbuttimer.tidder.R;
+import com.ianbuttimer.tidder.databinding.ActivityPostDetailBinding;
 import com.ianbuttimer.tidder.event.PostEvent;
 import com.ianbuttimer.tidder.reddit.RedditClient;
 import com.ianbuttimer.tidder.ui.util.DoubleEnterKeyInterceptor;
 import com.ianbuttimer.tidder.ui.util.KeyInterceptor;
 import com.ianbuttimer.tidder.ui.widgets.PostOffice;
 import com.ianbuttimer.tidder.utils.Utils;
+
+import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
@@ -50,7 +55,8 @@ import static com.ianbuttimer.tidder.ui.CommentThreadProcessor.THREAD;
  * item details are presented side-by-side with a list of items
  * in a {@link PostListActivity}.
  */
-public class PostDetailActivity extends AppCompatActivity implements KeyInterceptor.IKeyInterceptor {
+public class PostDetailActivity extends AppCompatActivity
+        implements KeyInterceptor.IKeyInterceptor, CommentThreadProcessor.ICommentThreadHost {
 
     public static final String TAG = PostDetailActivity.class.getSimpleName();
 
@@ -59,6 +65,8 @@ public class PostDetailActivity extends AppCompatActivity implements KeyIntercep
     };
 
     private DoubleEnterKeyInterceptor mInterceptor;
+
+    private ActivityPostDetailBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,11 +80,12 @@ public class PostDetailActivity extends AppCompatActivity implements KeyIntercep
             finish();
         }
 
-
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post_detail);
 
-        Toolbar toolbar = findViewById(R.id.toolbar_postDetailA);
+        binding = ActivityPostDetailBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        Toolbar toolbar = binding.toolbarPostDetailA;
         setSupportActionBar(toolbar);
 
         // Show the Up button in the action bar.
@@ -85,7 +94,8 @@ public class PostDetailActivity extends AppCompatActivity implements KeyIntercep
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        mInterceptor = new DoubleEnterKeyInterceptor(findViewById(R.id.layout_postDetailsA), this);
+        View view = binding.layoutPostDetailsA;
+        mInterceptor = new DoubleEnterKeyInterceptor(view, this);
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
@@ -153,5 +163,20 @@ public class PostDetailActivity extends AppCompatActivity implements KeyIntercep
     public void onIntercept() {
         PostOffice.postEvent(PostEvent.newViewThreadRequest()
                                     .setAddress(PostDetailFragment.getTabAddress()));
+    }
+
+    @Override
+    public FloatingActionButton getFabPin() {
+        return binding.fabPinPostDetailA;
+    }
+
+    @Override
+    public FloatingActionButton getFabRefresh() {
+        return null;
+    }
+
+    @Override
+    public CollapsingToolbarLayout getAppBarLayout() {
+        return binding.toolbarLayoutPostDetailA;
     }
 }

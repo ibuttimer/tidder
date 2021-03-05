@@ -57,6 +57,16 @@
     <string name="redirect_uri_intentfilter_scheme" translatable="false">http</string>
     <string name="redirect_uri_intentfilter_path" translatable="false">/my_redirect</string>
 
+    <!-- see https://www.reddit.com/wiki/api for app registration details -->
+    <!-- The redirect_uri specified during registration -->
+    <string name="reddit_redirect_uri" translatable="false">http://tidder.ianbuttimer.com/redirect</string>
+    <!-- The host of redirect_uri specified during registration -->
+    <string name="reddit_redirect_uri_host" translatable="false">tidder.ianbuttimer.com</string>
+    <!-- The scheme of redirect_uri specified during registration -->
+    <string name="reddit_redirect_uri_scheme" translatable="false">http</string>
+    <!-- The path of redirect_uri specified during registration -->
+    <string name="reddit_redirect_uri_path" translatable="false">/redirect</string>
+
     <!-- Note: to be parsed by MessageFormat, play particular attention to quotes -->
     <string name="config_error">The application does not appear to be configured correctly.\nPlease verify the {0} configuration.</string>
     <string name="config_error_client_id">Reddit Client ID</string>

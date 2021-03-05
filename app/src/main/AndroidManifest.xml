@@ -15,19 +15,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!-- TODO replace values with Reddit Client ID and redirect URL -->
-        <!-- <meta-data -->
-        <!-- android:name="CLIENT_ID" -->
-        <!-- android:value="@string/client_id_metadata_todo" /> -->
-        <!-- <meta-data -->
-        <!-- android:name="REDIRECT_URI" -->
-        <!-- android:value="@string/redirect_uri_metadata_todo" /> -->
+        <!-- TODO set values of Reddit Client ID and redirect URL
+            see https://github.com/ibuttimer/tidder#development-setup -->
         <meta-data
-            android:name="CLIENT_ID"
-            android:value="reddit_client_id" />
+             android:name="CLIENT_ID"
+             android:value="@string/reddit_client_id" />
         <meta-data
-            android:name="REDIRECT_URI"
-            android:value="http://tidder.ianbuttimer.com/redirect" />
+             android:name="REDIRECT_URI"
+             android:value="@string/reddit_redirect_uri" />
 
         <activity android:name=".ui.LoginActivity">
             <intent-filter>
@@ -41,18 +36,12 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <!-- TODO replace host. scheme and path with Reddit redirect URL values, -->
-                <!-- e.g. if the redirect URL is http://www.example.com/my_redirect, then -->
-                <!-- <data android:host="www.example.com" -->
-                <!-- android:scheme="http" -->
-                <!-- android:path="/my_redirect" /> -->
-                <!-- <data android:host="@string/redirect_uri_intentfilter_host" -->
-                <!-- android:scheme="@string/redirect_uri_intentfilter_scheme" -->
-                <!-- android:path="@string/redirect_uri_intentfilter_path" /> -->
+                <!-- TODO set host, scheme and path with Reddit redirect URL values
+                    see https://github.com/ibuttimer/tidder#development-setup -->
                 <data
-                    android:host="tidder.ianbuttimer.com"
-                    android:path="/redirect"
-                    android:scheme="http" />
+                    android:host="@string/reddit_redirect_uri_host"
+                    android:path="@string/reddit_redirect_uri_path"
+                    android:scheme="@string/reddit_redirect_uri_scheme" />
             </intent-filter>
         </activity>
 

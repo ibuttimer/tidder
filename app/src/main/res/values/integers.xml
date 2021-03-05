@@ -17,7 +17,7 @@
 
 <resources>
 
-    <integer name="search_text_sise">10</integer>
+    <integer name="search_text_size">10</integer>
 
     <integer name="intercept_key_delay_msec">300</integer>
     <integer name="intercept_key_extend_delay_msec">50</integer>

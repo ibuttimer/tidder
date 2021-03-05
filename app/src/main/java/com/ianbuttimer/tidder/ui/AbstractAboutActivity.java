@@ -26,24 +26,23 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ianbuttimer.tidder.R;
+import com.ianbuttimer.tidder.databinding.ActivityAboutBinding;
 import com.ianbuttimer.tidder.ui.widgets.UnorderedListItem;
 import com.ianbuttimer.tidder.utils.Utils;
 
 import java.util.Arrays;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public abstract class AbstractAboutActivity extends AppCompatActivity {
 
-    @BindView(R.id.rl_aboutA) RelativeLayout mLayout;
+    private ActivityAboutBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_about);
 
-        ButterKnife.bind(this);
+        binding = ActivityAboutBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
         // set version string
         TextView tv = findViewById(R.id.tv_version_aboutA);
@@ -62,7 +61,7 @@ public abstract class AbstractAboutActivity extends AppCompatActivity {
         // list of common acks
         @StringRes int[] ids = new int[] {
                 R.string.ack_icons8, R.string.ack_icons_material, R.string.ack_noto_font,
-                R.string.ack_okhttp, R.string.ack_timber, R.string.ack_butterknife,
+                R.string.ack_okhttp, R.string.ack_timber,
                 R.string.ack_glide, R.string.ack_parceler, R.string.ack_eventbus,
                 R.string.ack_recyclerviewhelper, R.string.ack_multilinecollapsingtoolbar,
                 R.string.ack_guava, R.string.ack_gson, R.string.ack_markdownview,
@@ -91,12 +90,12 @@ public abstract class AbstractAboutActivity extends AppCompatActivity {
 
             item.setLayoutParams(params);
 
-            mLayout.addView(item);
+            binding.rlAboutA.addView(item);
             item.setMovementMethod(LinkMovementMethod.getInstance());
 
             aboveId = viewId;
         }
-        mLayout.invalidate();
+        binding.rlAboutA.invalidate();
     }
 
     @StringRes protected abstract int[] getSpecificAcks();

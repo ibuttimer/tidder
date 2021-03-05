@@ -20,24 +20,28 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.IdRes;
-import androidx.annotation.LayoutRes;
-import androidx.annotation.StringRes;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.fragment.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import androidx.annotation.IdRes;
+import androidx.annotation.StringRes;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewbinding.ViewBinding;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.data.DatabaseIntentService;
 import com.ianbuttimer.tidder.data.PinnedQueryResponse;
 import com.ianbuttimer.tidder.data.provider.PinnedBuilder;
+import com.ianbuttimer.tidder.databinding.ContentPostBinding;
 import com.ianbuttimer.tidder.event.PostEvent;
 import com.ianbuttimer.tidder.event.StandardEvent;
 import com.ianbuttimer.tidder.net.GlideApp;
@@ -53,6 +57,7 @@ import com.ianbuttimer.tidder.reddit.PreviewImages;
 import com.ianbuttimer.tidder.reddit.RedditClient;
 import com.ianbuttimer.tidder.reddit.SecureMedia;
 import com.ianbuttimer.tidder.reddit.util.RedditMisc;
+import com.ianbuttimer.tidder.ui.widgets.BasicStatsView;
 import com.ianbuttimer.tidder.ui.widgets.PostOffice;
 import com.ianbuttimer.tidder.ui.widgets.ToastReceiver;
 import com.ianbuttimer.tidder.utils.ScreenUtils;
@@ -60,10 +65,6 @@ import com.ianbuttimer.tidder.utils.Utils;
 
 import java.text.MessageFormat;
 import java.util.Objects;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 import static com.ianbuttimer.tidder.data.provider.BaseProvider.PinnedBase.NAME_EQ_SELECTION;
 import static com.ianbuttimer.tidder.ui.CommentThreadProcessor.DETAIL_ARGS;
@@ -81,8 +82,10 @@ public class PostDetailFragment extends CommentThreadFragment implements PostOff
 
     private static final int TOAST_TITLE_LEN = 10;  // max length of title int pin/unpin toast
 
-    @BindView(R.id.wv_selftext_postA) WebView wvSelfText;
-    @BindView(R.id.img_thumbnail_postA) ImageView imgThumbnail;
+    private ContentPostBinding binding;
+
+    private WebView wvSelfText;
+    private ImageView imgThumbnail;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -93,25 +96,51 @@ public class PostDetailFragment extends CommentThreadFragment implements PostOff
     }
 
     @Override
-    public void bind(View view) {
-        ButterKnife.bind(this, view);
+    public ViewBinding getViewBinding() {
+        binding = ContentPostBinding.inflate(getLayoutInflater());
+
+        wvSelfText = binding.wvSelftextPostA;
+        imgThumbnail = binding.imgThumbnailPostA;
+        imgThumbnail.setOnClickListener(onImageClick);
+
+        return binding;
     }
 
     @Override
-    @LayoutRes public int getLayoutId() {
-        return R.layout.content_post;
+    public ConstraintLayout getContents() {
+        return binding.clContentPostOrThread;
+    }
+
+    @Override
+    public RecyclerView getRecyclerView() {
+        return binding.incListingLayout.rvListListingL;
+    }
+
+    @Override
+    public ProgressBar getProgressBar() {
+        return binding.incListingLayout.pbProgressListingL;
+    }
+
+    @Override
+    public TextView getMessageTv() {
+        return binding.incListingLayout.tvMessageListingL;
+    }
+
+    @Override
+    public TextView getTitleTv() {
+        return binding.tvTitlePostOrThread;
+    }
+
+    @Override
+    public BasicStatsView getBasicStatsView() {
+        return binding.bsvPostOrThread;
     }
 
     @Override
     public void onActivityCreated() {
         FloatingActionButton fabPin = mProcessor.getFabPin();
         if (fabPin != null) {
-            fabPin.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    onPinClick(view);
-                }
-            });
+            fabPin.setOnClickListener(this::onPinClick);
         }
     }
 
@@ -137,6 +166,12 @@ public class PostDetailFragment extends CommentThreadFragment implements PostOff
 
         // cancel any pending loads
         GlideApp.with(this).clear(imgThumbnail);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 
     @Override
@@ -280,14 +315,13 @@ public class PostDetailFragment extends CommentThreadFragment implements PostOff
         }
     }
 
-    @OnClick(R.id.img_thumbnail_postA)
-    public void onImageClick() {
+    private final View.OnClickListener onImageClick = view -> {
         Uri url = mProcessor.getLink().getUrl();
         if (UriUtils.actionable(url)) {
             Intent intent = new Intent(Intent.ACTION_VIEW, url);
             Utils.startActivity(getActivity(), intent);
         }
-    }
+    };
 
     @Override
     public void onItemClick(View view, Comment comment) {
@@ -308,7 +342,7 @@ public class PostDetailFragment extends CommentThreadFragment implements PostOff
 
     /**
      * Handle the pin button click
-     * @param view
+     * @param view - view on which event happened
      */
     public void onPinClick(View view) {
         Link link = mProcessor.getLink();

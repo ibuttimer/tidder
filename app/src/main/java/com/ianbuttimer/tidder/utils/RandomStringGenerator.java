@@ -184,7 +184,7 @@ public class RandomStringGenerator {
         int start;  // start of range
         int end;    // end of range
         int bound;  // num of chars in range
-        Pair<Integer, Integer> exclusions[];    // start/end excluded ranges
+        Pair<Integer, Integer>[] exclusions;    // start/end excluded ranges
 
         Picker(int start, int end, Pair<Integer, Integer>[] exclusions) {
             this.start = start;

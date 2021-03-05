@@ -145,7 +145,7 @@ public abstract class ListingRequest extends Request {
          * @param event     The request event
          * @return  Builder to facilitate chaining
          */
-        public Builder listing(AbstractEvent event) {
+        public Builder listing(AbstractEvent<?> event) {
             if (event != null) {
                 before(event.getBefore());
                 after(event.getAfter());

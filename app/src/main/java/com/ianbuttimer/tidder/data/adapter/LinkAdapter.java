@@ -19,10 +19,14 @@ package com.ianbuttimer.tidder.data.adapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import android.view.View;
+import androidx.viewbinding.ViewBinding;
+
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
 
 import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.data.IAdapterHandler;
+import com.ianbuttimer.tidder.databinding.LinkListItemBinding;
 import com.ianbuttimer.tidder.reddit.Link;
 
 import java.util.List;
@@ -32,7 +36,7 @@ import java.util.List;
  * Adapter class for a RecyclerView of Link
  */
 
-public class LinkAdapter extends AbstractRecycleViewAdapter<Link, LinkViewHolder> {
+public class LinkAdapter extends AbstractRecycleViewAdapter<Link, LinkListItemBinding, LinkViewHolder> {
 
     /**
      * Constructor
@@ -43,9 +47,13 @@ public class LinkAdapter extends AbstractRecycleViewAdapter<Link, LinkViewHolder
         super(objects, adapterHandler, R.layout.link_list_item);
     }
 
+    @Override
+    protected ViewBinding createView(LayoutInflater inflater, int viewType, ViewGroup parent) {
+        return LinkListItemBinding.inflate(inflater, parent, false);
+    }
 
     @Override
-    public LinkViewHolder getNewViewHolder(View view, IAdapterHandler adapterHandler, int viewType) {
-        return new LinkViewHolder(view, adapterHandler);
+    public LinkViewHolder getNewViewHolder(ViewBinding viewBinding, IAdapterHandler adapterHandler, int viewType) {
+        return new LinkViewHolder(viewBinding.getRoot(), adapterHandler, (LinkListItemBinding) viewBinding);
     }
 }

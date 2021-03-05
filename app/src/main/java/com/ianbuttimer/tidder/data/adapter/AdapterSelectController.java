@@ -17,11 +17,14 @@
 package com.ianbuttimer.tidder.data.adapter;
 
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewbinding.ViewBinding;
+
 import android.view.KeyEvent;
 import android.view.View;
 
 import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.data.IAdapterHandler;
+import com.ianbuttimer.tidder.reddit.BaseObject;
 
 import timber.log.Timber;
 
@@ -36,16 +39,19 @@ import static android.view.KeyEvent.KEYCODE_UNKNOWN;
 
 /**
  * RecycleViewAdapter selected item controller
+ * @param <T> class of reddit object
+ * @param <B> class of view binding
+ * @param <K> class of view holder
  */
-public class AdapterSelectController implements IAdapterHandler {
+public class AdapterSelectController<T extends BaseObject<T>, B extends ViewBinding, K extends AbstractViewHolder<T, B>> implements IAdapterHandler {
 
-    private AbstractRecycleViewAdapter mAdapter;
+    private AbstractRecycleViewAdapter<T, B, K> mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     public AdapterSelectController(RecyclerView recyclerView) {
-        RecyclerView.Adapter adapter = recyclerView.getAdapter();
+        RecyclerView.Adapter<?> adapter = recyclerView.getAdapter();
         if (adapter instanceof AbstractRecycleViewAdapter) {
-            setAdapter((AbstractRecycleViewAdapter)adapter);
+            setAdapter((AbstractRecycleViewAdapter<T, B, K>)adapter);
         }
         mLayoutManager = recyclerView.getLayoutManager();
     }
@@ -126,7 +132,7 @@ public class AdapterSelectController implements IAdapterHandler {
     }
 
 
-    public void setAdapter(AbstractRecycleViewAdapter adapter) {
+    public void setAdapter(AbstractRecycleViewAdapter<T, B, K> adapter) {
         this.mAdapter = adapter;
     }
 

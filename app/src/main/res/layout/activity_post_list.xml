@@ -45,14 +45,16 @@
             app:tabGravity="fill"
             app:tabMode="fixed">
 
+            <!-- TODO open material-components issue: Tab Items does not work with View Binding, throws NPE -->
+            <!-- https://github.com/material-components/material-components-android/issues/1162 -->
+            <!--                android:id="@+id/tabItemNew"-->
             <com.google.android.material.tabs.TabItem
-                android:id="@+id/tabItemNew"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/posts_tab_new" />
 
+            <!--                android:id="@+id/tabItemPinned"-->
             <com.google.android.material.tabs.TabItem
-                android:id="@+id/tabItemPinned"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/posts_tab_pinned" />
@@ -66,11 +68,19 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <include layout="@layout/post_list" />
+        <include layout="@layout/post_list"
+            android:id="@+id/inc_layout_post_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
     </FrameLayout>
 
-    <include layout="@layout/activity_post_list_refresh_fab"/>
+    <include layout="@layout/activity_post_list_refresh_fab"
+        android:id="@+id/inc_layout_activity_post_list_refresh_fab"
+        />
 
-    <include layout="@layout/activity_post_list_pin_fab" />
+    <include layout="@layout/activity_post_list_pin_fab"
+        android:id="@+id/inc_layout_activity_post_list_pin_fab"
+        />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

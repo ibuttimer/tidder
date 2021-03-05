@@ -16,6 +16,9 @@
 
 package com.ianbuttimer.tidder.ui.util;
 
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -33,12 +36,12 @@ public abstract class AbstractSectionPagerAdapter extends FragmentPagerAdapter
     private ViewGroup mContainer;
 
     public AbstractSectionPagerAdapter(FragmentManager fm) {
-        super(fm);
+        super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         mFragmentManager = fm;
     }
 
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
+    public @NonNull Object instantiateItem(@NonNull ViewGroup container, int position) {
         mContainer = container;
         return super.instantiateItem(container, position);
     }

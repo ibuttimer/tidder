@@ -28,10 +28,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/text_margin"
         android:layout_marginEnd="@dimen/text_margin"
+        android:layout_marginTop="@dimen/text_margin"
         android:ems="@integer/search_text_size"
         android:hint="@string/what_interests"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toStartOf="@+id/btn_search_fragF"
+        app:layout_constraintEnd_toStartOf="@+id/et_name_fragF"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/cl_search_fragF" />
 
@@ -43,9 +44,9 @@
         android:ems="@integer/search_text_size"
         android:hint="@string/search_name"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="@+id/et_interest_fragF"
-        app:layout_constraintStart_toStartOf="@+id/et_interest_fragF"
-        app:layout_constraintTop_toBottomOf="@+id/et_interest_fragF" />
+        app:layout_constraintEnd_toStartOf="@+id/btn_clear_fragF"
+        app:layout_constraintStart_toEndOf="@+id/et_interest_fragF"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_search_fragF"
@@ -72,8 +73,10 @@
         android:longClickable="true"
         android:tint="@color/colorAccentLight"
         app:fabSize="mini"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_search_fragF" />
+        app:layout_constraintEnd_toStartOf="@+id/btn_search_fragF"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

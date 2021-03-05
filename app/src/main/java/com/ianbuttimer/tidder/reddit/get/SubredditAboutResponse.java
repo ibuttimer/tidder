@@ -20,7 +20,6 @@ import androidx.annotation.Nullable;
 import android.util.JsonReader;
 
 import com.ianbuttimer.tidder.event.EventType;
-import com.ianbuttimer.tidder.reddit.BaseObject;
 import com.ianbuttimer.tidder.reddit.KindDataResponse;
 import com.ianbuttimer.tidder.reddit.Subreddit;
 

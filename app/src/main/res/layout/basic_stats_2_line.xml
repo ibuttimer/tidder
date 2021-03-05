@@ -23,8 +23,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <include layout="@layout/basic_stats_score_comments" />
+    <include layout="@layout/basic_stats_score_comments"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
-    <include layout="@layout/basic_stats_age_author" />
+    <include layout="@layout/basic_stats_age_author"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
 
 </LinearLayout>

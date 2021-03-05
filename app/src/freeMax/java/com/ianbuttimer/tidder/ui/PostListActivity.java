@@ -46,5 +46,4 @@ public class PostListActivity extends AbstractPostListActivity implements PostOf
     protected ArrayList<IStandardEventProcessorExt> getExtensions() {
         return null;
     }
-
 }

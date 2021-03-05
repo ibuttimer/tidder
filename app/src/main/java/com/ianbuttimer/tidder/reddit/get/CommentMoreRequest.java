@@ -21,16 +21,9 @@ import androidx.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.ianbuttimer.tidder.reddit.BaseObject;
-import com.ianbuttimer.tidder.reddit.ListingRequest;
 import com.ianbuttimer.tidder.reddit.Response;
 
-import timber.log.Timber;
-
-import static com.ianbuttimer.tidder.net.NetworkUtils.joinUrlPaths;
-import static com.ianbuttimer.tidder.net.NetworkUtils.trimUrlPathStart;
 import static com.ianbuttimer.tidder.net.RedditUriBuilder.SUBREDDIT_COMMENT_MORE_BASE_URL;
-import static com.ianbuttimer.tidder.net.RedditUriBuilder.SUBREDDIT_COMMENT_TREE_BASE_URL;
-import static com.ianbuttimer.tidder.net.RedditUriBuilder.SUBREDDIT_COMMENT_TREE_URL_MID;
 
 /**
  * A GET /api/morechildren request<br>

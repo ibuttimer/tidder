@@ -20,7 +20,6 @@ import android.util.JsonReader;
 
 import com.ianbuttimer.tidder.TidderApplication;
 import com.ianbuttimer.tidder.event.EventType;
-import com.ianbuttimer.tidder.reddit.BaseObject;
 import com.ianbuttimer.tidder.reddit.ListingList;
 import com.ianbuttimer.tidder.reddit.ListingResponse;
 import com.ianbuttimer.tidder.reddit.Subreddit;

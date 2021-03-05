@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.data.IAdapterHandler;
+import com.ianbuttimer.tidder.databinding.LinkListItemBinding;
 import com.ianbuttimer.tidder.net.GlideApp;
 import com.ianbuttimer.tidder.net.NetworkUtils;
 import com.ianbuttimer.tidder.reddit.Link;
@@ -30,20 +31,18 @@ import com.ianbuttimer.tidder.reddit.util.RedditMisc;
 import com.ianbuttimer.tidder.ui.UiUtils;
 import com.ianbuttimer.tidder.ui.widgets.BasicStatsView;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 
 /**
  * A RecyclerView.ViewHolder for Subreddit objects
  */
 
-public class LinkViewHolder extends AbstractViewHolder<Link> {
+public class LinkViewHolder extends AbstractViewHolder<Link, LinkListItemBinding> {
 
-    @BindView(R.id.img_thumbnail_link_item) ImageView imgThumbnail;
-    @BindView(R.id.tv_title_link_item) TextView tvTitle;
-    @BindView(R.id.tv_subreddit_link_item) TextView tvSubreddit;
-    @BindView(R.id.bsv_link_item) BasicStatsView bsvView;
+    private final ImageView imgThumbnail;
+    private final TextView tvTitle;
+    private final TextView tvSubreddit;
+    private final BasicStatsView bsvView;
 
     private Link mLink;
 
@@ -52,10 +51,13 @@ public class LinkViewHolder extends AbstractViewHolder<Link> {
      * @param view              View to hold
      * @param adapterHandler    Handler for view
      */
-    public LinkViewHolder(View view, IAdapterHandler adapterHandler) {
+    public LinkViewHolder(View view, IAdapterHandler adapterHandler, LinkListItemBinding binding) {
         super(view, adapterHandler);
 
-        ButterKnife.bind(this, view);
+        imgThumbnail = binding.imgThumbnailLinkItem;
+        tvTitle = binding.tvTitleLinkItem;
+        tvSubreddit = binding.tvSubredditLinkItem;
+        bsvView = binding.bsvLinkItem;
 
         UiUtils.setTypeface(tvTitle, UiUtils.AppTypeface.NOTO_SANS_REGULAR);
         UiUtils.setTypeface(tvSubreddit, UiUtils.AppTypeface.NOTO_SANS_ITALIC);

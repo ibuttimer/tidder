@@ -26,7 +26,6 @@ import com.ianbuttimer.tidder.reddit.Link;
 import com.ianbuttimer.tidder.reddit.ListingTracker;
 import com.ianbuttimer.tidder.reddit.Response;
 import com.ianbuttimer.tidder.reddit.get.SubredditLinkResponse;
-import com.ianbuttimer.tidder.reddit.get.ThingAboutResponse;
 import com.ianbuttimer.tidder.ui.ICommonEvents;
 
 /**

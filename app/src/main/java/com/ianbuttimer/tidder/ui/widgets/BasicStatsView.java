@@ -18,14 +18,15 @@ package com.ianbuttimer.tidder.ui.widgets;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import androidx.annotation.LayoutRes;
-import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import android.text.Html;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.LayoutRes;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.utils.Utils;
@@ -33,11 +34,7 @@ import com.ianbuttimer.tidder.utils.Utils;
 import java.text.MessageFormat;
 import java.util.Date;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import timber.log.Timber;
-
-import static com.ianbuttimer.tidder.utils.Utils.getCountIndication;
 
 /**
  * Widget to display basic stats for a object implementing the IBasicStats interface<br>
@@ -49,16 +46,15 @@ import static com.ianbuttimer.tidder.utils.Utils.getCountIndication;
  *     <li>To include comment information add a TextView with id <code>tv_comments_basic_stats</code></li>
  *     <li>To include age information add a TextView with id <code>tv_age_basic_stats</code></li>
  *     <li>Add a BasicStatsView element to your layout and set the <code>app:layoutId</code> attribute to the id of your custom layout</li>
- *     <li>After your layout has been inflated, call the setViewInfo(IBasicStats) to display the information</li>
+ *     <li>After your layout has been inflated, call <code>setViewInfo(IBasicStats)</code> to display the information</li>
  * </ol>
  */
-
 public class BasicStatsView extends ConstraintLayout {
 
-    @Nullable @BindView(R.id.tv_author_basic_stats) TextView tvAuthor;
-    @Nullable @BindView(R.id.tv_score_basic_stats) TextView tvScore;
-    @Nullable @BindView(R.id.tv_comments_basic_stats) TextView tvComments;
-    @Nullable @BindView(R.id.tv_age_basic_stats) TextView tvAge;
+    private TextView tvAuthor;
+    private TextView tvScore;
+    private TextView tvComments;
+    private TextView tvAge;
 
     public BasicStatsView(Context context) {
         this(context, null);
@@ -82,9 +78,14 @@ public class BasicStatsView extends ConstraintLayout {
         if (layoutId != 0) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             if (inflater != null) {
+
+                // not possible to use view binding in a generic form so just do traditional findViewById
                 View view = inflater.inflate(layoutId, this, true);
 
-                ButterKnife.bind(this, view);
+                tvAuthor = view.findViewById(R.id.tv_author_basic_stats);
+                tvScore = view.findViewById(R.id.tv_score_basic_stats);
+                tvComments = view.findViewById(R.id.tv_comments_basic_stats);
+                tvAge = view.findViewById(R.id.tv_age_basic_stats);
             }
         } else {
             Timber.e("No layout specified for %s", getClass());

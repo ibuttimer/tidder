@@ -17,21 +17,21 @@
 package com.ianbuttimer.tidder.ui;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Pair;
+import android.view.KeyEvent;
+import android.view.View;
+
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
-import android.text.TextUtils;
-import android.util.Pair;
-import android.view.KeyEvent;
-import android.view.View;
 
 import com.google.common.primitives.Ints;
 import com.ianbuttimer.tidder.R;
@@ -42,6 +42,7 @@ import com.ianbuttimer.tidder.data.adapter.AbstractRecycleViewAdapter;
 import com.ianbuttimer.tidder.data.adapter.AbstractViewHolder;
 import com.ianbuttimer.tidder.data.adapter.LinkAdapter;
 import com.ianbuttimer.tidder.data.adapter.LinkViewHolder;
+import com.ianbuttimer.tidder.databinding.LinkListItemBinding;
 import com.ianbuttimer.tidder.event.AbstractEvent;
 import com.ianbuttimer.tidder.event.PostsEvent;
 import com.ianbuttimer.tidder.event.RedditClientEvent;
@@ -59,15 +60,13 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import butterknife.ButterKnife;
-
 
 /**
  * Base class for Posts activity tab fragments
  */
 
 public abstract class AbstractBasePostsTabFragment
-            extends AbstractListingTabFragment<Link, LinkViewHolder>
+            extends AbstractListingTabFragment<Link, LinkListItemBinding, LinkViewHolder>
             implements IAdapterHandler {
 
     private static final String TAG = AbstractBasePostsTabFragment.class.getSimpleName();
@@ -96,12 +95,7 @@ public abstract class AbstractBasePostsTabFragment
     }
 
     @Override
-    protected void bind(View rootView) {
-        ButterKnife.bind(this, rootView);
-    }
-
-    @Override
-    protected AbstractRecycleViewAdapter<Link, LinkViewHolder> getAdapter() {
+    protected AbstractRecycleViewAdapter<Link, LinkListItemBinding, LinkViewHolder> getAdapter() {
         return new LinkAdapter(mList, this);
     }
 
@@ -115,8 +109,7 @@ public abstract class AbstractBasePostsTabFragment
 
         if (mTwoPane) {
             // only change background when in 2 pane mode
-            Activity activity = getActivity();
-            if ((activity != null) && (rvList != null)) {
+            if ((getActivity() != null) && (getRecyclerView() != null)) {
                 Drawable background = ResourcesCompat.getDrawable(getResources(), R.drawable.post_selected_background, null);
                 view.setBackground(background);
 
@@ -188,7 +181,7 @@ public abstract class AbstractBasePostsTabFragment
 
     @UiThread
     @Override
-    protected void processMessageEvent(AbstractEvent event) {
+    protected void processMessageEvent(AbstractEvent<?> event) {
         if (PostOffice.deliverEvent(event, getAddress())) {
             if (event instanceof PostsEvent) {
                 onPostsEvent((PostsEvent)event);
@@ -310,23 +303,22 @@ public abstract class AbstractBasePostsTabFragment
 
 
     protected void setViewsBackground(Drawable background, int... exclude) {
-        if (rvList == null) {
-            return;
-        }
-
-        int[] excludes;
-        if (exclude != null) {
-            excludes = exclude;
-        } else {
-            excludes = new int[0];
-        }
-        for (int i = 0; i < mList.size(); i++) {
-            if (!Ints.contains(excludes, i)) {
-                RecyclerView.ViewHolder vh = rvList.findViewHolderForAdapterPosition(i);
-                if (vh instanceof AbstractViewHolder) {
-                    View holderView = ((AbstractViewHolder)vh).getView();
-                    holderView.setBackground(background);
-                    holderView.invalidate();
+        RecyclerView rvList = getRecyclerView();
+        if (rvList != null) {
+            int[] excludes;
+            if (exclude != null) {
+                excludes = exclude;
+            } else {
+                excludes = new int[0];
+            }
+            for (int i = 0; i < mList.size(); i++) {
+                if (!Ints.contains(excludes, i)) {
+                    RecyclerView.ViewHolder vh = rvList.findViewHolderForAdapterPosition(i);
+                    if (vh instanceof AbstractViewHolder) {
+                        View holderView = ((AbstractViewHolder<?, ?>)vh).getView();
+                        holderView.setBackground(background);
+                        holderView.invalidate();
+                    }
                 }
             }
         }

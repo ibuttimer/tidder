@@ -17,14 +17,10 @@
 package com.ianbuttimer.tidder.ui;
 
 import android.annotation.TargetApi;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,9 +32,12 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.common.net.MediaType;
 import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.TidderApplication;
+import com.ianbuttimer.tidder.databinding.ActivityLoginBinding;
 import com.ianbuttimer.tidder.event.RedditClientEvent;
 import com.ianbuttimer.tidder.net.NetworkUtils;
 import com.ianbuttimer.tidder.net.RedditUriBuilder;
@@ -50,10 +49,8 @@ import com.ianbuttimer.tidder.utils.Utils;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.text.MessageFormat;
+import java.util.Objects;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import timber.log.Timber;
 
 import static android.content.Intent.EXTRA_TEXT;
@@ -66,10 +63,9 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
 
-    @BindView(R.id.btn_login_loginA) Button mLoginBtn;
-// FIXME currently not using temporary or device login
-//    @BindView(R.id.btn_login_imp_loginA) Button mLoginImpBtn;
-//    @BindView(R.id.btn_login_app_loginA) Button mLoginAppBtn;
+    // FIXME currently not using temporary or device login
+//    private Button mLoginImpBtn;
+//    private Button mLoginAppBtn;
 
     private AuthenticateDialog mDialog;
 
@@ -80,9 +76,14 @@ public class LoginActivity extends AppCompatActivity {
         // Let's display the progress in the activity title bar, like the browser app does.
         getWindow().requestFeature(Window.FEATURE_PROGRESS);
 
-        setContentView(R.layout.activity_login);
+        ActivityLoginBinding binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        ButterKnife.bind(this);
+        Button mLoginBtn = binding.btnLoginLoginA;
+        mLoginBtn.setOnClickListener(onLoginClick);
+
+//        mLoginImpBtn = binding.btnLoginImpLoginA;
+//        mLoginAppBtn = binding.btnLoginAppLoginA;
 
         if (!TidderApplication.isConfigValid()) {
             Dialog.showAlertDialog(this, TidderApplication.getConfigErrorMsg());
@@ -149,23 +150,17 @@ public class LoginActivity extends AppCompatActivity {
         return handled;
     }
 
-    @OnClick(R.id.btn_login_loginA)
-    public void onLoginClick() {
+    private final View.OnClickListener onLoginClick = view -> {
         webviewLogin(RedditClient.getClient().loginHybrid(LoginActivity.this));
-    }
+    };
 
     public void webviewLogin(final Uri uri) {
 
         if (NetworkUtils.isInternetAvailable(this)) {
             mDialog = new AuthenticateDialog(this);
 
-            mDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                @Override
-                public void onShow(DialogInterface dialogInterface) {
-
-                    mDialog.loadUrl(NetworkUtils.convertUriToURL(uri));
-                }
-            });
+            mDialog.setOnShowListener(dialogInterface ->
+                    mDialog.loadUrl(Objects.requireNonNull(NetworkUtils.convertUriToURL(uri))));
 
             mDialog.setTitle(R.string.authorise_title);
             mDialog.show();
@@ -183,17 +178,6 @@ public class LoginActivity extends AppCompatActivity {
             Dialog.showNoNetworkDialog(this);
         }
     }
-
-//    @OnClick(R.id.btn_login_imp_loginA)
-//    public void onLoginImplicitClick() {
-//        webviewLogin(RedditClient.getClient().loginImplicit(LoginActivity.this));
-//    }
-//
-//    @OnClick(R.id.btn_login_app_loginA)
-//    public void onLoginAppClick() {
-//        RedditClient.getClient().loginAppOnly(LoginActivity.this);
-//    }
-
 
     class LoginWebViewClient extends WebViewClient {
 

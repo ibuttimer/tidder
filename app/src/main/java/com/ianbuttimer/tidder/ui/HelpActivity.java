@@ -24,19 +24,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
 
 import com.ianbuttimer.tidder.R;
+import com.ianbuttimer.tidder.databinding.ActivityHelpBinding;
 
 import java.text.MessageFormat;
 
 import br.tiagohm.markdownview.MarkdownView;
 import br.tiagohm.markdownview.css.styles.Github;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 import static com.ianbuttimer.tidder.utils.ColourUtils.TRANSPARENT;
 
 public class HelpActivity extends AppCompatActivity {
-
-    @BindView(R.id.markdown_view) MarkdownView mMarkdown;
 
     @StringRes private static final int[][] sPropSetting = new int[][] {
             //          property                                setting
@@ -63,13 +60,13 @@ public class HelpActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_help);
 
-        ButterKnife.bind(this);
+        ActivityHelpBinding binding = ActivityHelpBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
+        MarkdownView mMarkdown = binding.markdownView;
         mMarkdown.addStyleSheet(new HelpStyle(this));
         mMarkdown.loadMarkdownFromAsset("help.md");
-
     }
 
 

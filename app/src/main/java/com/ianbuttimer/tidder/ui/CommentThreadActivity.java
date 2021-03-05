@@ -18,7 +18,7 @@ package com.ianbuttimer.tidder.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.fragment.app.DialogFragment;
+
 import androidx.fragment.app.Fragment;
 
 import static com.ianbuttimer.tidder.ui.CommentThreadProcessor.DETAIL_ARGS;

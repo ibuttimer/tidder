@@ -23,6 +23,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
+
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Pair;
 
@@ -73,7 +75,7 @@ public abstract class AbstractPostsNewTabFragment extends AbstractBasePostsTabFr
         setObserverAndUri(mDbObserver, ProviderUri.FOLLOW_CONTENT_URI);
     }
 
-    protected ContentObserver mDbObserver = new ContentObserver(new Handler()) {
+    protected ContentObserver mDbObserver = new ContentObserver(new Handler(Looper.myLooper())) {
         @Override
         public void onChange(boolean selfChange, Uri uri) {
             postEventForActivity(StandardEvent.newUpdateFollowingListRequest());
@@ -124,7 +126,12 @@ public abstract class AbstractPostsNewTabFragment extends AbstractBasePostsTabFr
                     }
                     if (!ignore) {
                         // remove any surplus subreddits from following list
-                        ArrayList<String> removeList = subredditRemoveList(mFollowing, list, true);
+                        ArrayList<String> removeList;
+                        if (mFollowing != null) {
+                            removeList = subredditRemoveList(mFollowing, list, true);
+                        } else {
+                            removeList = new ArrayList<>();
+                        }
 
                         Timber.i("Removed from following %d", removeList.size());
 
@@ -316,7 +323,8 @@ public abstract class AbstractPostsNewTabFragment extends AbstractBasePostsTabFr
 
     protected ArrayList<String> subredditRemoveList(
             ArrayList<Follow> master, ArrayList<Follow> update, boolean remove) {
-        ArrayList<String> toRemove = new ArrayList<>();
+        ArrayList<Follow> toRemove = new ArrayList<>();
+        ArrayList<String> removed = new ArrayList<>();
         ArrayTester<Follow> arrayTester = new ArrayTester<>(update);
         FollowFindBySubredditName tester = new FollowFindBySubredditName(null);
 
@@ -324,15 +332,17 @@ public abstract class AbstractPostsNewTabFragment extends AbstractBasePostsTabFr
             String name = follow.getSubreddit();
             tester.setName(name);
             if (arrayTester.findItem(tester) == null) {
-                toRemove.add(name);
+                toRemove.add(follow);
             }
         }
         if (remove) {
-            for (String name : toRemove) {
-                master.remove(name);
+            for (Follow follow : toRemove) {
+                if (master.remove(follow)) {
+                    removed.add(follow.getSubreddit());
+                }
             }
         }
-        return toRemove;
+        return removed;
     }
 
 
@@ -347,7 +357,7 @@ public abstract class AbstractPostsNewTabFragment extends AbstractBasePostsTabFr
             // tracker key is the subreddit name
             ListingTracker<Link> tracker = getTracker(name);
             if (tracker == null) {
-                tracker = addTracker(name, new ListingTracker<Link>());
+                tracker = addTracker(name, new ListingTracker<>());
             }
             if (tracker != null) {
                 postEventForActivity(PostsEvent

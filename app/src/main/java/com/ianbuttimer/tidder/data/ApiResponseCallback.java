@@ -38,9 +38,10 @@ import timber.log.Timber;
 
 /**
  * Asynchronous request and response handler for Follow queries
+ * @param <E> class of event
  */
 
-public class ApiResponseCallback<E extends AbstractEvent> extends AsyncCallback<Response<? extends BaseObject<?>>> {
+public class ApiResponseCallback<E extends AbstractEvent<E>> extends AsyncCallback<Response<? extends BaseObject<?>>> {
 
     private final WeakReference<Activity> mActivity;
     private final ICommonEvents<E, Response<? extends BaseObject<?>>> mEventFactory;

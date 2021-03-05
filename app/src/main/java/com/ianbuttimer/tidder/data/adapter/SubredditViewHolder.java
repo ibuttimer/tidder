@@ -16,16 +16,21 @@
 
 package com.ianbuttimer.tidder.data.adapter;
 
-import androidx.annotation.ColorInt;
-import androidx.annotation.DrawableRes;
-import androidx.annotation.StringRes;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import android.content.res.ColorStateList;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.StringRes;
+import androidx.viewbinding.ViewBinding;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.data.IAdapterHandler;
+import com.ianbuttimer.tidder.databinding.SubredditListItemBinding;
 import com.ianbuttimer.tidder.event.FollowEvent;
 import com.ianbuttimer.tidder.reddit.Subreddit;
 import com.ianbuttimer.tidder.ui.widgets.PostOffice;
@@ -34,10 +39,6 @@ import com.ianbuttimer.tidder.utils.Utils;
 import java.text.MessageFormat;
 import java.util.Date;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 import static com.ianbuttimer.tidder.utils.ColourUtils.getContrastColor;
 
 
@@ -45,15 +46,15 @@ import static com.ianbuttimer.tidder.utils.ColourUtils.getContrastColor;
  * A RecyclerView.ViewHolder for Subreddit objects
  */
 
-public class SubredditViewHolder extends AbstractViewHolder<Subreddit> {
+public class SubredditViewHolder<B extends ViewBinding> extends AbstractViewHolder<Subreddit, B> {
 
-    @BindView(R.id.tv_name_subred_item) TextView tvName;
-    @BindView(R.id.tv_title_subred_item) TextView tvTitle;
-    @BindView(R.id.tv_desc_subred_item) TextView tvDescription;
-    @BindView(R.id.tv_followers_subred_item) TextView tvFollowers;
-    @BindView(R.id.tv_age_subred_item) TextView tvAge;
-    @BindView(R.id.fab_like_subred_item) FloatingActionButton fabLike;
-    @BindView(R.id.fl_background_subred_item) FrameLayout flBackground;
+    private final TextView tvName;
+    private final TextView tvTitle;
+    private final TextView tvDescription;
+    private final TextView tvFollowers;
+    private final TextView tvAge;
+    private final FloatingActionButton fabLike;
+    private final FrameLayout flBackground;
 
     private Subreddit mSubreddit;
 
@@ -62,11 +63,19 @@ public class SubredditViewHolder extends AbstractViewHolder<Subreddit> {
      * @param view              View to hold
      * @param adapterHandler    Handler for view
      */
-    public SubredditViewHolder(View view, IAdapterHandler adapterHandler) {
+    public SubredditViewHolder(View view, IAdapterHandler adapterHandler, SubredditListItemBinding binding) {
         // don't set clock listener for view, individual view items have own listeners
         super(view, adapterHandler, Listeners.CLICK_AND_LONG);
 
-        ButterKnife.bind(this, view);
+        tvName = binding.tvNameSubredItem;
+        tvTitle = binding.tvTitleSubredItem;
+        tvDescription = binding.tvDescSubredItem;
+        tvFollowers = binding.tvFollowersSubredItem;
+        tvAge = binding.tvAgeSubredItem;
+        fabLike = binding.fabLikeSubredItem;
+        flBackground = binding.flBackgroundSubredItem;
+
+        fabLike.setOnClickListener(onLikeClick);
     }
 
     @Override
@@ -107,17 +116,23 @@ public class SubredditViewHolder extends AbstractViewHolder<Subreddit> {
         mSubreddit.setFollowing(following);
         @DrawableRes int icon;
         @StringRes int contentDesc;
+        @ColorRes int colour;
         if (following) {
             icon = R.drawable.ic_unlike;
             contentDesc = R.string.unfollow_subreddit_content_desc;
+            colour = R.color.colorAccentDark;
         } else {
             icon = R.drawable.ic_like;
             contentDesc = R.string.follow_subreddit_content_desc;
+            colour = R.color.colorAccent;
         }
         fabLike.setImageResource(icon);
         fabLike.setContentDescription(
                 MessageFormat.format(
                         getContext().getString(contentDesc), mSubreddit.getTitle()));
+        fabLike.setBackgroundTintList(
+                ColorStateList.valueOf(
+                        getContext().getResources().getColor(colour)));
     }
 
 
@@ -126,8 +141,7 @@ public class SubredditViewHolder extends AbstractViewHolder<Subreddit> {
         // no op
     }
 
-    @OnClick(R.id.fab_like_subred_item)
-    public void onLikeClick(View view) {
+    private final View.OnClickListener onLikeClick = view -> {
         String icon;
         if (mSubreddit.getIcon() != null) {
             icon = mSubreddit.getIcon().toString();
@@ -146,6 +160,5 @@ public class SubredditViewHolder extends AbstractViewHolder<Subreddit> {
                         icon
                 )
         );
-
-    }
+    };
 }
