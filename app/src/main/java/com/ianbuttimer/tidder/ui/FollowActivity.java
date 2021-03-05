@@ -42,6 +42,7 @@ import com.ianbuttimer.tidder.data.ICallback;
 import com.ianbuttimer.tidder.data.QueryCallback;
 import com.ianbuttimer.tidder.data.provider.BaseProvider;
 import com.ianbuttimer.tidder.data.provider.FollowBuilder;
+import com.ianbuttimer.tidder.databinding.ActivityFollowBinding;
 import com.ianbuttimer.tidder.event.FollowEvent;
 import com.ianbuttimer.tidder.event.StandardEvent;
 import com.ianbuttimer.tidder.event.StandardEventProcessor;
@@ -61,8 +62,6 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.text.MessageFormat;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class FollowActivity extends AppCompatActivity implements ISectionsPagerAdapter {
 
@@ -76,13 +75,12 @@ public class FollowActivity extends AppCompatActivity implements ISectionsPagerA
             for (Tabs tab : values()) {
                 if (tab.ordinal() == ordinal) {
                     value = tab;
+                    break;
                 }
             }
             return value;
         }
     }
-
-    @BindView(R.id.fab_delete_followA) FloatingActionButton fabDelete;
 
     /**
      * The {@link androidx.viewpager.widget.PagerAdapter} that will provide
@@ -94,19 +92,16 @@ public class FollowActivity extends AppCompatActivity implements ISectionsPagerA
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_follow);
 
-        ButterKnife.bind(this);
+        ActivityFollowBinding binding = ActivityFollowBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_followA);
+        FloatingActionButton fabDelete = binding.fabDeleteFollowA;
+
+        Toolbar toolbar = binding.toolbarFollowA;
         setSupportActionBar(toolbar);
 
         // Show the Up button in the action bar.
@@ -115,15 +110,14 @@ public class FollowActivity extends AppCompatActivity implements ISectionsPagerA
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
+        // Create the adapter that will return a fragment for each of the primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container_followA);
+        // Set up the ViewPager, that will host the section contents, with the sections adapter.
+        ViewPager mViewPager = binding.containerFollowA;
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs_followA);
+        TabLayout tabLayout = findViewById(R.id.tabs_followA);
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
@@ -294,6 +288,10 @@ public class FollowActivity extends AppCompatActivity implements ISectionsPagerA
      */
     public static class SectionsPagerAdapter extends AbstractSectionPagerAdapter {
 
+//        public SectionsPagerAdapter(@NonNull FragmentActivity fragmentActivity, FragmentManager mFragmentManager) {
+//            super(fragmentActivity, mFragmentManager);
+//        }
+
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -302,7 +300,7 @@ public class FollowActivity extends AppCompatActivity implements ISectionsPagerA
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
-            return FollowTabFragment.newInstance(position);
+            return AbstractFollowTabFragment.newInstance(position);
         }
 
         @Override

@@ -20,8 +20,6 @@ import android.util.JsonReader;
 
 import com.ianbuttimer.tidder.utils.Utils;
 
-import org.parceler.Parcel;
-
 import java.io.IOException;
 
 

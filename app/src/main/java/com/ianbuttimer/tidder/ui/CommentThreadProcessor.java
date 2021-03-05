@@ -19,19 +19,6 @@ package com.ianbuttimer.tidder.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import androidx.annotation.DrawableRes;
-import androidx.annotation.IdRes;
-import androidx.annotation.LayoutRes;
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.annotation.UiThread;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.fragment.app.FragmentActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import android.text.TextUtils;
 import android.util.Pair;
 import android.view.KeyEvent;
@@ -42,6 +29,19 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.DrawableRes;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.annotation.UiThread;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewbinding.ViewBinding;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.TidderApplication;
 import com.ianbuttimer.tidder.data.ApiResponseCallback;
@@ -50,6 +50,7 @@ import com.ianbuttimer.tidder.data.IAdapterHandler;
 import com.ianbuttimer.tidder.data.ICallback;
 import com.ianbuttimer.tidder.data.ITester;
 import com.ianbuttimer.tidder.data.QueryCallback;
+import com.ianbuttimer.tidder.data.adapter.AbstractViewHolder;
 import com.ianbuttimer.tidder.data.adapter.AdapterSelectController;
 import com.ianbuttimer.tidder.data.adapter.CommentAdapter;
 import com.ianbuttimer.tidder.data.adapter.CommentMoreViewHolder;
@@ -81,7 +82,6 @@ import com.ianbuttimer.tidder.ui.widgets.EndlessRecyclerViewScrollListener;
 import com.ianbuttimer.tidder.ui.widgets.NoUrlTextViewListItemClickListener;
 import com.ianbuttimer.tidder.ui.widgets.PostOffice;
 import com.ianbuttimer.tidder.ui.widgets.TypedGestureDetector;
-import com.ianbuttimer.tidder.utils.Utils;
 
 import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout;
 
@@ -92,8 +92,6 @@ import java.text.MessageFormat;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import github.nisrulz.recyclerviewhelper.RVHItemDividerDecoration;
 import github.nisrulz.recyclerviewhelper.RVHItemTouchHelperCallback;
 import timber.log.Timber;
@@ -107,7 +105,8 @@ import static com.ianbuttimer.tidder.utils.PreferenceControl.getAutoExpandLevelP
  * in two-pane mode (on tablets) or a {@link CommentThreadActivity}
  * on handsets.
  */
-public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddressable {
+public class CommentThreadProcessor<T extends BaseObject<T>, B extends ViewBinding, K extends AbstractViewHolder<T, B>>
+        implements IAdapterHandler, PostOffice.IAddressable {
 
     public static final String TAG = CommentThreadProcessor.class.getSimpleName();
 
@@ -132,14 +131,15 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
     protected boolean mThread = false;
     protected boolean mTwoPane = false;
 
-    @BindView(R.id.cl_content_post_or_thread) ConstraintLayout clContent;
-    @BindView(R.id.rv_list_listingL) RecyclerView rvList;
-    @BindView(R.id.pb_progress_listingL) ProgressBar pbProgress;
-    @BindView(R.id.tv_message_listingL) TextView tvMessage;
-    @BindView(R.id.tv_title_post_or_thread) TextView tvTitle;
-    @BindView(R.id.bsv_post_or_thread) BasicStatsView bsvView;
+    private ConstraintLayout clContent;
+    private RecyclerView rvList;
+    private ProgressBar pbProgress;
+    private TextView tvMessage;
+    private TextView tvTitle;
+    private BasicStatsView bsvView;
 
     @Nullable protected FloatingActionButton mFabPin;
+    @Nullable protected CollapsingToolbarLayout mAppBarLayout;
 
     protected Link mLink = null;
     protected Subreddit mSubreddit = null;
@@ -155,7 +155,7 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
     protected QueryCallback<StandardEvent> mCpStdEventHandler;
     protected StandardEventProcessor mStdEventProcessor;
 
-    protected AdapterSelectController mSelectCtrl;
+    protected AdapterSelectController<T, B, K> mSelectCtrl;
 
     protected static final boolean mIsPinnable;
 
@@ -194,10 +194,15 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(mHost.getLayoutId(), container, false);
+        ViewBinding viewBinding = mHost.getViewBinding();
+        View rootView = viewBinding.getRoot();
 
-        ButterKnife.bind(this, rootView);
-        mHost.bind(rootView);
+        clContent = mHost.getContents();
+        rvList = mHost.getRecyclerView();
+        pbProgress = mHost.getProgressBar();
+        tvMessage = mHost.getMessageTv();
+        tvTitle = mHost.getTitleTv();
+        bsvView = mHost.getBasicStatsView();
 
         setTitle(mTitle);
 
@@ -245,15 +250,21 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
         // Adds the scroll listener to RecyclerView
         rvList.addOnScrollListener(mScrollListener);
 
-        mSelectCtrl = new AdapterSelectController(rvList);
+        mSelectCtrl = new AdapterSelectController<>(rvList);
 
         return rootView;
     }
 
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        mFabPin = (FloatingActionButton) findActivityView(R.id.fab_pin_postDetailA);
-        if (!mIsPinnable && (mFabPin != null)) {
-            ((ImageButton)mFabPin).setVisibility(View.GONE);
+        FragmentActivity activity = mHost.getActivity();
+        if (activity instanceof ICommentThreadHost) {
+            ICommentThreadHost commentThreadHost = (ICommentThreadHost) activity;
+            mFabPin = commentThreadHost.getFabPin();
+            if (!mIsPinnable && (mFabPin != null)) {
+                ((ImageButton)mFabPin).setVisibility(View.GONE);
+            }
+
+            mAppBarLayout = commentThreadHost.getAppBarLayout();
         }
         mHost.onActivityCreated();
     }
@@ -356,7 +367,7 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
 
     @UiThread
     @Subscribe
-    public void processMessageEvent(AbstractEvent event) {
+    public void processMessageEvent(AbstractEvent<?> event) {
         if (PostOffice.deliverEvent(event, getAddress())) {
             if (event instanceof PostEvent) {
                 onPostEvent((PostEvent)event);
@@ -538,7 +549,7 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
                 ThingAboutResponse response = event.getThingAboutResponse();
                 if (response != null) {
                     FullnameITester<Comment> tester = new FullnameITester<>(null);
-                    for (RedditObject obj : response.getList()) {
+                    for (RedditObject<?, ?> obj : response.getList()) {
                         if (obj instanceof Comment) {
                             Comment comment = (Comment) obj;
                             tester.setFullname(comment.getName());
@@ -566,10 +577,8 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
     private void setTitle(String title) {
         tvTitle.setText(title);
 
-        CollapsingToolbarLayout appBarLayout =
-                (CollapsingToolbarLayout) findActivityView(R.id.toolbar_layout_postDetailA);
-        if (appBarLayout != null) {
-            appBarLayout.setTitle(title);
+        if (mAppBarLayout != null) {
+            mAppBarLayout.setTitle(title);
         }
     }
 
@@ -737,7 +746,6 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
         return (Comment) view.getTag(R.id.base_obj_tag);
     }
 
-
     private int insertComments(ArrayList<Comment> replies, int startPos, int depth) {
         return insertComments(replies.toArray(new Comment[0]), startPos, depth);
     }
@@ -757,7 +765,7 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
      * @param replies   Comments to insert
      * @param startPos  Start position for inserting
      * @param depth     Comment expand depth
-     * @return
+     * @return number of comments added to list
      */
     private int insertComments(ArrayList<Comment> list, Comment[] replies, int startPos, int depth) {
 
@@ -871,7 +879,7 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
         }
     }
 
-    public <T extends AbstractEvent> void postEvent(T event) {
+    public <E extends AbstractEvent<?>> void postEvent(E event) {
         PostOffice.postEvent(event.addAddress(getAddress()));
     }
 
@@ -879,16 +887,6 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
     public String getAddress() {
         return mHost.getAddress();
     }
-
-    @Nullable private View findActivityView(@IdRes int idRes) {
-        View view = null;
-        Activity activity = mHost.getActivity();
-        if (activity != null) {
-            view = activity.findViewById(idRes);
-        }
-        return view;
-    }
-
 
     @Nullable public FloatingActionButton getFabPin() {
         FloatingActionButton fab = null;
@@ -958,13 +956,20 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
 
         void processSavedInstanceState(@Nullable Bundle savedInstanceState);
 
-        @LayoutRes int getLayoutId();
+        ViewBinding getViewBinding();
 
-        void bind(View view);
+        ConstraintLayout getContents();
+        RecyclerView getRecyclerView();
+        ProgressBar getProgressBar();
+        TextView getMessageTv();
+        TextView getTitleTv();
+        BasicStatsView getBasicStatsView();
 
         void onActivityCreated();
 
         void onStart(boolean emptyList);
+
+        void onDestroyView();
 
         boolean onPostEvent(PostEvent event);
 
@@ -983,4 +988,12 @@ public class CommentThreadProcessor implements IAdapterHandler, PostOffice.IAddr
         boolean onItemMove(int fromPosition, int toPosition);
     }
 
+    public interface ICommentThreadHost {
+
+        FloatingActionButton getFabPin();
+
+        FloatingActionButton getFabRefresh();
+
+        CollapsingToolbarLayout getAppBarLayout();
+    }
 }

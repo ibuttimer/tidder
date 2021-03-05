@@ -19,17 +19,20 @@ package com.ianbuttimer.tidder.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import android.text.TextUtils;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
-import com.google.android.gms.ads.AdRequest;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewbinding.ViewBinding;
+
 import com.google.android.gms.ads.AdView;
 import com.ianbuttimer.tidder.R;
+import com.ianbuttimer.tidder.databinding.FragmentFollowPinnedBinding;
 import com.ianbuttimer.tidder.event.PostsEvent;
 import com.ianbuttimer.tidder.event.RedditClientEvent;
 import com.ianbuttimer.tidder.event.StandardEvent;
-
-import butterknife.BindView;
+import com.ianbuttimer.tidder.ui.util.AdConfig;
 
 import static com.ianbuttimer.tidder.ui.AbstractPostListActivity.Tabs.PINNED_POSTS;
 
@@ -42,7 +45,9 @@ public class PostsPinnedTabFragment extends AbstractBasePostsTabFragment {
 
     private static final String TAG = PINNED_POSTS.name();
 
-    @BindView(R.id.adView_listing_layout) AdView mAdView;
+    private FragmentFollowPinnedBinding binding;
+
+    private AdConfig mAdConfig;
 
     public PostsPinnedTabFragment() {
         super(R.layout.fragment_follow_pinned);
@@ -52,44 +57,68 @@ public class PostsPinnedTabFragment extends AbstractBasePostsTabFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        AdView mAdView = binding.adViewListingLayout;
+
         Activity activity = getActivity();
         if (activity != null) {
-            String testDeviceId = activity.getString(R.string.admob_test_device_id);
+            mAdConfig = new AdConfig(activity);
+            mAdConfig.initialise();
 
-            AdRequest.Builder adBuilder = new AdRequest.Builder();
-            if (!TextUtils.isEmpty(testDeviceId) &&
-                    !testDeviceId.equals(activity.getString(R.string.admob_test_device_id_todo))) {
-                adBuilder.addTestDevice(testDeviceId);
-            }
-            mAdView.loadAd(adBuilder.build());
+            mAdConfig.loadAd(mAdView);
+//            String testDeviceId = activity.getString(R.string.admob_test_device_id);
+//
+//            AdRequest.Builder adBuilder = new AdRequest.Builder();
+//            if (!TextUtils.isEmpty(testDeviceId) &&
+//                    !testDeviceId.equals(activity.getString(R.string.admob_test_device_id_todo))) {
+//                adBuilder.addTestDevice(testDeviceId);
+//            }
+//            mAdView.loadAd(adBuilder.build());
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
-        if (mAdView != null) {
-            mAdView.resume();
-        }
+        mAdConfig.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-
-        if (mAdView != null) {
-            mAdView.pause();
-        }
+        mAdConfig.onPause();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        mAdConfig.onDestroy();
+    }
 
-        if (mAdView != null) {
-            mAdView.destroy();
-        }
+    @Override
+    protected ViewBinding getViewBinding() {
+        binding = FragmentFollowPinnedBinding.inflate(getLayoutInflater());
+        return binding;
+    }
+
+    @Override
+    protected RecyclerView getRecyclerView() {
+        return null;
+    }
+
+    @Override
+    protected ProgressBar getProgressBar() {
+        return null;
+    }
+
+    @Override
+    protected TextView getTextView() {
+        return null;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 
     @Override

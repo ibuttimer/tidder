@@ -21,8 +21,6 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 import android.text.TextUtils;
 
-import com.ianbuttimer.tidder.utils.Utils;
-
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -139,7 +137,7 @@ public class UriUtils {
     public static Uri parse(String str) {
         Uri uri = Uri.EMPTY;
         if (str != null) {
-            uri = Uri.parse(str);;
+            uri = Uri.parse(str);
         }
         return uri;
     }

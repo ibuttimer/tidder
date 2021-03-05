@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 
-/* The keystore.properties file in the project root should contain the following properties:
+/* The keystore.properties file in the project root should contain the following properties for the
+    key to use sign the application for release:
     storePassword=myStorePassword
     keyPassword=mykeyPassword
     keyAlias=myKeyAlias
@@ -25,8 +26,8 @@ android {
         applicationId "com.ianbuttimer.tidder"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.compileSdkVersion
-        versionCode 2
-        versionName "1.1"
+        versionCode 3
+        versionName "1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -39,11 +40,13 @@ android {
         vectorDrawables.useSupportLibrary = true
     }
     signingConfigs {
+        // see https://developer.android.com/studio/publish/app-signing#sign-auto
         archive {
-            storeFile file("keystore/keystore.jks")
+            // an example configuration to allow app signing during the build process
             storePassword "Keys2thekingdom"
             keyAlias "tidderkey"
             keyPassword "reddit"
+            storeFile file("keystore/keystore.jks")
         }
         propfile {
             storeFile file(keystoreProperties['storeFile'])
@@ -62,6 +65,7 @@ android {
     flavorDimensions "tier"
 
     productFlavors {
+        // see https://github.com/ibuttimer/tidder#features for details of features
         free {
             // ad-supported, local db, no post pin functionality
             dimension "tier"
@@ -97,17 +101,19 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
     def xLegacyVersion = "1.0.0"
     def supportLibVersion = "27.1.1"
-    def butterknifeVersion = "10.2.3"
-    def glideVersion = "4.11.0"
+    def glideVersion = '4.12.0'
     def parcelerVersion = "1.1.13"
     def schematicVersion = "0.7.0"
     def stethoVersion = "1.5.1"
-    def firebaseVersion = "18.0.0"
+    def firebaseVersion = '19.6.0'
     def recyclerViewVersion = "1.1.0"
 
     def preference_version = "1.1.1"
@@ -115,26 +121,28 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "androidx.recyclerview:recyclerview:$recyclerViewVersion"
     implementation "androidx.preference:preference:$preference_version"
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.3'
-    implementation "androidx.legacy:legacy-support-v4:$xLegacyVersion"
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation "androidx.palette:palette:$xLegacyVersion"
     implementation "androidx.cardview:cardview:$xLegacyVersion"
     implementation "androidx.viewpager:viewpager:$xLegacyVersion"
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
-    testImplementation 'junit:junit:4.13'
+    testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
-    implementation 'com.squareup.okio:okio:1.14.1'
-    implementation 'com.jakewharton.timber:timber:4.7.0'
-    implementation "com.jakewharton:butterknife:$butterknifeVersion"
-    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
+
+    // define a BOM and its version
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.9.0"))
+    implementation("com.squareup.okhttp3:okhttp")
+//    implementation("com.squareup.okhttp3:logging-interceptor")
+    implementation("com.squareup.okio:okio:2.10.0")
+
+    implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation "com.github.bumptech.glide:glide:$glideVersion"
     implementation "com.github.bumptech.glide:okhttp3-integration:$glideVersion"
     annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
     implementation "org.parceler:parceler-api:$parcelerVersion"
     annotationProcessor "org.parceler:parceler:$parcelerVersion"
-    implementation 'org.greenrobot:eventbus:3.1.1'
+    implementation 'org.greenrobot:eventbus:3.2.0'
 
     /* The current artifact on bintray.com is empty so for the moment, use a local version compiled using the
         source from https://github.com/nisrulz/recyclerviewhelper
@@ -145,7 +153,7 @@ dependencies {
     implementation "net.opacapp:multiline-collapsingtoolbar:$supportLibVersion"
     implementation 'com.google.guava:guava:30.0-android'
     implementation 'com.github.tiagohm.MarkdownView:library:0.19.0'
-    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.google.code.gson:gson:2.8.6'
 //    implementation "com.google.firebase:firebase-core:$firebaseVersion"
 
     debugImplementation "com.facebook.stetho:stetho:$stethoVersion"
@@ -156,7 +164,7 @@ dependencies {
 
     freeAnnotationProcessor "net.simonvt.schematic:schematic-compiler:$schematicVersion"
     freeImplementation "net.simonvt.schematic:schematic:$schematicVersion"
-    freeImplementation 'com.google.android.gms:play-services-ads:19.5.0'
+    freeImplementation 'com.google.android.gms:play-services-ads:19.7.0'
 
     freeMaxAnnotationProcessor "net.simonvt.schematic:schematic-compiler:$schematicVersion"
     freeMaxImplementation "net.simonvt.schematic:schematic:$schematicVersion"

@@ -76,13 +76,13 @@ public class User extends BaseObject<User> {
 
         boolean consumed = true;
         if (NAME.equals(name)) {
-            ((User) obj).mName = nextString(jsonReader, "");
+            obj.mName = nextString(jsonReader, "");
         } else if (ID.equals(name)) {
-            ((User) obj).mId = nextString(jsonReader, "");
+            obj.mId = nextString(jsonReader, "");
         } else if (ICON.equals(name)) {
-            ((User) obj).mIcon = nextUri(jsonReader);
+            obj.mIcon = nextUri(jsonReader);
         } else if (HAS_SUBSCRIBED.equals(name)) {
-            ((User) obj).mHasSubscribed = nextBoolean(jsonReader, false);
+            obj.mHasSubscribed = nextBoolean(jsonReader, false);
         } else {
             consumed = false;
         }

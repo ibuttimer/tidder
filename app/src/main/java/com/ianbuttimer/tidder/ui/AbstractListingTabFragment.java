@@ -25,18 +25,18 @@ import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.viewbinding.ViewBinding;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.data.adapter.AbstractRecycleViewAdapter;
 import com.ianbuttimer.tidder.data.adapter.AbstractViewHolder;
 import com.ianbuttimer.tidder.data.adapter.AdapterSelectController;
@@ -49,7 +49,6 @@ import com.ianbuttimer.tidder.event.AbstractEvent;
 import com.ianbuttimer.tidder.ui.widgets.EndlessRecyclerViewScrollListener;
 import com.ianbuttimer.tidder.ui.widgets.ListItemClickListener;
 import com.ianbuttimer.tidder.ui.widgets.PostOffice;
-import com.ianbuttimer.tidder.utils.Utils;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -58,7 +57,6 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import butterknife.BindView;
 import github.nisrulz.recyclerviewhelper.RVHItemDividerDecoration;
 import github.nisrulz.recyclerviewhelper.RVHItemTouchHelperCallback;
 import timber.log.Timber;
@@ -69,21 +67,21 @@ import static com.ianbuttimer.tidder.ui.CommentThreadProcessor.TWO_PANE;
  * Base class for listing tab fragments
  */
 @SuppressWarnings("unused")
-public abstract class AbstractListingTabFragment<T extends BaseObject, K extends AbstractViewHolder>
+public abstract class AbstractListingTabFragment<T extends BaseObject<T>, B extends ViewBinding, K extends AbstractViewHolder<T, B>>
                         extends Fragment implements PostOffice.IAddressable {
 
     protected static final String LIST = "list";
     protected static final String TRACKERS = "trackers";
 
-    @Nullable @BindView(R.id.rv_list_listingL) RecyclerView rvList;
-    @Nullable @BindView(R.id.pb_progress_listingL) ProgressBar pbProgress;
-    @Nullable @BindView(R.id.tv_message_listingL) TextView tvMessage;
+    private RecyclerView rvList;
+    private ProgressBar pbProgress;
+    private TextView tvMessage;
 
     @LayoutRes protected int mLayoutId;
 
     protected boolean mTwoPane;
 
-    protected AbstractRecycleViewAdapter<T, K> mAdapter;
+    protected AbstractRecycleViewAdapter<T, B, K> mAdapter;
     protected RecyclerView.LayoutManager mLayoutManager;
     protected ArrayList<T> mList;
     protected EndlessRecyclerViewScrollListener mScrollListener;
@@ -94,7 +92,7 @@ public abstract class AbstractListingTabFragment<T extends BaseObject, K extends
     protected int mRegisterCount;
     protected Uri mObserverUri;
 
-    protected AdapterSelectController mSelectCtrl;
+    protected AdapterSelectController<T, B, K> mSelectCtrl;
 
 
     public AbstractListingTabFragment(@LayoutRes int layoutId) {
@@ -114,9 +112,12 @@ public abstract class AbstractListingTabFragment<T extends BaseObject, K extends
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                               @Nullable Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(mLayoutId, container, false);
+        ViewBinding binding = getViewBinding();
+        View rootView = binding.getRoot();
 
-        bind(rootView);
+        rvList = getRecyclerView();
+        pbProgress = getProgressBar();
+        tvMessage = getTextView();
 
         hideInProgressMessage();
 
@@ -156,13 +157,19 @@ public abstract class AbstractListingTabFragment<T extends BaseObject, K extends
             // Set On Click Listener
             rvList.addOnItemTouchListener(getListItemClickListener());
 
-            mSelectCtrl = new AdapterSelectController(rvList);
+            mSelectCtrl = new AdapterSelectController<>(rvList);
         }
     }
 
-    protected abstract void bind(View rootView);
+    protected abstract ViewBinding getViewBinding();
 
-    protected abstract AbstractRecycleViewAdapter<T, K> getAdapter();
+    protected abstract AbstractRecycleViewAdapter<T, B, K> getAdapter();
+
+    protected abstract RecyclerView getRecyclerView();
+
+    protected abstract ProgressBar getProgressBar();
+
+    protected abstract TextView getTextView();
 
     protected ListItemClickListener getListItemClickListener() {
         return new ListItemClickListener(getContext(), getIListItemClickTester());
@@ -268,7 +275,7 @@ public abstract class AbstractListingTabFragment<T extends BaseObject, K extends
 
             StandardEvent event = PostOffice.removeStickyEvent(StandardEvent.class);
             if (event != null) {
-                // repost so subscriber that missed it can receive it
+                // re-post so subscriber that missed it can receive it
                 postEvent(event);
             }
         }
@@ -291,35 +298,35 @@ public abstract class AbstractListingTabFragment<T extends BaseObject, K extends
         super.onStop();
     }
 
-    protected <E extends AbstractEvent> void postEvent(E event) {
+    protected <E extends AbstractEvent<?>> void postEvent(E event) {
         postEvent(event, getAddress());
     }
 
-    protected <E extends AbstractEvent> void postEvent(E event, String... tags) {
+    protected <E extends AbstractEvent<?>> void postEvent(E event, String... tags) {
         PostOffice.postEvent(event, tags);
     }
 
-    protected <E extends AbstractEvent> void postSticky(E event) {
+    protected <E extends AbstractEvent<?>> void postSticky(E event) {
         postSticky(event, getAddress());
     }
 
-    protected <E extends AbstractEvent> void postSticky(E event, String... tags) {
+    protected <E extends AbstractEvent<?>> void postSticky(E event, String... tags) {
         PostOffice.postSticky(event, tags);
     }
 
-    protected <E extends AbstractEvent> void postEventForActivity(E event) {
+    protected <E extends AbstractEvent<?>> void postEventForActivity(E event) {
         postEventForActivity(event, getAddress());
     }
 
-    protected <E extends AbstractEvent> void postEventForActivity(E event, String... tags) {
+    protected <E extends AbstractEvent<?>> void postEventForActivity(E event, String... tags) {
         PostOffice.postEvent(event.setAddress(getActivityTag()), tags);
     }
 
-    protected <E extends AbstractEvent> void postStickyForActivity(E event) {
+    protected <E extends AbstractEvent<?>> void postStickyForActivity(E event) {
         postStickyForActivity(event, getAddress());
     }
 
-    protected <E extends AbstractEvent> void postStickyForActivity(E event, String... tags) {
+    protected <E extends AbstractEvent<?>> void postStickyForActivity(E event, String... tags) {
         PostOffice.postSticky(event.setAddress(getActivityTag()), tags);
     }
 
@@ -340,11 +347,11 @@ public abstract class AbstractListingTabFragment<T extends BaseObject, K extends
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(AbstractEvent event) {
+    public void onMessageEvent(AbstractEvent<?> event) {
          processMessageEvent(event);
     }
 
-    protected abstract void processMessageEvent(AbstractEvent event);
+    protected abstract void processMessageEvent(AbstractEvent<?> event);
 
     protected void showInProgress() {
         setInProgressMessageVisibility(View.INVISIBLE, View.VISIBLE);

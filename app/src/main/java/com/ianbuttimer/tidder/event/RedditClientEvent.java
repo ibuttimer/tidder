@@ -163,7 +163,7 @@ public class RedditClientEvent extends AbstractEvent<RedditClientEvent> {
 
     public static class Builder {
 
-        private RedditClientEvent mEvent;
+        private final RedditClientEvent mEvent;
 
         public Builder(@EventType int type) {
             mEvent = new RedditClientEvent(type);

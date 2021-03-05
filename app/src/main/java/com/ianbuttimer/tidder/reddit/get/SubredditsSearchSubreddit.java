@@ -18,7 +18,6 @@ package com.ianbuttimer.tidder.reddit.get;
 
 import android.util.JsonReader;
 
-import com.ianbuttimer.tidder.reddit.BaseObject;
 import com.ianbuttimer.tidder.reddit.Subreddit;
 
 import org.parceler.Parcel;

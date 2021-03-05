@@ -51,20 +51,22 @@
             app:tabGravity="fill"
             app:tabMode="fixed">
 
+            <!-- TODO open material-components issue: Tab Items does not work with View Binding, throws NPE -->
+            <!-- https://github.com/material-components/material-components-android/issues/1162 -->
+<!--            android:id="@+id/tabItemList"-->
             <com.google.android.material.tabs.TabItem
-                android:id="@+id/tabItemList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/follow_tab_list" />
 
+<!--            android:id="@+id/tabItemSearch"-->
             <com.google.android.material.tabs.TabItem
-                android:id="@+id/tabItemSearch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/follow_tab_search" />
 
+<!--            android:id="@+id/tabItemAll"-->
             <com.google.android.material.tabs.TabItem
-                android:id="@+id/tabItemAll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/follow_tab_all" />

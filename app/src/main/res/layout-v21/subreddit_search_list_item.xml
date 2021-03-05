@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2018  Ian Buttimer
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cl_search_fragF"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <EditText
+        android:id="@+id/et_interest_fragF"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/text_margin"
+        android:layout_marginEnd="@dimen/text_margin"
+        android:ems="@integer/search_text_size"
+        android:hint="@string/what_interests"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toStartOf="@+id/btn_search_fragF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/cl_search_fragF" />
+
+    <EditText
+        android:id="@+id/et_name_fragF"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/text_margin"
+        android:ems="@integer/search_text_size"
+        android:hint="@string/search_name"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/et_interest_fragF"
+        app:layout_constraintStart_toStartOf="@+id/et_interest_fragF"
+        app:layout_constraintTop_toBottomOf="@+id/et_interest_fragF" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_search_fragF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/button_margin"
+        android:src="@drawable/ic_search"
+        android:contentDescription="@string/search_btn_content_desc"
+        android:longClickable="true"
+        app:fabSize="normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_clear_fragF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginEnd="@dimen/search_clear_centre_margin"
+        android:layout_marginTop="@dimen/button_margin"
+        android:src="@drawable/ic_clear_search"
+        android:contentDescription="@string/search_clear_btn_content_desc"
+        android:longClickable="true"
+        android:backgroundTint="@color/colorAccentLight"
+        app:fabSize="mini"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_search_fragF" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

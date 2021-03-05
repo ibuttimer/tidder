@@ -20,6 +20,8 @@ import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewbinding.ViewBinding;
+
 import android.util.Pair;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
@@ -45,10 +47,13 @@ import timber.log.Timber;
 
 
 /**
- * Adapter class for a RecyclerView of movies
+ * Adapter class for a RecyclerView of reddit objects
+ * @param <T> class of reddit object
+ * @param <B> class of view binding
+ * @param <K> class of view holder
  */
 @SuppressWarnings("unused")
-public abstract class AbstractRecycleViewAdapter<T extends BaseObject, K extends AbstractViewHolder>
+public abstract class AbstractRecycleViewAdapter<T extends BaseObject<T>, B extends ViewBinding, K extends AbstractViewHolder<T, B>>
                                         extends RecyclerView.Adapter<K>
                                         implements RVHAdapter {
 
@@ -141,19 +146,28 @@ public abstract class AbstractRecycleViewAdapter<T extends BaseObject, K extends
         }
 
         // inflate but don't attach
-        View view = inflater.inflate(layoutId, viewGroup, false);
+        ViewBinding viewBinding = createView(inflater, viewType, viewGroup);
 
-        return getNewViewHolder(view, mAdapterHandler, viewType);
+        return getNewViewHolder(viewBinding, mAdapterHandler, viewType);
     }
 
     /**
+     * Create a view using View Binding
+     * @param inflater - layout inflater
+     * @param viewType - type of view to create
+     * @param parent
+     * @return view binding
+     */
+    protected abstract ViewBinding createView(LayoutInflater inflater, int viewType, ViewGroup parent);
+
+    /**
      * Create a new view holder
-     * @param view              View to insert into view holder
+     * @param viewBinding       View binding for view
      * @param adapterHandler    Handler
      * @param viewType          If your RecyclerView has more than one type of item (which ours doesn't) you
      * @return  View holder
      */
-    public abstract K getNewViewHolder(View view, IAdapterHandler adapterHandler, int viewType);
+    public abstract K getNewViewHolder(ViewBinding viewBinding, IAdapterHandler adapterHandler, int viewType);
 
     /**
      * OnBindViewHolder is called by the RecyclerView to display the data at the specified

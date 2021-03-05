@@ -19,27 +19,28 @@ package com.ianbuttimer.tidder.ui;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.tabs.TabLayout;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.data.ApiResponseCallback;
 import com.ianbuttimer.tidder.data.ICallback;
 import com.ianbuttimer.tidder.data.QueryCallback;
+import com.ianbuttimer.tidder.databinding.ActivityPostListBinding;
 import com.ianbuttimer.tidder.event.AbstractEvent;
 import com.ianbuttimer.tidder.event.PostsEvent;
 import com.ianbuttimer.tidder.event.RedditClientEvent;
@@ -57,13 +58,12 @@ import com.ianbuttimer.tidder.utils.Dialog;
 import com.ianbuttimer.tidder.utils.Utils;
 import com.ianbuttimer.tidder.widget.PostsWidgetProvider;
 
+import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 import static android.content.Intent.EXTRA_TEXT;
 import static android.content.Intent.EXTRA_TITLE;
@@ -84,11 +84,12 @@ import static com.ianbuttimer.tidder.ui.CommentThreadProcessor.TWO_PANE;
  * item details side-by-side using two vertical panes.
  */
 public abstract class AbstractPostListActivity extends AppCompatActivity
-                                                implements PostOffice.IAddressable, ISectionsPagerAdapter {
+        implements PostOffice.IAddressable, ISectionsPagerAdapter, CommentThreadProcessor.ICommentThreadHost {
 
     private static final String TAG_POSTS_EVENT =
             AbstractPostListActivity.class.getSimpleName() + ":onPostsEvent";
 
+    protected ActivityPostListBinding binding;
 
     public enum Tabs { NEW_POSTS, PINNED_POSTS;
 
@@ -98,6 +99,7 @@ public abstract class AbstractPostListActivity extends AppCompatActivity
             for (Tabs tab : values()) {
                 if (tab.ordinal() == ordinal) {
                     value = tab;
+                    break;
                 }
             }
             return value;
@@ -117,14 +119,8 @@ public abstract class AbstractPostListActivity extends AppCompatActivity
     private ICallback<Response<? extends BaseObject<?>>> mApiResponseHandler;
     private StandardEventProcessor mStdEventProcessor;
 
-    @BindView(R.id.fab_refresh_postListA) FloatingActionButton fabRefresh;
-    @Nullable @BindView(R.id.fab_pin_postDetailA) FloatingActionButton fabPin;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    @BindView(R.id.container_postList) ViewPager mViewPager;
-
+    @Nullable protected FloatingActionButton fabPin;
+    @Nullable protected FloatingActionButton fabRefresh;
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -135,22 +131,25 @@ public abstract class AbstractPostListActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post_list);
 
-        ButterKnife.bind(this);
+        binding = ActivityPostListBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        Toolbar toolbar = findViewById(R.id.toolbar_postListA);
+        fabPin = binding.incLayoutActivityPostListPinFab.fabPinPostDetailA;
+        fabRefresh = binding.incLayoutActivityPostListRefreshFab.fabRefreshPostListA;
+
+        Toolbar toolbar = binding.toolbarPostListA;
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
-        // Create the adapter that will return a fragment for each of the
-        // primary sections of the activity.
+        // Create the adapter that will return a fragment for each of the primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        // Set up the ViewPager with the sections adapter.
+        // Set up the ViewPager, that will host the section contents, with the sections adapter.
+        ViewPager mViewPager = binding.incLayoutPostList.containerPostList;
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = findViewById(R.id.tabs_postListA);
+        TabLayout tabLayout = binding.tabsPostListA;
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
@@ -165,23 +164,20 @@ public abstract class AbstractPostListActivity extends AppCompatActivity
                 } else {
                     visibility = View.INVISIBLE;
                 }
+
                 ((ImageButton)fabRefresh).setVisibility(visibility);
             }
         });
 
-        fabRefresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                EventBus.getDefault().post(PostsEvent.newRefreshPostsCommand()
-                        .setAddress(Tabs.NEW_POSTS.name()));
-            }
-        });
+        fabRefresh.setOnClickListener(view1 ->
+                EventBus.getDefault()
+                        .post(PostsEvent.newRefreshPostsCommand()
+                        .setAddress(Tabs.NEW_POSTS.name()))
+        );
 
         if (findViewById(R.id.post_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
+            // The detail container view will be present only in the large-screen layouts (res/values-w900dp).
+            // If this view is present, then the activity should be in two-pane mode.
             mTwoPane = true;
         }
 
@@ -272,7 +268,7 @@ public abstract class AbstractPostListActivity extends AppCompatActivity
     }
 
     @Subscribe
-    public void processMessageEvent(AbstractEvent event) {
+    public void processMessageEvent(AbstractEvent<?> event) {
         if (event instanceof PostsEvent) {
             onPostsEvent((PostsEvent)event);
         } else if (event instanceof StandardEvent) {
@@ -346,17 +342,21 @@ public abstract class AbstractPostListActivity extends AppCompatActivity
         }
 
         @Override
-        public Fragment getItem(int position) {
+        public @NonNull Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
-            AbstractBasePostsTabFragment fragment = null;
+            AbstractBasePostsTabFragment fragment;
             Tabs tab = Tabs.valueOf(position);
 
             if (Tabs.NEW_POSTS.equals(tab)) {
                 fragment = new PostsNewTabFragment();
             } else if (Tabs.PINNED_POSTS.equals(tab)) {
                 fragment = new PostsPinnedTabFragment();
+            } else if (tab == null){
+                throw new IllegalStateException("No corresponding tab for position " + position);
+            } else {
+                throw new IllegalStateException("Unknown tab: " + tab.name());
             }
-            if (mTwoPane && (fragment != null)) {
+            if (mTwoPane) {
                 Bundle args = new Bundle();
                 args.putBoolean(TWO_PANE, mTwoPane);
                 fragment.setArguments(args);
@@ -371,11 +371,11 @@ public abstract class AbstractPostListActivity extends AppCompatActivity
         }
 
         @Override
-        public void setPrimaryItem(ViewGroup container, int position, Object object) {
+        public void setPrimaryItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
             super.setPrimaryItem(container, position, object);
 
             if (mTwoPane) {
-                if ((object != null) && !object.equals(mCurrentPrimaryItem)) {
+                if (!object.equals(mCurrentPrimaryItem)) {
                     mCurrentPrimaryItem = object;
 
                     // clear detail fragment
@@ -406,5 +406,18 @@ public abstract class AbstractPostListActivity extends AppCompatActivity
         return mSectionsPagerAdapter.getCount();
     }
 
+    @Override
+    public FloatingActionButton getFabPin() {
+        return fabPin;
+    }
 
+    @Override
+    public FloatingActionButton getFabRefresh() {
+        return fabRefresh;
+    }
+
+    @Override
+    public CollapsingToolbarLayout getAppBarLayout() {
+        return null;
+    }
 }

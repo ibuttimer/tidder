@@ -38,9 +38,10 @@ import java.lang.ref.WeakReference;
 
 /**
  * Asynchronous request and response handler for Follow queries
+ * @param <T> class of event
  */
 
-public class QueryCallback<T extends AbstractEvent> extends
+public class QueryCallback<T extends AbstractEvent<T>> extends
         AbstractContentProviderCallback<QueryResponse<? extends AbstractDbRow>> {
 
     private final WeakReference<Activity> mActivity;

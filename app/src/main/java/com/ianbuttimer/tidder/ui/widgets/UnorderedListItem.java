@@ -29,14 +29,12 @@ import android.text.Spanned;
 import android.text.method.MovementMethod;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ianbuttimer.tidder.R;
+import com.ianbuttimer.tidder.databinding.UnorderedListItemBinding;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Widget to display an unordered list item<br>
@@ -44,8 +42,8 @@ import butterknife.ButterKnife;
 
 public class UnorderedListItem extends LinearLayout {
 
-    @BindView(R.id.tv_ul_bullet) TextView tvBullet;
-    @BindView(R.id.tv_ul_item) TextView tvItem;
+    private TextView tvBullet;
+    private TextView tvItem;
 
     @StyleRes private int mAppearance = android.R.style.TextAppearance_Small;
     @IntegerRes private int mAlignment = R.integer.text_alignment;
@@ -79,9 +77,10 @@ public class UnorderedListItem extends LinearLayout {
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (inflater != null) {
-            View view = inflater.inflate(R.layout.unordered_list_item, this, true);
+            UnorderedListItemBinding binding = UnorderedListItemBinding.inflate(inflater, this, true);
 
-            ButterKnife.bind(this, view);
+            tvBullet = binding.tvUlBullet;
+            tvItem = binding.tvUlItem;
 
             setTexts(bulletId, textId);
             setStyle();

@@ -19,7 +19,6 @@ package com.ianbuttimer.tidder.reddit.get;
 import android.util.JsonReader;
 
 import com.ianbuttimer.tidder.event.EventType;
-import com.ianbuttimer.tidder.reddit.BaseObject;
 import com.ianbuttimer.tidder.reddit.Comment;
 import com.ianbuttimer.tidder.reddit.CommentMore;
 import com.ianbuttimer.tidder.reddit.ListingList;

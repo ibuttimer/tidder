@@ -39,9 +39,10 @@ import timber.log.Timber;
 
 /**
  * Base class representing events<br>
+ * @param <E> class of event object
  */
 
-public abstract class AbstractEvent<E extends AbstractEvent> {
+public abstract class AbstractEvent<E extends AbstractEvent<?>> {
 
     protected static final SparseArray<String> mEventNames;
     protected static final SparseArray<String> mModeNames;
@@ -333,7 +334,7 @@ public abstract class AbstractEvent<E extends AbstractEvent> {
         sb.append(" tag=").append(getAddress());
 
         if (mSrvResponse instanceof ListingList) {
-            sb.append(" entries=").append(((ListingList) mSrvResponse).getCount());
+            sb.append(" entries=").append(((ListingList<?>) mSrvResponse).getCount());
         }
 
         String extra = toStringExtra();
@@ -351,7 +352,7 @@ public abstract class AbstractEvent<E extends AbstractEvent> {
      * The parameter <code>B</code> represents the class of the builder.
      * The parameter <code>T</code> represents the class for the event.
      */
-    public abstract static class AdditionalInfoBuilder<B extends AdditionalInfoBuilder, T extends AbstractEvent> {
+    public abstract static class AdditionalInfoBuilder<B extends AdditionalInfoBuilder<B, T>, T extends AbstractEvent<?>> {
 
         protected Bundle mBundle;
         protected T mEvent;
@@ -396,7 +397,7 @@ public abstract class AbstractEvent<E extends AbstractEvent> {
      * The parameter <code>E</code> represents the class of the extractor.
      * The parameter <code>T</code> represents the class for the event.
      */
-    public abstract static class AdditionalInfoExtractor<E extends AdditionalInfoExtractor, T extends AbstractEvent> {
+    public abstract static class AdditionalInfoExtractor<E extends AdditionalInfoExtractor<E, ?>, T extends AbstractEvent<?>> {
 
         @Nullable protected Bundle mBundle;
         @Nullable protected T mEvent;
@@ -439,7 +440,7 @@ public abstract class AbstractEvent<E extends AbstractEvent> {
     }
 
     /**
-     * Get the names of the static final integers int the specified field list
+     * Get the names of the static final integers in the specified field list
      * @param fields    List of fields
      * @return  SparseArray of names with field values as the key
      */

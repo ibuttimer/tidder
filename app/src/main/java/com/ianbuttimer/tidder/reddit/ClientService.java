@@ -24,14 +24,10 @@ import android.os.ResultReceiver;
 import androidx.annotation.Nullable;
 import android.text.TextUtils;
 
-import com.ianbuttimer.tidder.TidderApplication;
 import com.ianbuttimer.tidder.data.AbstractIntentService;
 import com.ianbuttimer.tidder.exception.HttpException;
 import com.ianbuttimer.tidder.net.NetworkUtils;
 import com.ianbuttimer.tidder.utils.PreferenceControl;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;

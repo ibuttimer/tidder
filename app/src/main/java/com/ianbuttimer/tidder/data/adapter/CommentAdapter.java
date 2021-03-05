@@ -21,13 +21,16 @@ import android.content.Context;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.viewbinding.ViewBinding;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.data.IAdapterHandler;
+import com.ianbuttimer.tidder.databinding.CommentListItemBinding;
+import com.ianbuttimer.tidder.databinding.CommentMoreListItemBinding;
 import com.ianbuttimer.tidder.reddit.Comment;
 import com.ianbuttimer.tidder.reddit.CommentMore;
 
@@ -38,7 +41,7 @@ import java.util.List;
  * Adapter class for a RecyclerView of Comment
  */
 
-public class CommentAdapter extends AbstractRecycleViewAdapter<Comment, CommentViewHolder> {
+public class CommentAdapter extends AbstractRecycleViewAdapter<Comment, CommentListItemBinding, CommentViewHolder> {
 
     protected static final int STD_COMMENT = DEFAULT_KEY;
     protected static final int MORE_COMMENT = STD_COMMENT + 1;
@@ -55,7 +58,6 @@ public class CommentAdapter extends AbstractRecycleViewAdapter<Comment, CommentV
         addLayoutId(MORE_COMMENT, R.layout.comment_more_list_item);
     }
 
-
     @NonNull
     @Override
     public CommentViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
@@ -68,18 +70,40 @@ public class CommentAdapter extends AbstractRecycleViewAdapter<Comment, CommentV
         }
 
         // inflate but don't attach
-        ConstraintLayout rootView = (ConstraintLayout)inflater.inflate(layoutId, viewGroup, false);
+        ViewBinding viewBinding = createView(inflater, viewType, viewGroup);
 
-        return getNewViewHolder(rootView, mAdapterHandler, viewType);
+        return getNewViewHolder(viewBinding, mAdapterHandler, viewType);
     }
 
     @Override
-    public CommentViewHolder getNewViewHolder(View view, IAdapterHandler adapterHandler, int viewType) {
+    protected ViewBinding createView(LayoutInflater inflater, int viewType, ViewGroup parent) {
+        ViewBinding binding;
+        switch (viewType) {
+            case STD_COMMENT:
+                binding = CommentListItemBinding.inflate(inflater, parent, false);
+                break;
+            case MORE_COMMENT:
+                binding = CommentMoreListItemBinding.inflate(inflater, parent, false);
+                break;
+            default:
+                throw new IllegalStateException("Unknown viewType: " + viewType);
+        }
+        return binding;
+    }
+
+    @Override
+    public CommentViewHolder getNewViewHolder(ViewBinding viewBinding, IAdapterHandler adapterHandler, int viewType) {
         CommentViewHolder viewHolder;
-        if (viewType == STD_COMMENT) {
-            viewHolder = new CommentViewHolder(view, adapterHandler);
-        } else {
-            viewHolder = new CommentMoreViewHolder(view, adapterHandler);
+        View rootView = viewBinding.getRoot();
+        switch (viewType) {
+            case STD_COMMENT:
+                viewHolder = new CommentViewHolder(rootView, adapterHandler, (CommentListItemBinding) viewBinding);
+                break;
+            case MORE_COMMENT:
+                viewHolder = new CommentMoreViewHolder(rootView, adapterHandler, (CommentMoreListItemBinding) viewBinding);
+                break;
+            default:
+                throw new IllegalStateException("Unknown viewType: " + viewType);
         }
         return viewHolder;
     }

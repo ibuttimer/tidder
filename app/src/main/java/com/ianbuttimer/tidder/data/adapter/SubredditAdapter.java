@@ -17,12 +17,16 @@
 package com.ianbuttimer.tidder.data.adapter;
 
 
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import android.view.View;
+import androidx.viewbinding.ViewBinding;
 
 import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.data.IAdapterHandler;
+import com.ianbuttimer.tidder.databinding.SubredditListItemBinding;
 import com.ianbuttimer.tidder.reddit.Subreddit;
 
 import java.util.List;
@@ -32,7 +36,7 @@ import java.util.List;
  * Adapter class for a RecyclerView of Subreddit
  */
 
-public class SubredditAdapter extends AbstractRecycleViewAdapter<Subreddit, SubredditViewHolder> {
+public class SubredditAdapter<B extends ViewBinding> extends AbstractRecycleViewAdapter<Subreddit, B, SubredditViewHolder<B>> {
 
     /**
      * Constructor
@@ -43,9 +47,13 @@ public class SubredditAdapter extends AbstractRecycleViewAdapter<Subreddit, Subr
         super(objects, adapterHandler, R.layout.subreddit_list_item);
     }
 
+    @Override
+    protected ViewBinding createView(LayoutInflater inflater, int viewType, ViewGroup parent) {
+        return SubredditListItemBinding.inflate(inflater, parent, false);
+    }
 
     @Override
-    public SubredditViewHolder getNewViewHolder(View view, IAdapterHandler clickHandler, int viewType) {
-        return new SubredditViewHolder(view, clickHandler);
+    public SubredditViewHolder<B> getNewViewHolder(ViewBinding viewBinding, IAdapterHandler clickHandler, int viewType) {
+        return new SubredditViewHolder<>(viewBinding.getRoot(), clickHandler, (SubredditListItemBinding) viewBinding);
     }
 }

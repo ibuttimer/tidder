@@ -19,25 +19,26 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:clickable="true"
-    android:focusable="true"
-    android:background="@drawable/list_item_background"
-    android:layout_margin="@dimen/list_item_margin"
+    android:id="@+id/cl_link_item"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/list_item_margin"
+    android:background="@drawable/list_item_background"
+    android:clickable="true"
+    android:focusable="true">
     <!--android:background="?attr/selectableItemBackgroundBorderless"-->
 
     <ImageView
         android:id="@+id/img_thumbnail_link_item"
-        android:src="@drawable/ic_link"
-        android:contentDescription="@string/content_desc_thumbnail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guide_left_link_item"
-        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/content_desc_thumbnail"
+        android:src="@drawable/ic_link"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content" />
+        app:layout_constraintEnd_toStartOf="@+id/guide_left_link_item"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guide_left_link_item"
@@ -52,7 +53,7 @@
         android:id="@+id/tv_title_link_item"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="@dimen/text_margin"
         android:layout_marginStart="@dimen/text_margin"
         android:textAlignment="@integer/text_alignment"
         app:layout_constraintEnd_toEndOf="parent"
@@ -67,7 +68,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/text_margin"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/tv_title_link_item"
         app:layout_constraintStart_toStartOf="@+id/tv_title_link_item"
         app:layout_constraintTop_toBottomOf="@+id/tv_title_link_item"
         />
@@ -76,10 +77,9 @@
         android:id="@+id/tv_subreddit_link_item"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/text_margin"
         android:layout_marginTop="@dimen/text_margin"
         android:textAlignment="@integer/text_alignment"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/tv_title_link_item"
         app:layout_constraintStart_toStartOf="@+id/tv_title_link_item"
         app:layout_constraintTop_toBottomOf="@+id/bsv_link_item"
         tools:text="@string/link_subreddit" />

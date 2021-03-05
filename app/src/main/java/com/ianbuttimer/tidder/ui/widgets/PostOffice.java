@@ -36,7 +36,7 @@ public class PostOffice {
 
     private static final PostOffice ourInstance = new PostOffice();
 
-    private SharedPreferences.OnSharedPreferenceChangeListener mPrefListener;   // need a strong ref to avoid possible garbage collection
+    private final SharedPreferences.OnSharedPreferenceChangeListener mPrefListener;   // need a strong ref to avoid possible garbage collection
 
     private static boolean mLogPost;
 
@@ -66,15 +66,12 @@ public class PostOffice {
         setLogDelivery(context);
         setLogHandled(context);
 
-        mPrefListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-                @Override
-                public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                    Context context = TidderApplication.getWeakApplicationContext().get();
-                    mLogPost = PreferenceControl.getLogEventPostPreference(context);
-                    setLogDelivery(context);
-                    setLogHandled(context);
-                }
-            };
+        mPrefListener = (sharedPreferences, key) -> {
+            Context context1 = TidderApplication.getWeakApplicationContext().get();
+            mLogPost = PreferenceControl.getLogEventPostPreference(context1);
+            setLogDelivery(context1);
+            setLogHandled(context1);
+        };
         PreferenceControl.registerOnSharedPreferenceChangeListener(context, mPrefListener);
     }
 
@@ -118,7 +115,7 @@ public class PostOffice {
      * @param tags  Address(s) to post too
      * @param <T>   Event class
      */
-    public static <T extends AbstractEvent> void postEvent(T event, String... tags) {
+    public static <T extends AbstractEvent<?>> void postEvent(T event, String... tags) {
         logPost(event.addAddress(tags));
         EventBus.getDefault().post(event);
     }
@@ -129,7 +126,7 @@ public class PostOffice {
      * @param tags  Address(s) to post too
      * @param <T>   Event class
      */
-    public static <T extends AbstractEvent> void postSticky(T event, String... tags) {
+    public static <T extends AbstractEvent<?>> void postSticky(T event, String... tags) {
         logPostSticky(event.addAddress(tags));
         EventBus.getDefault().postSticky(event);
     }
@@ -141,7 +138,7 @@ public class PostOffice {
      * @return  Event or <code>null</code> if no events
      */
     @Nullable
-    public static <T extends AbstractEvent> T getStickyEvent(Class<T> tClass) {
+    public static <T extends AbstractEvent<?>> T getStickyEvent(Class<T> tClass) {
         return EventBus.getDefault().getStickyEvent(tClass);
     }
 
@@ -152,7 +149,7 @@ public class PostOffice {
      * @return  Event or <code>null</code> if no events
      */
     @Nullable
-    public static <T extends AbstractEvent> T removeStickyEvent(Class<T> tClass) {
+    public static <T extends AbstractEvent<?>> T removeStickyEvent(Class<T> tClass) {
         return EventBus.getDefault().removeStickyEvent(tClass);
     }
 
@@ -162,7 +159,7 @@ public class PostOffice {
      * @param destination   Destination address
      * @return  <code>true</code> if event should be delivered
      */
-    public static boolean deliverEvent(AbstractEvent event, String destination) {
+    public static boolean deliverEvent(AbstractEvent<?> event, String destination) {
         return deliverEvent(event, destination, destination);
     }
 
@@ -173,7 +170,7 @@ public class PostOffice {
      * @param tag           Tag to display in log
      * @return  <code>true</code> if event should be delivered
      */
-    public static boolean deliverEvent(AbstractEvent event, String destination, String tag) {
+    public static boolean deliverEvent(AbstractEvent<?> event, String destination, String tag) {
         boolean deliver = event.isForTag(destination);
         logDeliver(event, tag, deliver);
         return deliver;
@@ -185,7 +182,7 @@ public class PostOffice {
      * @param destination   Destination address
      * @return  <code>true</code> if event should be delivered
      */
-    public static boolean deliverEventOrBroadcast(AbstractEvent event, String destination) {
+    public static boolean deliverEventOrBroadcast(AbstractEvent<?> event, String destination) {
         return deliverEventOrBroadcast(event, destination, destination);
     }
 
@@ -196,7 +193,7 @@ public class PostOffice {
      * @param tag       Tag to display in log
      * @return  <code>true</code> if event should be delivered
      */
-    public static boolean deliverEventOrBroadcast(AbstractEvent event, String destination, String tag) {
+    public static boolean deliverEventOrBroadcast(AbstractEvent<?> event, String destination, String tag) {
         boolean deliver = event.isBroadcast();
         if (!deliver) {
             deliver = deliverEvent(event, destination, tag);
@@ -211,7 +208,7 @@ public class PostOffice {
      * @param event     Event
      * @param <T>       Event class
      */
-    public static <T extends AbstractEvent> void logPost(T event) {
+    public static <T extends AbstractEvent<?>> void logPost(T event) {
         logPost(event, false);
     }
 
@@ -220,7 +217,7 @@ public class PostOffice {
      * @param event     Event
      * @param <T>       Event class
      */
-    public static <T extends AbstractEvent> void logPostSticky(T event) {
+    public static <T extends AbstractEvent<?>> void logPostSticky(T event) {
         logPost(event, true);
     }
 
@@ -230,7 +227,7 @@ public class PostOffice {
      * @param sticky    Sticky flag
      * @param <T>       Event class
      */
-    private static <T extends AbstractEvent> void logPost(T event, boolean sticky) {
+    private static <T extends AbstractEvent<?>> void logPost(T event, boolean sticky) {
         if (mLogPost) {
             Timber.i("postEvent%s: %s", (sticky ? "[STICKY]" : ""), event);
         }
@@ -243,7 +240,7 @@ public class PostOffice {
      * @param deliver   Delivered flag
      * @param <T>       Event class
      */
-    public static <T extends AbstractEvent> void logDeliver(T event, String tag, boolean deliver) {
+    public static <T extends AbstractEvent<?>> void logDeliver(T event, String tag, boolean deliver) {
         String msg = null;
         if (deliver && isSet(mLogDelivery, LOG_DELIVERY)) {
             msg = "";
@@ -262,7 +259,7 @@ public class PostOffice {
      * @param handled   Handled flag
      * @param <T>       Event class
      */
-    public static <T extends AbstractEvent> void logHandled(T event, String tag, boolean handled) {
+    public static <T extends AbstractEvent<?>> void logHandled(T event, String tag, boolean handled) {
         String msg = null;
         if (handled && isSet(mLogHandled, LOG_HANDLED)) {
             msg = "";

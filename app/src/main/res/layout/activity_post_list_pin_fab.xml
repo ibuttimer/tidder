@@ -27,4 +27,3 @@
     android:visibility="gone"
     android:contentDescription="@string/pin_content_desc"
     app:srcCompat="@drawable/ic_pin" />
-

@@ -15,7 +15,8 @@
   ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_postList"
@@ -33,6 +34,6 @@
         android:layout_height="match_parent"
         app:layoutManager="LinearLayoutManager"
         tools:context="com.ianbuttimer.tidder.ui.PostListActivity"
-        tools:listitem="@layout/content_post" />
+        tools:listitem="@layout/link_list_item" />
 
 </LinearLayout>

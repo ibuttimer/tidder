@@ -149,22 +149,21 @@ public class Subreddit extends RedditObject<Subreddit, SubredditProxy> {
                                         throws IOException, IllegalArgumentException {
         checkObject(obj, getClass());
 
-        Subreddit object = ((Subreddit) obj);
-        boolean consumed = super.parseToken(jsonReader, name, object);
+        boolean consumed = super.parseToken(jsonReader, name, obj);
         if (!consumed) {
             consumed = true;
             // process common subreddit fields
             if (ICON.equals(name)) {
-                object.mIcon = nextUri(jsonReader);
+                obj.mIcon = nextUri(jsonReader);
             } else if (ACTIVE_USER_CNT.equals(name)) {
-                object.mActiveUsers = nextInt(jsonReader, 0);
+                obj.mActiveUsers = nextInt(jsonReader, 0);
             } else if (KEY_COLOUR.equals(name)) {
                 String colour = nextString(jsonReader, "");
                 if (!TextUtils.isEmpty(colour)) {
-                    object.mKeyColour = Color.parseColor(colour);
+                    obj.mKeyColour = Color.parseColor(colour);
                 }
             } else if (ALLOW_IMAGES.equals(name)) {
-                object.mAllowImages = nextBoolean(jsonReader, false);
+                obj.mAllowImages = nextBoolean(jsonReader, false);
             } else {
                 consumed = false;
             }

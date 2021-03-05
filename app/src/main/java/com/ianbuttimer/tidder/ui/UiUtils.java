@@ -39,7 +39,7 @@ public class UiUtils {
 
     public enum AppTypeface {
         NO_TYPEFACE, NOTO_SANS_REGULAR, NOTO_SANS_ITALIC
-    };
+    }
 
     private static final Typeface mNotoSansRegular;
     private static final Typeface mNotoSansItalic;

@@ -256,36 +256,30 @@ public class Utils {
         boolean handled = true;
         Intent intent = null;
 
-        switch (id) {
-            case android.R.id.home:
-                // This ID represents the Home or Up button. In the case of this
-                // activity, the Up button is shown. Use NavUtils to allow users
-                // to navigate up one level in the application structure. For
-                // more details, see the Navigation pattern on Android Design:
-                //
-                // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-                //
-                NavUtils.navigateUpFromSameTask(activity);
-                break;
-            case R.id.action_settings:
-                intent = new Intent(activity, SettingsActivity.class);
-                break;
-            case R.id.action_help:
-                intent = new Intent(activity, HelpActivity.class);
-                break;
-            case R.id.action_about:
-                intent = new Intent(activity, AboutActivity.class);
-                break;
-            case R.id.action_logout:
-                RedditClient.getClient().logout(activity);
-                break;
-            case R.id.action_follow:
-                intent = new Intent(activity, FollowActivity.class);
-                break;
-            default:
-                handled = false;
-                break;
+        // don't use menu action ids in switch statement as Resource IDs will be non-final in Android Gradle Plugin version 5.0
+        if (id == android.R.id.home) {
+            // This ID represents the Home or Up button. In the case of this
+            // activity, the Up button is shown. Use NavUtils to allow users
+            // to navigate up one level in the application structure. For
+            // more details, see the Navigation pattern on Android Design:
+            //
+            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
+            //
+            NavUtils.navigateUpFromSameTask(activity);
+        } else if (id == R.id.action_settings) {
+            intent = new Intent(activity, SettingsActivity.class);
+        } else if (id == R.id.action_help) {
+            intent = new Intent(activity, HelpActivity.class);
+        } else if (id == R.id.action_about) {
+            intent = new Intent(activity, AboutActivity.class);
+        } else if (id == R.id.action_logout) {
+            RedditClient.getClient().logout(activity);
+        } else if (id == R.id.action_follow) {
+            intent = new Intent(activity, FollowActivity.class);
+        } else {
+            handled = false;
         }
+
         if (intent != null) {
             startActivity(activity, intent);
         }

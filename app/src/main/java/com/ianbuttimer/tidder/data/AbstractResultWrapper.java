@@ -53,7 +53,7 @@ public abstract class AbstractResultWrapper {
             }
             return resultType;
         }
-    };
+    }
 
     private ICallback.ResponseHandler mHandler;  // type of mHandler required to process this object
     protected UriURLPair mRequest;           // uri/url used to make request

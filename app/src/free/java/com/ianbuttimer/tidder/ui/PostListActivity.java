@@ -17,13 +17,9 @@
 package com.ianbuttimer.tidder.ui;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.AdapterStatus;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
-import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.event.StandardEventProcessor.IStandardEventProcessorExt;
 import com.ianbuttimer.tidder.ui.widgets.PostOffice;
 

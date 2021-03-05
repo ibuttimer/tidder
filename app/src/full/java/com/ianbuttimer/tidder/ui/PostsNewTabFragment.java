@@ -17,9 +17,16 @@
 package com.ianbuttimer.tidder.ui;
 
 
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewbinding.ViewBinding;
+
 import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.data.Config;
 import com.ianbuttimer.tidder.data.ConfigQueryResponse;
+import com.ianbuttimer.tidder.databinding.FragmentPostsBinding;
 import com.ianbuttimer.tidder.event.RedditClientEvent;
 import com.ianbuttimer.tidder.event.StandardEvent;
 import com.ianbuttimer.tidder.ui.util.DatabaseSettings;
@@ -31,6 +38,8 @@ import com.ianbuttimer.tidder.utils.Utils;
  */
 
 public class PostsNewTabFragment extends AbstractPostsNewTabFragment {
+
+    private FragmentPostsBinding binding;
 
     public PostsNewTabFragment() {
         super(R.layout.fragment_posts);
@@ -77,4 +86,30 @@ public class PostsNewTabFragment extends AbstractPostsNewTabFragment {
         return handled;
     }
 
+    @Override
+    protected ViewBinding getViewBinding() {
+        binding = FragmentPostsBinding.inflate(getLayoutInflater());
+        return binding;
+    }
+
+    @Override
+    protected RecyclerView getRecyclerView() {
+        return binding.incListingLayout.rvListListingL;
+    }
+
+    @Override
+    protected ProgressBar getProgressBar() {
+        return binding.incListingLayout.pbProgressListingL;
+    }
+
+    @Override
+    protected TextView getTextView() {
+        return binding.incListingLayout.tvMessageListingL;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
 }

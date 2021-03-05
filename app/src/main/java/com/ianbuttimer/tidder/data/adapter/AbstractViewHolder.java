@@ -16,8 +16,6 @@
 package com.ianbuttimer.tidder.data.adapter;
 
 import android.content.Context;
-import androidx.annotation.ColorInt;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -26,10 +24,12 @@ import android.text.method.LinkMovementMethod;
 import android.text.method.MovementMethod;
 import android.text.style.URLSpan;
 import android.text.util.Linkify;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.ColorInt;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewbinding.ViewBinding;
 
 import com.ianbuttimer.tidder.data.IAdapterHandler;
 import com.ianbuttimer.tidder.net.NetworkUtils;
@@ -50,11 +50,11 @@ import static com.ianbuttimer.tidder.net.RedditUriBuilder.SUBREDDIT_RELATIVE_STA
  * A base RecyclerView.ViewHolder for BaseObject objects
  */
 @SuppressWarnings("unused")
-public abstract class AbstractViewHolder<T extends BaseObject>
+public abstract class AbstractViewHolder<T extends BaseObject<T>, B extends ViewBinding>
                     extends RecyclerView.ViewHolder
                     implements View.OnClickListener, View.OnLongClickListener, RVHViewHolder {
 
-    enum Listeners { NONE, CLICK, LONG_CLICK, CLICK_AND_LONG };
+    enum Listeners { NONE, CLICK, LONG_CLICK, CLICK_AND_LONG }
 
     private final View mView;
     private IAdapterHandler mAdapterHandler;
@@ -97,23 +97,14 @@ public abstract class AbstractViewHolder<T extends BaseObject>
                 break;
         }
 
+        mView.setOnTouchListener((view1, motionEvent) -> false);
 
-        mView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                return false;
+        mView.setOnKeyListener((view12, keyCode, keyEvent) -> {
+            boolean consumed = false;
+            if (mAdapterHandler != null) {
+                consumed = mAdapterHandler.onKey(view12, keyCode, keyEvent);
             }
-        });
-
-        mView.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
-                boolean consumed = false;
-                if (mAdapterHandler != null) {
-                    consumed = mAdapterHandler.onKey(view, keyCode, keyEvent);
-                }
-                return consumed;
-            }
+            return consumed;
         });
     }
 
@@ -238,8 +229,8 @@ public abstract class AbstractViewHolder<T extends BaseObject>
     // vvvvvvvv RVHViewHolder implementation vvvvvvvv
 
     @Override
-    public void onItemSelected(int actionstate) {
-        mActionState = actionstate;
+    public void onItemSelected(int actionState) {
+        mActionState = actionState;
         actionStateDbg();
     }
 

@@ -179,38 +179,37 @@ public class OEmbed extends BaseObject<OEmbed> {
             throws IOException, IllegalArgumentException {
         checkObject(obj, getClass());
 
-        OEmbed object = ((OEmbed) obj);
         boolean consumed = true;
         if (AUTHOR_URL.equals(name)) {
-            object.setAuthorUrl(nextUri(jsonReader));
+            obj.setAuthorUrl(nextUri(jsonReader));
         } else if (PROVIDER_URL.equals(name)) {
-            object.setProviderUrl(nextUri(jsonReader));
+            obj.setProviderUrl(nextUri(jsonReader));
         } else if (THUMBNAIL_URL.equals(name)) {
-            object.setThumbnailUrl(nextUri(jsonReader));
+            obj.setThumbnailUrl(nextUri(jsonReader));
         } else if (URL.equals(name)) {
-            object.setUrl(nextUri(jsonReader));
+            obj.setUrl(nextUri(jsonReader));
         } else if (TYPE.equals(name)) {
-            object.setType(nextString(jsonReader, ""));
+            obj.setType(nextString(jsonReader, ""));
         } else if (VERSION.equals(name)) {
-            object.setVersion(nextString(jsonReader, ""));
+            obj.setVersion(nextString(jsonReader, ""));
         } else if (TITLE.equals(name)) {
-            object.setTitle(nextString(jsonReader, ""));
+            obj.setTitle(nextString(jsonReader, ""));
         } else if (AUTHOR_NAME.equals(name)) {
-            object.setAuthor(nextString(jsonReader, ""));
+            obj.setAuthor(nextString(jsonReader, ""));
         } else if (PROVIDER_NAME.equals(name)) {
-            object.setProvider(nextString(jsonReader, ""));
+            obj.setProvider(nextString(jsonReader, ""));
         } else if (HTML.equals(name)) {
-            object.setHtml(nextString(jsonReader, ""));
+            obj.setHtml(nextString(jsonReader, ""));
         } else if (CACHE_AGE.equals(name)) {
-            object.setCacheAge(nextLong(jsonReader, 0));
+            obj.setCacheAge(nextLong(jsonReader, 0));
         } else if (THUMBNAIL_WIDTH.equals(name)) {
-            object.setThumbnailWidth(nextInt(jsonReader, 0));
+            obj.setThumbnailWidth(nextInt(jsonReader, 0));
         } else if (THUMBNAIL_HEIGHT.equals(name)) {
-            object.setThumbnailHeight(nextInt(jsonReader, 0));
+            obj.setThumbnailHeight(nextInt(jsonReader, 0));
         } else if (WIDTH.equals(name)) {
-            object.setWidth(nextInt(jsonReader, 0));
+            obj.setWidth(nextInt(jsonReader, 0));
         } else if (HEIGHT.equals(name)) {
-            object.setHeight(nextInt(jsonReader, 0));
+            obj.setHeight(nextInt(jsonReader, 0));
         } else {
             consumed = false;
         }

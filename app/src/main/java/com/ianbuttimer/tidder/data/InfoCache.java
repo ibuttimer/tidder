@@ -122,12 +122,12 @@ public class InfoCache {
             InfoCache infoCache = null;
             if (Utils.readBooleanFromParcel(parcel)) {
                 infoCache = new InfoCache(
-                        (Subreddit) Parcels.unwrap(parcel.readParcelable(Subreddit.class.getClassLoader())));
+                        Parcels.unwrap(parcel.readParcelable(Subreddit.class.getClassLoader())));
                 int size = parcel.readInt();
                 if (size > 0) {
                     for (int i = 0; i < size; ++i) {
                         infoCache.add(
-                                (Link) Parcels.unwrap(parcel.readParcelable(Link.class.getClassLoader())));
+                                Parcels.unwrap(parcel.readParcelable(Link.class.getClassLoader())));
                     }
                 }
             }

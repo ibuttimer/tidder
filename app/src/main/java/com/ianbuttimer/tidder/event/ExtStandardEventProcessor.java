@@ -24,12 +24,12 @@ import com.ianbuttimer.tidder.ui.widgets.PostOffice;
 
 public class ExtStandardEventProcessor implements StandardEventProcessor.IStandardEventProcessorExt {
 
-    private IStandardEventProcessor mHhost;
+    private IStandardEventProcessor mHost;
 
 
     @Override
     public void setHost(IStandardEventProcessor host) {
-        mHhost = host;
+        mHost = host;
     }
 
     @Override
@@ -37,13 +37,13 @@ public class ExtStandardEventProcessor implements StandardEventProcessor.IStanda
         boolean handled = true;
 
         if (event.isSettingsRequest()) {
-            QueryCallback<StandardEvent> cpStdEventHandler = mHhost.getCpStdEventHandler();
+            QueryCallback<StandardEvent> cpStdEventHandler = mHost.getCpStdEventHandler();
             if (Uri.EMPTY.equals(ProviderUri.CONFIG_CONTENT_URI)) {
                 // nothing to do
                 PostOffice.postEvent(StandardEvent.newSettingsResult(), event.getAddresses());
             } else if (cpStdEventHandler != null) {
-                cpStdEventHandler.queryList(mHhost.getActivity(),
-                        mHhost.getLoaderId(event),
+                cpStdEventHandler.queryList(mHost.getActivity(),
+                        mHost.getLoaderId(event),
                         event,
                         ProviderUri.CONFIG_CONTENT_URI);
             }

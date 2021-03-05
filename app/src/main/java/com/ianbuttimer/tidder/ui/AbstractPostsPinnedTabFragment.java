@@ -23,6 +23,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
+
+import android.os.Looper;
 import android.util.Pair;
 
 import com.ianbuttimer.tidder.R;
@@ -61,7 +63,7 @@ public abstract class AbstractPostsPinnedTabFragment extends AbstractBasePostsTa
         setObserverAndUri(mDbObserver, ProviderUri.PINNED_CONTENT_URI);
     }
 
-    protected ContentObserver mDbObserver = new ContentObserver(new Handler()) {
+    protected ContentObserver mDbObserver = new ContentObserver(new Handler(Looper.myLooper())) {
         @Override
         public void onChange(boolean selfChange, Uri uri) {
             postEventForActivity(StandardEvent.newUpdatePinnedListRequest());
@@ -72,6 +74,15 @@ public abstract class AbstractPostsPinnedTabFragment extends AbstractBasePostsTa
             return true;
         }
     };
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        if (getAdapter().getItemCount() == 0) {
+            showMessage(R.string.no_pinned_posts);
+        }
+    }
 
     @Override
     public String getAddress() {
@@ -115,7 +126,7 @@ public abstract class AbstractPostsPinnedTabFragment extends AbstractBasePostsTa
                     boolean isUpdate = event.isUpdateMode();
 
                     ArrayList<Link> linkList = new ArrayList<>();
-                    for (RedditObject obj : response.getList()) {
+                    for (RedditObject<?, ?> obj : response.getList()) {
                         if (obj instanceof Link) {
                             boolean add;
 

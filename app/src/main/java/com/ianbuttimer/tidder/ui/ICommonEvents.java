@@ -27,9 +27,11 @@ import com.ianbuttimer.tidder.reddit.Response;
 
 /**
  * Interface for processing common events
+ * @param <E> class of event object
+ * @param <R> class of reddit response
  */
 
-public interface ICommonEvents<E extends AbstractEvent, R extends Response<? extends BaseObject<?>>> {
+public interface ICommonEvents<E extends AbstractEvent<E>, R extends Response<? extends BaseObject<?>>> {
 
     ICommonEvents<E, R> getFactoryInstance();
 
@@ -47,23 +49,22 @@ public interface ICommonEvents<E extends AbstractEvent, R extends Response<? ext
      */
     @Nullable <T extends ContentProviderResponse> E newCpResponseResult(T response);
 
-    IAdditionalInfoBuilder infoBuilder(@NonNull E event);
+    IAdditionalInfoBuilder<?> infoBuilder(@NonNull E event);
 
     @Nullable Bundle additionalInfoTag(@NonNull E event);
 
     @Nullable Bundle additionalInfoAll(@NonNull E event);
 
-    interface IAdditionalInfoBuilder<B extends AbstractEvent.AdditionalInfoBuilder> {
-
+    interface IAdditionalInfoBuilder<B extends AbstractEvent.AdditionalInfoBuilder<B, ?>> {
         B tag();
         B all();
     }
 
 
-    IAdditionalInfoExtractor infoExtractor(@NonNull E event, @Nullable Bundle bundle);
+    IAdditionalInfoExtractor<E, ?> infoExtractor(@NonNull E event, @Nullable Bundle bundle);
 
-    interface IAdditionalInfoExtractor<E extends AbstractEvent,
-                        X extends AbstractEvent.AdditionalInfoExtractor> {
+    interface IAdditionalInfoExtractor<E extends AbstractEvent<E>,
+                        X extends AbstractEvent.AdditionalInfoExtractor<X, E>> {
         X tag();
         X all();
         E done();

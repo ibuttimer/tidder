@@ -22,9 +22,9 @@ import org.parceler.Parcel;
  * Class for tracking position in a Reddit listing
  */
 @Parcel
-public class ListingTracker<T extends BaseObject> {
+public class ListingTracker<T extends BaseObject<T>> {
 
-    public enum UpdateDir { FORWARD, BACKWARD };
+    public enum UpdateDir { FORWARD, BACKWARD }
 
     protected String mBefore; // before (i.e. prev) from last listing response
     protected String mAfter;  // after (i.e. next) from last listing response

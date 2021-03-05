@@ -20,10 +20,11 @@ import android.content.Context;
 import android.graphics.Color;
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
-import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.viewbinding.ViewBinding;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -32,37 +33,43 @@ import android.widget.TextView;
 
 import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.data.IAdapterHandler;
+import com.ianbuttimer.tidder.databinding.CommentListItemBinding;
 import com.ianbuttimer.tidder.reddit.Comment;
 import com.ianbuttimer.tidder.ui.widgets.BasicStatsView;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 
 
 /**
  * A RecyclerView.ViewHolder for Subreddit objects
  */
 
-public class CommentViewHolder extends AbstractViewHolder<Comment> {
+public class CommentViewHolder extends AbstractViewHolder<Comment, CommentListItemBinding> {
 
     private static final String INDENT_TAG = "indent";
 
-    @BindView(R.id.tv_text_comment_item) TextView tvText;
-    @BindView(R.id.img_replies_comment_item) ImageView imgReplies;
-
-    @Nullable @BindView(R.id.bsv_comment_item) BasicStatsView bsvView;
-    @Nullable @BindView(R.id.pb_comment_item) ProgressBar pbProgress;
+    protected TextView tvText;
+    protected ImageView imgReplies;
+    protected BasicStatsView bsvView;
+    protected ProgressBar pbProgress;
 
     /**
      * Constructor
      * @param view              View to hold
      * @param adapterHandler    Handler for view
+     * @param binding
      */
-    public CommentViewHolder(View view, IAdapterHandler adapterHandler) {
+    public CommentViewHolder(View view, IAdapterHandler adapterHandler, CommentListItemBinding binding) {
         super(view, adapterHandler);
+        bind(binding);
+    }
 
-        ButterKnife.bind(this, view);
+    protected void bind(ViewBinding viewBinding) {
+        if (viewBinding instanceof CommentListItemBinding) {
+            CommentListItemBinding binding = (CommentListItemBinding) viewBinding;
+            this.tvText = binding.tvTextCommentItem;
+            this.imgReplies = binding.imgRepliesCommentItem;
+            this.bsvView = binding.bsvCommentItem;
+            this.pbProgress = binding.pbCommentItem;
+        }
     }
 
     @Override
@@ -113,7 +120,6 @@ public class CommentViewHolder extends AbstractViewHolder<Comment> {
 
         addIndents(info);
     }
-
 
     @Override
     public void onViewRecycled() {
@@ -169,7 +175,6 @@ public class CommentViewHolder extends AbstractViewHolder<Comment> {
                 rootView.invalidate();
             }
         }
-
     }
 
     /**
@@ -223,6 +228,4 @@ public class CommentViewHolder extends AbstractViewHolder<Comment> {
             pbProgress.setVisibility(visibility);
         }
     }
-
-
 }

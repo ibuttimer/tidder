@@ -18,23 +18,29 @@ package com.ianbuttimer.tidder.ui;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.annotation.LayoutRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
-import com.ianbuttimer.tidder.R;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewbinding.ViewBinding;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.ianbuttimer.tidder.data.adapter.CommentViewHolder;
+import com.ianbuttimer.tidder.databinding.CommentListItemBinding;
+import com.ianbuttimer.tidder.databinding.ContentThreadBinding;
 import com.ianbuttimer.tidder.event.PostEvent;
 import com.ianbuttimer.tidder.event.StandardEvent;
 import com.ianbuttimer.tidder.reddit.Comment;
 import com.ianbuttimer.tidder.reddit.Link;
+import com.ianbuttimer.tidder.ui.widgets.BasicStatsView;
 import com.ianbuttimer.tidder.ui.widgets.PostOffice;
 
 /**
@@ -48,18 +54,20 @@ public class CommentThreadFragment extends Fragment
 
     public static final String TAG = CommentThreadFragment.class.getSimpleName();
 
-    protected CommentThreadProcessor mProcessor;
+    private ContentThreadBinding binding;
+
+    protected CommentThreadProcessor<Comment, ContentThreadBinding, ?> mProcessor;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
     public CommentThreadFragment() {
-        mProcessor = new CommentThreadProcessor(this);
+        mProcessor = new CommentThreadProcessor<>(this);
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
         mProcessor.onAttach(context);
@@ -79,12 +87,39 @@ public class CommentThreadFragment extends Fragment
     }
 
     @Override
-    public void bind(View view) {
-        // no op
+    public ViewBinding getViewBinding() {
+        binding = ContentThreadBinding.inflate(getLayoutInflater());
+        return binding;
     }
 
-    @LayoutRes public int getLayoutId() {
-        return R.layout.content_thread;
+    @Override
+    public ConstraintLayout getContents() {
+        return binding.clContentPostOrThread;
+    }
+
+    @Override
+    public RecyclerView getRecyclerView() {
+        return binding.incListingLayout.rvListListingL;
+    }
+
+    @Override
+    public ProgressBar getProgressBar() {
+        return binding.incListingLayout.pbProgressListingL;
+    }
+
+    @Override
+    public TextView getMessageTv() {
+        return binding.incListingLayout.tvMessageListingL;
+    }
+
+    @Override
+    public TextView getTitleTv() {
+        return binding.tvTitlePostOrThread;
+    }
+
+    @Override
+    public BasicStatsView getBasicStatsView() {
+        return binding.bsvPostOrThread;
     }
 
     @Override
@@ -118,6 +153,12 @@ public class CommentThreadFragment extends Fragment
     public void onStop() {
         mProcessor.onStop();
         super.onStop();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 
     @Override

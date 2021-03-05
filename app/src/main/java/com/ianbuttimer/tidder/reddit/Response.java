@@ -21,6 +21,7 @@ import com.ianbuttimer.tidder.event.EventType;
 
 /**
  * Base class for reddit responses
+ * @param <T> class of reddit object
  */
 
 public abstract class Response<T> extends BaseObject<T> implements IEmpty {

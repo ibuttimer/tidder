@@ -18,8 +18,11 @@ package com.ianbuttimer.tidder.data.adapter;
 
 import android.view.View;
 
+import androidx.viewbinding.ViewBinding;
+
 import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.data.IAdapterHandler;
+import com.ianbuttimer.tidder.databinding.CommentMoreListItemBinding;
 import com.ianbuttimer.tidder.reddit.Comment;
 import com.ianbuttimer.tidder.reddit.CommentMore;
 
@@ -37,8 +40,21 @@ public class CommentMoreViewHolder extends CommentViewHolder {
      * @param view              View to hold
      * @param adapterHandler    Handler for view
      */
-    public CommentMoreViewHolder(View view, IAdapterHandler adapterHandler) {
-        super(view, adapterHandler);
+    public CommentMoreViewHolder(View view, IAdapterHandler adapterHandler, CommentMoreListItemBinding binding) {
+        super(view, adapterHandler, null);
+        // do bind here ignoring super
+        bind(binding);
+    }
+
+    @Override
+    protected void bind(ViewBinding viewBinding) {
+        if (viewBinding instanceof CommentMoreListItemBinding) {
+            CommentMoreListItemBinding binding = (CommentMoreListItemBinding) viewBinding;
+            this.tvText = binding.tvTextCommentItem;
+            this.imgReplies = binding.imgRepliesCommentItem;
+            this.bsvView = null;
+            this.pbProgress = binding.pbCommentItem;
+        }
     }
 
     @Override
@@ -54,7 +70,6 @@ public class CommentMoreViewHolder extends CommentViewHolder {
             addIndents(info);
         }
 
-
         setBackground(position);
 
         hideProgress();
@@ -68,6 +83,4 @@ public class CommentMoreViewHolder extends CommentViewHolder {
             imgReplies.setVisibility(imgVisibility);
         }
     }
-
-
 }

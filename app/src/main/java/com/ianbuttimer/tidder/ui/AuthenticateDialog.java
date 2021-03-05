@@ -21,24 +21,23 @@ import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.ianbuttimer.tidder.R;
+import com.ianbuttimer.tidder.databinding.DialogAuthenticateBinding;
 
 import java.net.URL;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * WebView dialog used for authentication purposes
  */
-@SuppressWarnings("unused")
 public class AuthenticateDialog extends Dialog {
 
-    @BindView(R.id.web_authD) WebView webView;
+    private WebView webView;
 
     public AuthenticateDialog(@NonNull Context context) {
         super(context);
@@ -56,9 +55,11 @@ public class AuthenticateDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.dialog_authenticate);
+        DialogAuthenticateBinding binding = DialogAuthenticateBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
-        ButterKnife.bind(this);
+        webView = binding.webAuthD;
 
         setJavaScriptEnabled(true);
     }

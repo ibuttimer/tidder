@@ -165,58 +165,57 @@ public class Link extends RedditObject<Link, LinkProxy>
 
         boolean consumed = super.parseToken(jsonReader, name, obj);
         if (!consumed) {
-            Link object = ((Link) obj);
             consumed = true;
             // process required fields
             if (URL.equals(name)) {
-                object.setUrl(nextUri(jsonReader));
+                obj.setUrl(nextUri(jsonReader));
             } else if (THUMBNAIL.equals(name)) {
-                object.setThumbnail(nextUri(jsonReader));
+                obj.setThumbnail(nextUri(jsonReader));
             } else if (LIKES.equals(name)) {
-                object.setLikes(nextInt(jsonReader, 0));
+                obj.setLikes(nextInt(jsonReader, 0));
             } else if (SCORE.equals(name)) {
-                object.setScore(nextInt(jsonReader, 0));
+                obj.setScore(nextInt(jsonReader, 0));
             } else if (NUM_COMMENTS.equals(name)) {
-                object.setNumComments(nextInt(jsonReader, 0));
+                obj.setNumComments(nextInt(jsonReader, 0));
             } else if (OVER_18.equals(name)) {
-                object.setOver18(nextBoolean(jsonReader, false));
+                obj.setOver18(nextBoolean(jsonReader, false));
             } else if (IS_VIDEO.equals(name)) {
-                object.setVideo(nextBoolean(jsonReader, false));
+                obj.setVideo(nextBoolean(jsonReader, false));
             } else if (HIDE_SCORE.equals(name)) {
-                object.setHideScore(nextBoolean(jsonReader, false));
+                obj.setHideScore(nextBoolean(jsonReader, false));
             } else if (DOMAIN.equals(name)) {
-                object.setDomain(nextString(jsonReader, ""));
+                obj.setDomain(nextString(jsonReader, ""));
             } else if (SUBREDDIT.equals(name)) {
-                object.setSubreddit(nextString(jsonReader, ""));
+                obj.setSubreddit(nextString(jsonReader, ""));
             } else if (AUTHOR.equals(name)) {
-                object.setAuthor(nextString(jsonReader, ""));
+                obj.setAuthor(nextString(jsonReader, ""));
             } else if (SUBREDDIT_ID.equals(name)) {
-                object.setSubredditId(nextString(jsonReader, ""));
+                obj.setSubredditId(nextString(jsonReader, ""));
             } else if (PERMALINK.equals(name)) {
-                object.setPermalink(nextString(jsonReader, ""));
+                obj.setPermalink(nextString(jsonReader, ""));
             } else if (SELFTEXT.equals(name)) {
-                object.setSelfText(nextString(jsonReader, ""));
+                obj.setSelfText(nextString(jsonReader, ""));
             } else if (SELFTEXT_HTML.equals(name)) {
-                object.setSelfTextHtml(nextStringFromHtml(jsonReader, ""));
+                obj.setSelfTextHtml(nextStringFromHtml(jsonReader, ""));
             } else if (TITLE.equals(name)) {
-                object.setTitle(nextStringFromHtml(jsonReader, ""));
+                obj.setTitle(nextStringFromHtml(jsonReader, ""));
             } else if (SUBREDDIT_NAME_PREFIXED.equals(name)) {
-                object.setSubredditNamePrefixed(nextString(jsonReader, ""));
+                obj.setSubredditNamePrefixed(nextString(jsonReader, ""));
             } else if (SECURE_MEDIA.equals(name)) {
                 if (!skipNull(jsonReader)) {
                     SecureMedia secureMedia = new SecureMedia();
                     secureMedia.parseJson(jsonReader);
-                    object.setSecureMedia(secureMedia);
+                    obj.setSecureMedia(secureMedia);
                 }
             } else if (SECURE_MEDIA_EMBED.equals(name)) {
-                object.setSecureMediaEmbed(readMedisEmbed(jsonReader));
+                obj.setSecureMediaEmbed(readMedisEmbed(jsonReader));
             } else if (MEDIA_EMBED.equals(name)) {
-                object.setMediaEmbed(readMedisEmbed(jsonReader));
+                obj.setMediaEmbed(readMedisEmbed(jsonReader));
             } else if (PREVIEW.equals(name)) {
                 if (!skipNull(jsonReader)) {
                     Preview preview = new Preview();
                     preview.parseJson(jsonReader);
-                    object.setPreview(preview);
+                    obj.setPreview(preview);
                 }
             } else {
                 consumed = false;
