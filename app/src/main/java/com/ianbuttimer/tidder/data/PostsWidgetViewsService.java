@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018  Ian Buttimer
+ * Copyright (C) 2018,2021  Ian Buttimer
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -139,8 +139,8 @@ public class PostsWidgetViewsService extends RemoteViewsService {
         if (link != null) {
             int index = 0;
             row[index++] = link.getTitle();
-            row[index++] = getCountIndication(link.getScore(), 0, 0);
-            row[index++] = getCountIndication(link.getNumComments(), R.string.item_comment, R.string.item_comments);
+            row[index++] = getCountIndication(link.getScore(), 0, 0).first;
+            row[index++] = getCountIndication(link.getNumComments(), R.string.item_comment, R.string.item_comments).first;
             row[index++] = link.getSubredditNamePrefixed();
             row[index++] = link.getName();
             row[index++] = link.getPermalink();
@@ -169,7 +169,7 @@ public class PostsWidgetViewsService extends RemoteViewsService {
 
 
     /**
-     * Class to generate ingredient views for the app widget
+     * Class to generate post views for the app widget
      */
     private static class PostsWidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 

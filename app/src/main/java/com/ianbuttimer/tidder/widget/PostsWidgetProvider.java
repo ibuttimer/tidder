@@ -32,6 +32,8 @@ import com.ianbuttimer.tidder.R;
 import com.ianbuttimer.tidder.data.PostsWidgetViewsService;
 import com.ianbuttimer.tidder.ui.PostDetailActivity;
 
+import timber.log.Timber;
+
 /**
  * Application widget provider
  */
@@ -54,13 +56,24 @@ public class PostsWidgetProvider extends AppWidgetProvider {
         Intent intent = PostsWidgetViewsService.getLaunchIntent(context, layoutId, appWidgetId);
         views.setRemoteAdapter(R.id.appwidget_listview, intent);
 
-        // set the widget onclick to load the recipe
+        // set the widget items onclick to load the item
         Intent appIntent = new Intent(context, PostDetailActivity.class);
 
         // set the request code to the widget id to ensure its unique and avoid issues with cached intents
         PendingIntent pendingIntent = PendingIntent.getActivity(context, appWidgetId, appIntent, 0);
         views.setOnClickPendingIntent(R.id.appwidget_text, pendingIntent);
         views.setPendingIntentTemplate(R.id.appwidget_listview, pendingIntent);
+
+        // TODO implement update from widget
+        // set the update onclick to update the widget
+//        Intent updateIntent = new Intent(context, PostsWidgetProvider.class);
+//        updateIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+//        // just this widget
+//        updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, new int[] { appWidgetId });
+//
+//        PendingIntent pendingUpdate = PendingIntent.getBroadcast(context, appWidgetId,
+//                updateIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        views.setOnClickPendingIntent(R.id.appwidget_update, pendingUpdate);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -92,6 +105,7 @@ public class PostsWidgetProvider extends AppWidgetProvider {
         if (appWidgetIds != null) {
             for (int appWidgetId : appWidgetIds) {
                 updateAppWidget(context, appWidgetManager, appWidgetId);
+                Timber.i("Widget updated %d", appWidgetId);
             }
         }
     }

@@ -49,4 +49,6 @@
     <string name="link_author_format">by &lt;b&gt;{0}&lt;/b&gt;</string>
     <string name="score_content_desc">Score {0}</string>
 
+    <string name="widget_posts_update">Update</string>
+
 </resources>

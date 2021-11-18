@@ -32,9 +32,10 @@
             android:contentDescription="@string/app_name"
             android:layout_width="wrap_content"
             android:layout_height="match_parent" />
+
         <TextView
             android:id="@+id/appwidget_text"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/small_margin"
             android:contentDescription="@string/title_post_list"
@@ -42,6 +43,13 @@
             android:textColor="@color/colorPrimaryText"
             android:textSize="@dimen/widget_name_text"
             android:textStyle="bold|italic" />
+
+<!--        <Button-->
+<!--            android:id="@+id/appwidget_update"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="0.5"-->
+<!--            android:text="@string/widget_posts_update" />-->
 
     </LinearLayout>
 
