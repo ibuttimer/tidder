@@ -62,7 +62,7 @@
         app:layout_constraintHorizontal_bias="0"
         tools:text="@string/link_title" />
 
-    <com.ianbuttimer.tidder.ui.widgets.BasicStatsView
+    <com.ianbuttimer.tidderish.ui.widgets.BasicStatsView
         android:id="@+id/bsv_link_item"
         app:layoutId="@layout/basic_stats_link_list_item"
         android:layout_width="0dp"

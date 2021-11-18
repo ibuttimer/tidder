@@ -14,7 +14,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ianbuttimer.tidder.data.provider;
+package com.ianbuttimer.tidderish.data.provider;
 
 import android.content.ContentProvider;
 import android.content.ContentProviderOperation;
@@ -30,24 +30,24 @@ import android.util.Pair;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.ianbuttimer.tidder.BuildConfig;
-import com.ianbuttimer.tidder.data.db.AbstractFbRow;
-import com.ianbuttimer.tidder.data.db.ConfigFb;
-import com.ianbuttimer.tidder.data.db.FollowFb;
-import com.ianbuttimer.tidder.data.db.IFbCursorable;
-import com.ianbuttimer.tidder.data.db.PinnedFb;
-import com.ianbuttimer.tidder.net.UriUtils;
-import com.ianbuttimer.tidder.reddit.RedditClient;
+import com.ianbuttimer.tidderish.BuildConfig;
+import com.ianbuttimer.tidderish.data.db.AbstractFbRow;
+import com.ianbuttimer.tidderish.data.db.ConfigFb;
+import com.ianbuttimer.tidderish.data.db.FollowFb;
+import com.ianbuttimer.tidderish.data.db.IFbCursorable;
+import com.ianbuttimer.tidderish.data.db.PinnedFb;
+import com.ianbuttimer.tidderish.net.UriUtils;
+import com.ianbuttimer.tidderish.reddit.RedditClient;
 
 import java.util.ArrayList;
 
 import timber.log.Timber;
 
-import static com.ianbuttimer.tidder.data.provider.BaseProvider.ID_EQ_SELECTION;
-import static com.ianbuttimer.tidder.data.provider.BaseProvider.Path.FOLLOW_FRAGMENT_INDEX;
-import static com.ianbuttimer.tidder.data.provider.BaseProvider.Path.PINNED_FRAGMENT_INDEX;
-import static com.ianbuttimer.tidder.data.provider.BaseProvider.TYPE_DIR;
-import static com.ianbuttimer.tidder.data.provider.BaseProvider.buildUri;
+import static com.ianbuttimer.tidderish.data.provider.BaseProvider.ID_EQ_SELECTION;
+import static com.ianbuttimer.tidderish.data.provider.BaseProvider.Path.FOLLOW_FRAGMENT_INDEX;
+import static com.ianbuttimer.tidderish.data.provider.BaseProvider.Path.PINNED_FRAGMENT_INDEX;
+import static com.ianbuttimer.tidderish.data.provider.BaseProvider.TYPE_DIR;
+import static com.ianbuttimer.tidderish.data.provider.BaseProvider.buildUri;
 
 public class FirebaseProvider extends ContentProvider {
     public static final String AUTHORITY = BuildConfig.FB_PROVIDER_AUTHORITY;
@@ -91,7 +91,7 @@ public class FirebaseProvider extends ContentProvider {
     }
 
 
-    // start copy from com.ianbuttimer.tidder.data.db.gen.TidderProvider.java
+    // start copy from com.ianbuttimer.tidderish.data.db.gen.TidderProvider.java
     private static final int FOLLOW_CONTENT_URI = 0;
 
     private static final int FOLLOW_follow_id = 1;
@@ -108,7 +108,7 @@ public class FirebaseProvider extends ContentProvider {
         MATCHER.addURI(AUTHORITY, "pinned", PINNED_CONTENT_URI);
         MATCHER.addURI(AUTHORITY, "pinned/#", PINNED_pinned_id);
     }
-    // end copy from com.ianbuttimer.tidder.data.db.gen.TidderProvider.java
+    // end copy from com.ianbuttimer.tidderish.data.db.gen.TidderProvider.java
 
     private static final int CONFIG_CONTENT_URI = 4;
 
@@ -152,7 +152,7 @@ public class FirebaseProvider extends ContentProvider {
         throw new UnsupportedOperationException("Batch operations not currently supported on " + getClass().getSimpleName());
     }
 
-    // start copy from com.ianbuttimer.tidder.data.db.gen.TidderProvider.java
+    // start copy from com.ianbuttimer.tidderish.data.db.gen.TidderProvider.java
     @Override
     public String getType(Uri uri) {
         switch(MATCHER.match(uri)) {
@@ -180,7 +180,7 @@ public class FirebaseProvider extends ContentProvider {
             }
         }
     }
-    // end copy from com.ianbuttimer.tidder.data.db.gen.TidderProvider.java
+    // end copy from com.ianbuttimer.tidderish.data.db.gen.TidderProvider.java
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,

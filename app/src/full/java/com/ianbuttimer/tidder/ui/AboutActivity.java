@@ -14,7 +14,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ianbuttimer.tidder.ui;
+package com.ianbuttimer.tidderish.ui;
 
 public class AboutActivity extends AbstractAboutActivity {
 

@@ -14,18 +14,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ianbuttimer.tidder.ui.util;
+package com.ianbuttimer.tidderish.ui.util;
 
 import android.content.Context;
 import androidx.annotation.StringRes;
 import androidx.preference.Preference;
 
-import com.ianbuttimer.tidder.R;
-import com.ianbuttimer.tidder.TidderApplication;
-import com.ianbuttimer.tidder.data.Config;
-import com.ianbuttimer.tidder.data.db.ConfigFb;
-import com.ianbuttimer.tidder.data.provider.FirebaseProvider;
-import com.ianbuttimer.tidder.utils.PreferenceControl;
+import com.ianbuttimer.tidderish.R;
+import com.ianbuttimer.tidderish.TidderApplication;
+import com.ianbuttimer.tidderish.data.Config;
+import com.ianbuttimer.tidderish.data.db.ConfigFb;
+import com.ianbuttimer.tidderish.data.provider.FirebaseProvider;
+import com.ianbuttimer.tidderish.utils.PreferenceControl;
 
 /**
  * Process configuration from Firebase database

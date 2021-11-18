@@ -23,7 +23,7 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        applicationId "com.ianbuttimer.tidder"
+        applicationId "com.ianbuttimer.tidderish"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.compileSdkVersion
         versionCode 4
@@ -31,11 +31,11 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
-        resValue "string", "widget_authority_provider", "com.ianbuttimer.tidder.widget"
-        buildConfigField "String", "PROVIDER_AUTHORITY", "\"com.ianbuttimer.tidder.data.db.gen\""
-        resValue "string", "authority_provider", "com.ianbuttimer.tidder.data.db.gen"
-        buildConfigField "String", "FB_PROVIDER_AUTHORITY", "\"com.ianbuttimer.tidder.data.db\""
-        resValue "string", "fb_authority_provider", "com.ianbuttimer.tidder.data.db"
+        resValue "string", "widget_authority_provider", "com.ianbuttimer.tidderish.widget"
+        buildConfigField "String", "PROVIDER_AUTHORITY", "\"com.ianbuttimer.tidderish.data.db.gen\""
+        resValue "string", "authority_provider", "com.ianbuttimer.tidderish.data.db.gen"
+        buildConfigField "String", "FB_PROVIDER_AUTHORITY", "\"com.ianbuttimer.tidderish.data.db\""
+        resValue "string", "fb_authority_provider", "com.ianbuttimer.tidderish.data.db"
 
         vectorDrawables.useSupportLibrary = true
     }

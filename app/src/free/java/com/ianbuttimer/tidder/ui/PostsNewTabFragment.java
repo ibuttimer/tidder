@@ -14,7 +14,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ianbuttimer.tidder.ui;
+package com.ianbuttimer.tidderish.ui;
 
 
 import android.app.Activity;
@@ -27,9 +27,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 
 import com.google.android.gms.ads.AdView;
-import com.ianbuttimer.tidder.R;
-import com.ianbuttimer.tidder.databinding.FragmentPostsBinding;
-import com.ianbuttimer.tidder.ui.util.AdConfig;
+import com.ianbuttimer.tidderish.R;
+import com.ianbuttimer.tidderish.databinding.FragmentPostsBinding;
+import com.ianbuttimer.tidderish.ui.util.AdConfig;
 
 /**
  * Base class for Posts activity tab fragments

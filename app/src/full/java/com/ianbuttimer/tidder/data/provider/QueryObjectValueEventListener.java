@@ -14,7 +14,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ianbuttimer.tidder.data.provider;
+package com.ianbuttimer.tidderish.data.provider;
 
 import android.database.Cursor;
 import android.database.MatrixCursor;
@@ -23,7 +23,7 @@ import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.ianbuttimer.tidder.data.db.IFbCursorable;
+import com.ianbuttimer.tidderish.data.db.IFbCursorable;
 
 /**
  * Event listener for a Firebase Realtime database query

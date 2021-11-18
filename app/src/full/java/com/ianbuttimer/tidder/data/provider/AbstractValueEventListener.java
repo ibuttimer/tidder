@@ -14,7 +14,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ianbuttimer.tidder.data.provider;
+package com.ianbuttimer.tidderish.data.provider;
 
 import androidx.annotation.NonNull;
 

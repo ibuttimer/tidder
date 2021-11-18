@@ -14,7 +14,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ianbuttimer.tidder.data;
+package com.ianbuttimer.tidderish.data;
 
 import android.database.Cursor;
 import androidx.annotation.Nullable;

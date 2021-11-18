@@ -14,7 +14,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ianbuttimer.tidder.data.provider;
+package com.ianbuttimer.tidderish.data.provider;
 
 import android.text.TextUtils;
 import android.util.Pair;
@@ -22,10 +22,10 @@ import android.util.Pair;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
-import com.ianbuttimer.tidder.data.ITester;
-import com.ianbuttimer.tidder.utils.ArrayTester;
-import com.ianbuttimer.tidder.utils.Quartet;
-import com.ianbuttimer.tidder.utils.Utils;
+import com.ianbuttimer.tidderish.data.ITester;
+import com.ianbuttimer.tidderish.utils.ArrayTester;
+import com.ianbuttimer.tidderish.utils.Quartet;
+import com.ianbuttimer.tidderish.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,9 +33,9 @@ import java.util.Map;
 
 import timber.log.Timber;
 
-import static com.ianbuttimer.tidder.data.db.DbUtils.DB_DELETE_ALL;
-import static com.ianbuttimer.tidder.data.provider.BaseProvider.isColumnEqSelection;
-import static com.ianbuttimer.tidder.data.provider.BaseProvider.isColumnInSelection;
+import static com.ianbuttimer.tidderish.data.db.DbUtils.DB_DELETE_ALL;
+import static com.ianbuttimer.tidderish.data.provider.BaseProvider.isColumnEqSelection;
+import static com.ianbuttimer.tidderish.data.provider.BaseProvider.isColumnInSelection;
 
 /**
  * A Firebase query class handling basic 'equals to' and 'in' queries.

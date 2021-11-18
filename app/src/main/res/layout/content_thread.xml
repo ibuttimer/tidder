@@ -23,7 +23,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.ianbuttimer.tidder.ui.CommentThreadActivity"
+    tools:context="com.ianbuttimer.tidderish.ui.CommentThreadActivity"
     tools:showIn="@layout/activity_post_detail">
 
     <TextView
@@ -40,7 +40,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content" />
 
-    <com.ianbuttimer.tidder.ui.widgets.BasicStatsView
+    <com.ianbuttimer.tidderish.ui.widgets.BasicStatsView
         android:id="@+id/bsv_post_or_thread"
         app:layoutId="@layout/basic_stats_content_post_thread"
         android:layout_width="0dp"

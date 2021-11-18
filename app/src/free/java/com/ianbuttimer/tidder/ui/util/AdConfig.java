@@ -1,4 +1,4 @@
-package com.ianbuttimer.tidder.ui.util;
+package com.ianbuttimer.tidderish.ui.util;
 
 import android.app.Activity;
 import android.text.TextUtils;
@@ -7,7 +7,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.RequestConfiguration;
-import com.ianbuttimer.tidder.R;
+import com.ianbuttimer.tidderish.R;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

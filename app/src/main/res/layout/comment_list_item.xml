@@ -41,7 +41,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/comment_text" />
 
-    <com.ianbuttimer.tidder.ui.widgets.BasicStatsView
+    <com.ianbuttimer.tidderish.ui.widgets.BasicStatsView
         android:id="@+id/bsv_comment_item"
         app:layoutId="@layout/comment_list_item_basic_stats"
         android:layout_width="0dp"

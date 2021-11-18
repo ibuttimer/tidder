@@ -14,13 +14,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ianbuttimer.tidder.data.db;
+package com.ianbuttimer.tidderish.data.db;
 
 import android.content.ContentValues;
 
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
-import com.ianbuttimer.tidder.data.Config;
+import com.ianbuttimer.tidderish.data.Config;
 
 import java.util.HashMap;
 import java.util.Map;

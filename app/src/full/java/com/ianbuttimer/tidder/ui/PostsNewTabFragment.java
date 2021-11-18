@@ -14,7 +14,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ianbuttimer.tidder.ui;
+package com.ianbuttimer.tidderish.ui;
 
 
 import android.widget.ProgressBar;
@@ -23,15 +23,15 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 
-import com.ianbuttimer.tidder.R;
-import com.ianbuttimer.tidder.data.Config;
-import com.ianbuttimer.tidder.data.ConfigQueryResponse;
-import com.ianbuttimer.tidder.databinding.FragmentPostsBinding;
-import com.ianbuttimer.tidder.event.RedditClientEvent;
-import com.ianbuttimer.tidder.event.StandardEvent;
-import com.ianbuttimer.tidder.ui.util.DatabaseSettings;
-import com.ianbuttimer.tidder.ui.widgets.PostOffice;
-import com.ianbuttimer.tidder.utils.Utils;
+import com.ianbuttimer.tidderish.R;
+import com.ianbuttimer.tidderish.data.Config;
+import com.ianbuttimer.tidderish.data.ConfigQueryResponse;
+import com.ianbuttimer.tidderish.databinding.FragmentPostsBinding;
+import com.ianbuttimer.tidderish.event.RedditClientEvent;
+import com.ianbuttimer.tidderish.event.StandardEvent;
+import com.ianbuttimer.tidderish.ui.util.DatabaseSettings;
+import com.ianbuttimer.tidderish.ui.widgets.PostOffice;
+import com.ianbuttimer.tidderish.utils.Utils;
 
 /**
  * Base class for Posts activity tab fragments

@@ -23,7 +23,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.ianbuttimer.tidder.ui.FollowActivity">
+    tools:context="com.ianbuttimer.tidderish.ui.FollowActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_followA"

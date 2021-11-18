@@ -13,11 +13,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.ianbuttimer.tidder.utils;
+package com.ianbuttimer.tidderish.utils;
 
 import android.content.Context;
 
-import com.ianbuttimer.tidder.R;
+import com.ianbuttimer.tidderish.R;
 
 
 /**

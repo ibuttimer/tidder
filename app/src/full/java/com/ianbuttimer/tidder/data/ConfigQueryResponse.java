@@ -14,11 +14,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ianbuttimer.tidder.data;
+package com.ianbuttimer.tidderish.data;
 
 import android.database.Cursor;
 
-import com.ianbuttimer.tidder.event.EventType;
+import com.ianbuttimer.tidderish.event.EventType;
 
 import java.util.ArrayList;
 

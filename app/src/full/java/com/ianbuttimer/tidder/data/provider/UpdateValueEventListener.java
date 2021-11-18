@@ -14,7 +14,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ianbuttimer.tidder.data.provider;
+package com.ianbuttimer.tidderish.data.provider;
 
 import android.content.ContentValues;
 
@@ -22,7 +22,7 @@ import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.ianbuttimer.tidder.data.db.AbstractFbRow;
+import com.ianbuttimer.tidderish.data.db.AbstractFbRow;
 
 import java.util.ArrayList;
 

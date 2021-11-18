@@ -1,4 +1,4 @@
-package com.ianbuttimer.tidder.net;
+package com.ianbuttimer.tidderish.net;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 

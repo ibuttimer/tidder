@@ -19,7 +19,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_settings"
-    android:name="com.ianbuttimer.tidder.ui.SettingsFragment"
+    android:name="com.ianbuttimer.tidderish.ui.SettingsFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ianbuttimer.tidder.ui.SettingsFragment" />
+    tools:context="com.ianbuttimer.tidderish.ui.SettingsFragment" />

@@ -14,11 +14,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ianbuttimer.tidder.ui;
+package com.ianbuttimer.tidderish.ui;
 
-import com.ianbuttimer.tidder.event.ExtStandardEventProcessor;
-import com.ianbuttimer.tidder.event.StandardEventProcessor.IStandardEventProcessorExt;
-import com.ianbuttimer.tidder.ui.widgets.PostOffice;
+import com.ianbuttimer.tidderish.event.ExtStandardEventProcessor;
+import com.ianbuttimer.tidderish.event.StandardEventProcessor.IStandardEventProcessorExt;
+import com.ianbuttimer.tidderish.ui.widgets.PostOffice;
 
 import java.util.ArrayList;
 

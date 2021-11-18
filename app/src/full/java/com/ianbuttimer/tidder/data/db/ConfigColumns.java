@@ -14,7 +14,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ianbuttimer.tidder.data.db;
+package com.ianbuttimer.tidderish.data.db;
 
 /**
  * Columns for config database table

@@ -14,7 +14,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ianbuttimer.tidder.data;
+package com.ianbuttimer.tidderish.data;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -22,9 +22,9 @@ import android.database.Cursor;
 
 import androidx.annotation.NonNull;
 
-import com.ianbuttimer.tidder.R;
-import com.ianbuttimer.tidder.TidderApplication;
-import com.ianbuttimer.tidder.data.db.ConfigColumns;
+import com.ianbuttimer.tidderish.R;
+import com.ianbuttimer.tidderish.TidderApplication;
+import com.ianbuttimer.tidderish.data.db.ConfigColumns;
 
 import org.parceler.Parcel;
 

@@ -25,15 +25,15 @@
     android:layout_marginStart="@dimen/postlist_horizontal_margin"
     android:layout_marginEnd="@dimen/postlist_horizontal_margin"
     android:baselineAligned="false"
-    tools:context="com.ianbuttimer.tidder.ui.PostListActivity">
+    tools:context="com.ianbuttimer.tidderish.ui.PostListActivity">
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/container_postList"
-        android:name="com.ianbuttimer.tidder.ui.PostListFragment"
+        android:name="com.ianbuttimer.tidderish.ui.PostListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="LinearLayoutManager"
-        tools:context="com.ianbuttimer.tidder.ui.PostListActivity"
+        tools:context="com.ianbuttimer.tidderish.ui.PostListActivity"
         tools:listitem="@layout/link_list_item" />
 
 </LinearLayout>

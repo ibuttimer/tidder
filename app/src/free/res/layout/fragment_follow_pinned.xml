@@ -22,7 +22,7 @@
     android:id="@+id/cl_fragPosts"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ianbuttimer.tidder.ui.AbstractBasePostsTabFragment">
+    tools:context="com.ianbuttimer.tidderish.ui.AbstractBasePostsTabFragment">
 
     <TextView
         android:id="@+id/tv_paid_feature_pinnedF"

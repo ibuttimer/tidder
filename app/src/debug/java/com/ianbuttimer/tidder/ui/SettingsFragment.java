@@ -13,13 +13,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.ianbuttimer.tidder.ui;
+package com.ianbuttimer.tidderish.ui;
 
 
 import android.os.Bundle;
 import androidx.annotation.StringRes;
 
-import com.ianbuttimer.tidder.R;
+import com.ianbuttimer.tidderish.R;
 
 /**
  * Settings fragment to display the general preferences

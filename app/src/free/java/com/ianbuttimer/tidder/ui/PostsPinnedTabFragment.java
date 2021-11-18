@@ -14,7 +14,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ianbuttimer.tidder.ui;
+package com.ianbuttimer.tidderish.ui;
 
 
 import android.app.Activity;
@@ -27,14 +27,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 
 import com.google.android.gms.ads.AdView;
-import com.ianbuttimer.tidder.R;
-import com.ianbuttimer.tidder.databinding.FragmentFollowPinnedBinding;
-import com.ianbuttimer.tidder.event.PostsEvent;
-import com.ianbuttimer.tidder.event.RedditClientEvent;
-import com.ianbuttimer.tidder.event.StandardEvent;
-import com.ianbuttimer.tidder.ui.util.AdConfig;
+import com.ianbuttimer.tidderish.R;
+import com.ianbuttimer.tidderish.databinding.FragmentFollowPinnedBinding;
+import com.ianbuttimer.tidderish.event.PostsEvent;
+import com.ianbuttimer.tidderish.event.RedditClientEvent;
+import com.ianbuttimer.tidderish.event.StandardEvent;
+import com.ianbuttimer.tidderish.ui.util.AdConfig;
 
-import static com.ianbuttimer.tidder.ui.AbstractPostListActivity.Tabs.PINNED_POSTS;
+import static com.ianbuttimer.tidderish.ui.AbstractPostListActivity.Tabs.PINNED_POSTS;
 
 
 /**

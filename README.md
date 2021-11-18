@@ -55,9 +55,9 @@ The development environment may be configured as follows:
   
   - Create a project in the [Firebase Console](https://console.firebase.google.com/)
   - Follow the *Add Firebase to your Android app* instructions to add an app for each variant:
-    - com.ianbuttimer.tidder.free 
-    - com.ianbuttimer.tidder.freeMax 
-    - com.ianbuttimer.tidder.full
+    - com.ianbuttimer.tidderish.free 
+    - com.ianbuttimer.tidderish.freeMax 
+    - com.ianbuttimer.tidderish.full
   - Download the `google-services.json` file to the [app](app) folder 
 
 ## Usage ##

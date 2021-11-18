@@ -1,4 +1,4 @@
-package com.ianbuttimer.tidder;
+package com.ianbuttimer.tidderish;
 
 import android.app.Application;
 

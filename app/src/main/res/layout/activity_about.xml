@@ -23,7 +23,7 @@
     android:paddingStart="@dimen/activity_horizontal_margin"
     android:paddingEnd="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_horizontal_margin"
-    tools:context="com.ianbuttimer.tidder.ui.AboutActivity">
+    tools:context="com.ianbuttimer.tidderish.ui.AboutActivity">
 
     <RelativeLayout
         android:id="@+id/rl_aboutA"
