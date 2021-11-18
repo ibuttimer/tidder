@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright (C) 2018  Ian Buttimer
+  ~ Copyright (C) 2018,2021  Ian Buttimer
   ~ This program is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License as published by
   ~ the Free Software Foundation, either version 3 of the License, or
@@ -16,7 +16,6 @@
   -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -62,10 +61,21 @@
             android:textColor="@color/colorTextDefault" />
 
         <TextView
-            android:id="@+id/tv_price_aboutA"
+            android:id="@+id/tv_affiliation_aboutA"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_copyright_aboutA"
+            android:text="@string/about_affiliation"
+            android:paddingBottom="@dimen/fab_margin"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textAlignment="@integer/text_alignment"
+            android:textColor="@color/colorTextDefault" />
+
+        <TextView
+            android:id="@+id/tv_price_aboutA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_affiliation_aboutA"
             android:text="@string/about_price"
             android:paddingBottom="@dimen/fab_margin"
             android:textAppearance="?android:attr/textAppearanceSmall"

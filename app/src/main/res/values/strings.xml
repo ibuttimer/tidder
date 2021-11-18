@@ -6,6 +6,7 @@
     <string name="login_to_reddit_text">Login to Reddit using your Reddit ID</string>
     <string name="login_imp_to_reddit_text">Login to Reddit temporarily using your Reddit ID</string>
     <string name="login_app_to_reddit_text">Login to Reddit with no user details</string>
+    <string name="redirect_to_reddit_text">(This will redirect to Reddit)</string>
 
     <!-- logout related -->
     <string name="info_title">Information</string>

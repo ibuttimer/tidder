@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018  Ian Buttimer
+ * Copyright (C) 2018,2021  Ian Buttimer
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -50,7 +50,8 @@ public abstract class AbstractAboutActivity extends AppCompatActivity {
 
         // make links work
         @IdRes int[] tvIds = new int[] {
-                R.id.tv_licencelink_aboutA, R.id.tv_privacylink_aboutA
+                R.id.tv_licencelink_aboutA, R.id.tv_privacylink_aboutA,
+                R.id.tv_affiliation_aboutA
         };
         for (int id : tvIds) {
             tv = findViewById(id);

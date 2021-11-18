@@ -17,7 +17,7 @@
 
 <resources>
 
-    <string name="app_name">Tidder</string>
+    <string name="app_name">Tidderish</string>
 
     <string name="ack_schematic">Schematic (<a href="https://github.com/SimonVT/schematic">Simon Vig Therkildsen</a>) licensed under the (<a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>).</string>
 

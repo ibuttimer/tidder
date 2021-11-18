@@ -1,3 +1,8 @@
+## Overview
+This application is an API client, allowing the retrieval and display of content from [Reddit](https://www.reddit.com/). 
+
+    The application and its developers are not affiliated in any way with Reddit.
+
 ## Log in
 
 In order to use the application a Reddit account is required.

@@ -27,6 +27,8 @@
 
     <string name="about_privacy_link">The application privacy policy is available on the <a href="https://github.com/ibuttimer/tidder/wiki/Tidder-Privacy-Policy">application wiki</a>.</string>
 
+    <string name="about_affiliation">This application is an API client, allowing the retrieval and display of content from <a href="https://www.reddit.com/">Reddit</a>. The application and its developers are not affiliated in any way with <a href="https://www.reddit.com/">Reddit</a>.</string>
+
     <string name="acknowledgements">Acknowledgements</string>
     <string name="unordered_list_bullet">&#x2022; </string>
     <string name="ack_icons8">Some icons courtesy of icons8 (<a href="http://icons8.com/">icons8</a>) licensed under the (<a href="http://creativecommons.org/licenses/by-nd/3.0/">Creative Commons Attribution-NoDerivs 3.0 Unported License</a>).</string>
