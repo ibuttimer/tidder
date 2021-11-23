@@ -1,6 +1,6 @@
-# Tidder #
+# Tidderish #
 
-- [Tidder](#tidder)
+- [Tidderish](#tidderish)
   - [Overview](#overview)
     - [Features](#features)
   - [Technical Overview](#technical-overview)
@@ -61,7 +61,7 @@ The development environment may be configured as follows:
   - Download the `google-services.json` file to the [app](app) folder 
 
 ## Usage ##
-Please see the [Tidder help](app/src/main/assets/help.md) for details of how to use the application.
+Please see the [Tidderish help](app/src/main/assets/help.md) for details of how to use the application.
 
 
 

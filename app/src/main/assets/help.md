@@ -9,7 +9,7 @@ In order to use the application a Reddit account is required.
 If you do not have an account, you can sign up at [reddit.com](https://www.reddit.com/login).
 
 * When prompted login using your Reddit credentials.
-Check the 'Remember Me' option to avoid having to enter your credentials everytime you log in.
+Check the 'Remember Me' option to avoid having to enter your credentials every time you log in.
 * Review and accept the authorisation request to allow access to your account
 
 The application only uses the login credentials to **read** information regarding
